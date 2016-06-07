@@ -49,32 +49,33 @@ param.gamma = x(3);
 
 param
 
-%Check that R0 is greater than 1
-R0 = (param.beta*param.c)/param.gamma;
-if (R0 <=1)
-    display('R0 is less than 1')
-    return
-end
+% %Check that R0 is greater than 1
+% R0 = (param.beta*param.c)/param.gamma;
+% if (R0 <=1)
+%     display('R0 is less than 1')
+%     return
+% end
 
 
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
 new_init = out(1,1:4)';
 
-%figure(3)
-%plot_both(t,out,real_data);
+figure(3)
+ plot_both(t,out,real_data);
 
-%figure(4)
-Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
-sir_sensitivity_analysis(Q, param,'gamma');
-%sir_plot_sensitivity(Q, 'gamma',1:20, param);
-%ylabel('cumulative infected');
+figure(4)
+ Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
+ sir_sensitivity_analysis(Q, param,'gamma');
+ sir_plot_sensitivity(Q, 'gamma',1:20, param);
+ ylabel('cumulative infected');
 
-%figure(5)
+figure(5)
  Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
  sir_sensitivity_analysis(Q, param,'c')
  sir_sensitivity_analysis(Q, param,'gamma')
-%sir_plot_sensitivity(Q, 'c',1:20, param);
- %ylabel('time to 1% infected');
+ sir_plot_sensitivity(Q, 'c',1:20, param);
+ ylabel('time to 1% infected');
 
+ figure(6)
  sir_plot_contour(Q,1:20,1:20, param);
