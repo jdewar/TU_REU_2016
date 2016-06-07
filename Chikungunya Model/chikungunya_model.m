@@ -35,16 +35,16 @@ init = [total_pop_h - init_infected_h;0;init_infected_h;0;init_infected_h;K_v;0;
 
 
  % plotting
-% figure(1)
-% [t_model,out_model] = chik_balanceANDsolve([0 400], init, param);
-% size(out_model)
-% plot_chik_model(t_model,out_model)
-% param_array = struct2array(param,{'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v'});
-% R0 = R0_calc(param_array);
-% 
-% figure(2)
-% real_data = chik_get_data();
-% chik_plot_data(real_data)
+figure(1)
+[t_model,out_model] = chik_balanceANDsolve([0 400], init, param);
+size(out_model)
+plot_chik_model(t_model,out_model)
+param_array = struct2array(param,{'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v'});
+R0 = R0_calc(param_array);
+
+figure(2)
+real_data = chik_get_data();
+chik_plot_data(real_data)
 
 figure(3)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
