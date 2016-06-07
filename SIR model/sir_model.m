@@ -41,7 +41,7 @@ val = sir_obj_fn([param.beta,param.c,param.gamma],real_data,param,{'beta','c','g
 fn = @(x)sir_obj_fn(x,real_data,param,{'beta','c','gamma'},t,init);
 params = [10,10,10];
 
-[x] = fmincon(fn, params, [],[],[],[],[0.001,0.001,0.001],[1,20,10],@R0_calc);
+[x] = fmincon(fn, params, [],[],[],[],[1,0.001,0.001],[1,20,10],@R0_calc);
 
 param.beta = x(1);
 param.c = x(2);
@@ -57,13 +57,20 @@ end
 
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
+new_init = out(1,1:4)';
+
 figure(3)
 plot_both(t,out,real_data);
 
-Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],init);
-sir_sensitivity_analysis(Q, param,'gamma')
-
 figure(4)
-Q = @(params)sir_time_to_10percent(params,total_pop, [0:1:tend],init);
-sir_sensitivity_analysis(Q, param,'c');
+Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
+sir_sensitivity_analysis(Q, param,'gamma');
+sir_plot_sensitivity(Q, 'gamma',10:20, param);
+ylabel('cumulative infected');
+
+figure(5)
+ Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
+ sir_sensitivity_analysis(Q, param,'c')
+ sir_plot_sensitivity(Q, 'c',1:5, param);
+ ylabel('time to 10% infected');
 
