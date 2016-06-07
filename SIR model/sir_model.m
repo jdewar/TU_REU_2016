@@ -60,6 +60,7 @@ end
 figure(3)
 plot_both(t,out,real_data);
 
+figure(4)
 Q = @(params)sir_time_to_10percent(params,total_pop, [0:1:tend],init);
-sir_sensitivity_analysis(Q, param,'gamma')
+sir_sensitivity_analysis(Q, param,'c');
 
