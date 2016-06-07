@@ -16,6 +16,5 @@ te3 = Q(params);
 time = (te1-te2)/(2*epsilon);
 difference = time * params.(param_name)/te3;
 
-sir_plot_sensitivity(Q, param_name,10:20, params);
 
 end
