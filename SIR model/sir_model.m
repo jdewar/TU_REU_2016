@@ -10,10 +10,10 @@ field3 = 'gamma';  value3 = 0.1;
 
 param = struct(field1,value1,field2,value2,field3,value3);
 
-real = get_data();
+[real, pop] = get_data('Saint Lucia');
 init_infected = real(1);
 tend = length(real);
-total_pop = 466000;
+total_pop = pop;
 
 
 %initial conditions
@@ -22,23 +22,22 @@ init = [total_pop - init_infected;init_infected;0;init_infected];
 %% solving
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
-% plotting
-%figure(1)
+%plotting
+figure(1)
 
-%subplot(1,2,1)
+subplot(1,2,1)
 [t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
-%plot_sir_model(t_model,out_model)
+plot_sir_model(t_model,out_model)
 
-%subplot(1,2,2)
-real_data = get_data();
-%plot_data(real_data)
+subplot(1,2,2)
+plot_data(real)
 
-%figure(2)
-%plot_both(t,out,real_data);
+figure(2)
+plot_both(t,out,real);
 
-val = sir_obj_fn([param.beta,param.c,param.gamma],real_data,param,{'beta','c','gamma'},t,init);
+val = sir_obj_fn([param.beta,param.c,param.gamma],real,param,{'beta','c','gamma'},t,init);
 
-fn = @(x)sir_obj_fn(x,real_data,param,{'beta','c','gamma'},t,init);
+fn = @(x)sir_obj_fn(x,real,param,{'beta','c','gamma'},t,init);
 params = [10,10,10];
 
 [x] = fmincon(fn, params, [],[],[],[],[1,0.001,0.001],[1,20,10],@R0_calc);
@@ -61,20 +60,21 @@ end
 
 new_init = out(1,1:4)';
 
-%figure(3)
-%plot_both(t,out,real_data);
+figure(3)
+plot_both(t,out,real);
 
-%figure(4)
-Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
-sir_sensitivity_analysis(Q, param,'gamma');
-%sir_plot_sensitivity(Q, 'gamma',1:20, param);
-%ylabel('cumulative infected');
+% figure(4)
+% Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
+% sir_sensitivity_analysis(Q, param,'gamma');
+% sir_plot_sensitivity(Q, 'gamma',1:20, param);
+% ylabel('cumulative infected');
+% 
+% figure(5)
+%  Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
+%  sir_sensitivity_analysis(Q, param,'c')
+%  sir_sensitivity_analysis(Q, param,'gamma')
+% sir_plot_sensitivity(Q, 'c',1:20, param);
+%  ylabel('time to 1% infected');
 
-%figure(5)
- Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
- sir_sensitivity_analysis(Q, param,'c')
- sir_sensitivity_analysis(Q, param,'gamma')
-%sir_plot_sensitivity(Q, 'c',1:20, param);
- %ylabel('time to 1% infected');
-
- sir_plot_contour(Q,1:20,1:20, param);
+%  figure(6)
+%  sir_plot_contour(Q,1:20,1:20, param);
