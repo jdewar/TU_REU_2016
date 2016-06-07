@@ -23,20 +23,20 @@ init = [total_pop - init_infected;init_infected;0;init_infected];
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
 % plotting
-% figure(1)
-% 
-% subplot(1,2,1)
-% [t_model,out_model] = sir_balanceANDsolve([0 100], init, param);
-% plot_sir_model(t_model,out_model)
+figure(1)
 
-% subplot(1,2,2)
- real_data = get_data();
-% plot_data(real_data)
+subplot(1,2,1)
+[t_model,out_model] = sir_balanceANDsolve([0 100], init, param);
+plot_sir_model(t_model,out_model)
 
-% figure(2)
-% plot_both(t,out,real_data);
+subplot(1,2,2)
+real_data = get_data();
+plot_data(real_data)
 
-%val = sir_obj_fn([param.beta,param.c,param.gamma],real_data,param,{'beta','c','gamma'},t,init);
+figure(2)
+plot_both(t,out,real_data);
+
+val = sir_obj_fn([param.beta,param.c,param.gamma],real_data,param,{'beta','c','gamma'},t,init);
 
 fn = @(x)sir_obj_fn(x,real_data,param,{'beta','c','gamma'},t,init);
 params = [10,10,10];
@@ -57,16 +57,9 @@ end
 
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
-% figure(3)
-% plot_both(t,out,real_data);
+figure(3)
+plot_both(t,out,real_data);
 
-% figure(4)
-% fn = @(t,x)sir_rhs(t,x,param);
-% options = odeset('Events',@(t,x)sir_10percentI(t,x,total_pop)); 
-% [t,Y,te,ye,ie] = ode45(fn, [0:1:tend], init, options); 
-% plot(t,Y(:,4)) 
-% title('10% infected')
-% hold all
-% plot(te,ye(4),'bo') 
-sir_sensitivity_analysis([0:1:tend], init,param,'gamma', total_pop)
-sir_sensitivity_analysis([0:1:tend], init,param,'c', total_pop)
+Q = @(params)sir_time_to_10percent(params,total_pop, [0:1:tend],init);
+sir_sensitivity_analysis(Q, param,'gamma')
+
