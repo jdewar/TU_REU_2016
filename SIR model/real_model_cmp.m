@@ -1,7 +1,7 @@
-function [difference] = real_model_cmp(model, infected_real)
+function [out] = real_model_cmp(model, infected_real)
 %real_model_cmp gets norm of difference
 
-difference = norm(model(1:length(infected_real),4) - infected_real');
-
+difference = model(1:length(infected_real),4) - infected_real';
+out = sum((difference'.^2));
 end
 
