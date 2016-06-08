@@ -4,11 +4,11 @@
 %% Setting parameters and initial conditions
 close all;
 
-real = chik_get_data();
+[real,pop,name] = get_data('Guateloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = 466000*.20;
-K_v = total_pop_h * 5;
+total_pop_h = pop;
+K_v = total_pop_h * 10;
 
 %parameters
 field1 = 'beta_hv';  value1 = 0.24;
@@ -23,51 +23,51 @@ field9 = 'sigma_h';  value9 = 19;
 field10 = 'sigma_v'; value10 = 0.5;
 field11 = 'H0';      value11 = total_pop_h;
 field12 = 'K_v';     value12 = K_v;
+field13 = 'init_infected'; value13 = init_infected_h;
 
 
-param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, value5, field6,value6,field7,value7, field8,value8,field9,value9,field10,value10, field11,value11, field12,value12);
+param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, value5, field6,value6,field7,value7, field8,value8,field9,value9,field10,value10, field11,value11, field12,value12,field13,value13);
 
 
 %initial conditions
-init = [total_pop_h - init_infected_h;0;init_infected_h;0;init_infected_h;K_v;0;1];
+init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_infected;K_v;0;1];
 
 %% solving
 
 
  % plotting
-figure(1)
-[t_model,out_model] = chik_balanceANDsolve([0 400], init, param);
-size(out_model)
-plot_chik_model(t_model,out_model)
-param_array = struct2array(param,{'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v'});
-R0 = R0_calc(param_array);
-
-figure(2)
-real_data = chik_get_data();
-chik_plot_data(real_data)
+% figure(1)
+% [t_model,out_model] = chik_balanceANDsolve([0 400], init, param);
+% size(out_model)
+% plot_chik_model(t_model,out_model)
+% param_array = struct2array(param,{'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'});
+% R0 = chik_R0_calc(param_array);
+% 
+% figure(2)
+% real_data = chik_get_data();
+% chik_plot_data(real_data)
 
 figure(3)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
 
-chik_plot_both(t,out,real_data);
-array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v'};
 
-fn = @(x)chik_obj_fn(x,real_data,param,array_names,t,init);
+chik_plot_both(t,out,real);
+array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
+
+fn = @(x)chik_obj_fn(x,real,param,array_names,t,init);
 %params = [.001,.001,.001,.001,.001,.001,.001,.001,.001,.001, total_pop_h, K_v];
-nonlincon = @(x)R0_nonlin(x);
+nonlincon = @(x)chik_R0_nonlin(x);
 %options = optimset('Algorithm','active');
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,0,0.5, total_pop_h, K_v];
-ub = [0.24,0.24,20,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v];
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,0,0.5, total_pop_h, K_v, param.init_infected *.001];
+ub = [0.24,0.24,20,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v*10, param.init_infected*10];
 [x] = fmincon(fn, (lb+ub)/2, [],[],[],[],lb,ub,nonlincon);
 
 param = array2struct(param, x, array_names); 
 
+param
 
-param.sigma_h
-param.gamma_h
-R0 = R0_calc(x)
 
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
 figure(4)
-chik_plot_both(t,out,real_data);
+chik_plot_both(t,out,real);
