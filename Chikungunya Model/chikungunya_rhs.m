@@ -19,6 +19,7 @@ cumulative_ih = init(5);
 sv = init(6);
 ev = init(7);
 iv = init(8);
+cumulative_iv = init(9);
 
 %% Calculations
 N_h = sh+eh+ih+rh;
@@ -36,6 +37,7 @@ lambda_v = (param.sigma_v*param.sigma_h*param.beta_vh*N_h)/(param.sigma_v*N_v + 
 out(6) = (param.psi_v - (param.psi_v - param.mu_v)*(N_v/param.K_v))*N_v - lambda_v*sv - param.mu_v*sv;% Susceptible
 out(7) = lambda_v*sv - (param.nu_v + param.mu_v)*ev;
 out(8) = param.nu_v*ev - param.mu_v*iv; %Infected
+out(9) = param.nu_v*ev;
 
 end
 
