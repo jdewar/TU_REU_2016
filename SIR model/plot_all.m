@@ -1,10 +1,13 @@
 function [ ] = plot_all()
 db = create_database();
     for i = 1:50
-        data = get_data(db(i).name);
+        data = db(i);
         figure(i)
-        plot_data(data);
-        title(db(i).name);
+        plot_data(data.count);
+        count = data.count_linear;
+        str = sprintf('%s %g',data.name, (count(end)/data.population));
+        title(str);
+        
     end
 
 end

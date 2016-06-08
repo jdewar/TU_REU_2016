@@ -4,11 +4,11 @@
 %% Setting parameters and initial conditions
 close all;
 
-[real,pop,name] = get_data('Guateloupe');
+[real,pop,name] = get_data('Guadeloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop;
-K_v = total_pop_h * 10;
+total_pop_h = pop * .2;
+K_v = pop * 10;
 
 %parameters
 field1 = 'beta_hv';  value1 = 0.24;
@@ -31,7 +31,7 @@ param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, v
 %chik_optimize_subset(param)
 
 %initial conditions
-init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_infected;K_v;0;1;1];
+init = get_init_conditions(param);
 
 %% solving
 
@@ -49,32 +49,36 @@ init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_inf
 % chik_plot_data(real_data)
 
 figure(3)
+subplot(1,2,1)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
-new_init = out(1,:);
-new_init
 
-%chik_plot_both(t,out,real);
+chik_plot_both(t,out,real);
+
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
 
-fn = @(x)chik_obj_fn(x,real,param,array_names,t,new_init);
+fn = @(x)chik_obj_fn(x,real,param,array_names,t);
 
 nonlincon = @(x)chik_R0_nonlin(x);
 
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v, param.init_infected *.1];
-ub = [0.24,0.24,2,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v, param.init_infected*10];
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,1,0.5, param.H0, param.K_v* .1, param.init_infected *.001];
+ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected*100];
 
-[x] = fmincon(fn, (lb+ub)/2, [],[],[],[],lb,ub,nonlincon);
+%param_array = struct2array(param, array_names);
+
+options = optimset('Algorithm','sqp');
+[x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
 
 param = array2struct(param, x, array_names); 
 
+chik_R0_calc(x)
 
+init = get_init_conditions(param);
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
-figure(4)
-% subplot(1,2,1)
+subplot(1,2,2)
 chik_plot_both(t,out,real);
 
-
-figure(5)
-plot_chik_residual(t,out,real);
+param
+% figure(5)
+% plot_chik_residual(t,out,real);
 
