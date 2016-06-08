@@ -1,4 +1,4 @@
-function database=read_Tycho_data()
+function database=create_database()
 % Output data is a structure.  Structure entries are arrays.
 % The meat of the database are the PAHO arrays.  Entries are an cell array
 % countries   : Cell array of unique country names
