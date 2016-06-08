@@ -8,6 +8,7 @@ hold on
 plot(t, Y(:,1), 'g') %plots susceptible graph
 plot(t, Y(:,2), 'b') %plots infected graph
 plot(t, Y(:,3), 'r') %plots recovered graph
-legend('susceptible','infected','recovered')
+plot(t, Y(:,4), 'k') %plots cumu infected graph
+legend('susceptible','infected','recovered','cumulative infected')
 end
 
