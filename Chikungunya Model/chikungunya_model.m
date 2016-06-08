@@ -53,7 +53,7 @@ figure(3)
 new_init = out(1,:);
 new_init
 
-chik_plot_both(t,out,real);
+%chik_plot_both(t,out,real);
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
 
 fn = @(x)chik_obj_fn(x,real,param,array_names,t,new_init);
@@ -67,8 +67,6 @@ ub = [0.24,0.24,2,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v, param.in
 
 param = array2struct(param, x, array_names); 
 
-param
-
 
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
@@ -76,5 +74,7 @@ figure(4)
 % subplot(1,2,1)
 chik_plot_both(t,out,real);
 
-% subplot(1,2,2)
-% plot_mosquito(t,out, real);
+
+figure(5)
+plot_chik_residual(t,out,real);
+
