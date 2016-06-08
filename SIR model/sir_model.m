@@ -62,7 +62,7 @@ new_init = out(1,1:4)';
 
 
 figure(3)
- plot_both(t,out,real_data);
+ plot_both(t,out,real);
 
 figure(4)
  Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
