@@ -79,3 +79,7 @@ figure(5)
 
  figure(6)
  sir_plot_contour(Q,1:20,1:20, param);
+ 
+%  figure(7)
+%  residual = residual_calc(init,real)
+%  plot(t,residual,'o')
