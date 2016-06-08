@@ -7,9 +7,9 @@ close all;
 [real,pop,name] = get_data('Guateloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop;
+total_pop_h = pop * .2;
 K_v = pop*10;
-
+K_v
 %parameters
 field1 = 'beta_hv';  value1 = 0.24;
 field2 = 'beta_vh';  value2 = 0.24;
@@ -31,7 +31,7 @@ param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, v
 %chik_optimize_subset(param)
 
 %initial conditions
-init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_infected;K_v;0;1;1];
+init = get_init_conditions(param);
 
 %% solving
 
@@ -61,8 +61,8 @@ fn = @(x)chik_obj_fn(x,real,param,array_names,t,new_init);
 
 nonlincon = @(x)chik_R0_nonlin(x);
 
-lb = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h*.2, 932000, param.init_infected];
-ub = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h*.2, 932000, param.init_infected];
+lb = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, param.H0, param.K_v*.2, param.init_infected];
+ub = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, param.H0, param.K_v*.2, param.init_infected];
 
 [x] = fmincon(fn, (lb+ub)/2, [],[],[],[],lb,ub,nonlincon);
 
@@ -70,6 +70,7 @@ param = array2struct(param, x, array_names);
 
 chik_R0_calc(x)
 
+init = get_init_conditions(param);
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
 subplot(1,2,2)
