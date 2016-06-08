@@ -7,9 +7,9 @@ close all;
 [real,pop,name] = get_data('Guateloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop * .2;
-K_v = pop*10;
-K_v
+total_pop_h = pop;
+K_v = pop * 10;
+
 %parameters
 field1 = 'beta_hv';  value1 = 0.24;
 field2 = 'beta_vh';  value2 = 0.24;
@@ -51,20 +51,22 @@ init = get_init_conditions(param);
 figure(3)
 subplot(1,2,1)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
-new_init = out(1,:);
 
 chik_plot_both(t,out,real);
 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
 
-fn = @(x)chik_obj_fn(x,real,param,array_names,t,new_init);
+fn = @(x)chik_obj_fn(x,real,param,array_names,t);
 
 nonlincon = @(x)chik_R0_nonlin(x);
 
-lb = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, param.H0, param.K_v*.2, param.init_infected];
-ub = [0.24,0.24,0.393,1/(70*365),1/3,.3,1/14,1/11,50,0.5, param.H0, param.K_v*.2, param.init_infected];
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,1,0.5, param.H0, param.K_v* .1, param.init_infected *.001];
+ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected*100];
 
-[x] = fmincon(fn, (lb+ub)/2, [],[],[],[],lb,ub,nonlincon);
+%param_array = struct2array(param, array_names);
+
+options = optimset('Algorithm','sqp');
+[x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
 
 param = array2struct(param, x, array_names); 
 
