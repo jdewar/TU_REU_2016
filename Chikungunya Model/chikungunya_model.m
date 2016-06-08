@@ -51,7 +51,7 @@ figure(3)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
 
 
-chik_plot_both(t,out,real);
+%chik_plot_both(t,out,real);
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
 
 fn = @(x)chik_obj_fn(x,real,param,array_names,t,init);
@@ -64,10 +64,11 @@ ub = [0.24,0.24,20,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v*10, para
 
 param = array2struct(param, x, array_names); 
 
-param
-
 
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
 figure(4)
 chik_plot_both(t,out,real);
+
+figure(5)
+plot_chik_residual(t,out,real);
