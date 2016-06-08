@@ -28,9 +28,10 @@ field13 = 'init_infected'; value13 = init_infected_h;
 
 param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, value5, field6,value6,field7,value7, field8,value8,field9,value9,field10,value10, field11,value11, field12,value12,field13,value13);
 
+%chik_optimize_subset(param)
 
 %initial conditions
-init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_infected;K_v;0;1];
+init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_infected;K_v;0;1;1];
 
 %% solving
 
@@ -49,17 +50,19 @@ init = [total_pop_h - param.init_infected;0;param.init_infected;0;param.init_inf
 
 figure(3)
 [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
-
+new_init = out(1,:);
+new_init
 
 chik_plot_both(t,out,real);
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
 
-fn = @(x)chik_obj_fn(x,real,param,array_names,t,init);
-%params = [.001,.001,.001,.001,.001,.001,.001,.001,.001,.001, total_pop_h, K_v];
+fn = @(x)chik_obj_fn(x,real,param,array_names,t,new_init);
+
 nonlincon = @(x)chik_R0_nonlin(x);
-%options = optimset('Algorithm','active');
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,0,0.5, total_pop_h, K_v, param.init_infected *.001];
-ub = [0.24,0.24,20,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v*10, param.init_infected*10];
+
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v, param.init_infected *.1];
+ub = [0.24,0.24,2,1/(70*365),1/3,.3,1/14,1/11,50,0.5, total_pop_h, K_v, param.init_infected*10];
+
 [x] = fmincon(fn, (lb+ub)/2, [],[],[],[],lb,ub,nonlincon);
 
 param = array2struct(param, x, array_names); 
@@ -70,4 +73,8 @@ param
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
 figure(4)
+% subplot(1,2,1)
 chik_plot_both(t,out,real);
+
+% subplot(1,2,2)
+% plot_mosquito(t,out, real);
