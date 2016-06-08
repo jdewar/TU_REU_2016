@@ -4,10 +4,10 @@
 %% Setting parameters and initial conditions
 close all;
 
-[real,pop,name] = get_data('Guateloupe');
+[real,pop,name] = get_data('Guadeloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop;
+total_pop_h = pop * .2;
 K_v = pop * 10;
 
 %parameters
