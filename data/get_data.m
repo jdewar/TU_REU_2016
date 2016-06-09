@@ -22,6 +22,8 @@ if exist('which','var')
             count = db(c).count_linear;
         case 'sparse'
             count = db(c).count_sparse;
+        case 'confirmed'
+            count = db(c).count_confirmed;
         otherwise
             count = db(c).count;
     end
