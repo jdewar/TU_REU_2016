@@ -7,7 +7,7 @@ close all;
 [real,pop,name] = get_data('Guadeloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop * .2;
+total_pop_h = pop;
 K_v = pop * 10;
 
 %parameters
@@ -60,17 +60,17 @@ fn = @(x)chik_obj_fn(x,real,param,array_names,t);
 
 nonlincon = @(x)chik_R0_nonlin(x);
 
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,1,0.5, param.H0, param.K_v* .1, param.init_infected *.001];
-ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected*100];
+lb = [0.24,0.24,.001,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, param.H0, param.K_v*.05, param.init_infected];
+ub = [0.24,0.24,   1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected];
 
-%param_array = struct2array(param, array_names);
+param_array = struct2array(param, array_names);
 
 options = optimset('Algorithm','sqp');
 [x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
 
 param = array2struct(param, x, array_names); 
 
-chik_R0_calc(x)
+%chik_R0_calc(x)
 
 init = get_init_conditions(param);
 [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
@@ -79,6 +79,10 @@ subplot(1,2,2)
 chik_plot_both(t,out,real);
 
 param
+
 % figure(5)
 % plot_chik_residual(t,out,real);
+
+figure(4)
+plot_susceptible_proportions(param,real,array_names, t)
 
