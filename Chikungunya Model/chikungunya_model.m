@@ -51,50 +51,60 @@ init = get_init_conditions(param);
 
 
 
-figure(3)
-subplot(1,2,1)
-[t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
+% figure(3)
+% subplot(1,2,1)
+% [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
+% 
+% chik_plot_both(t,out,real);
+% 
+% array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
+% 
+% fn = @(x)chik_obj_fn(x,real,param,array_names,t);
+% 
+% nonlincon = @(x)chik_R0_nonlin(x);
+% 
+% lb = [0.24,0.24,.001,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, param.H0, param.K_v*.05, param.init_infected];
+% ub = [0.24,0.24,   1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected];
+% 
+% param_array = struct2array(param, array_names);
+% 
+% options = optimset('Algorithm','sqp');
+% [x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
+% 
+% param = array2struct(param, x, array_names); 
+% 
+% %chik_R0_calc(x)
+% 
+% init = get_init_conditions(param);
+% [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
+% 
+% subplot(1,2,2)
+% chik_plot_both(t,out,real);
+% 
+% 
+% param
+% 
+% % figure(5)
+% % plot_chik_residual(t,out,real);
+% 
+% 
+% % figure(4)
+% % plot_susceptible_proportions(param,real,array_names, t, lb,ub)
 
-chik_plot_both(t,out,real);
+% total_infected = chik_cumu_infect_real(real)
+% time = chik_percent_real(real, .1, total_infected)
+% hold on
+% chik_plot_data(real)
+% plot(time,real(time),'o');
 
-array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
-
-fn = @(x)chik_obj_fn(x,real,param,array_names,t);
-
-nonlincon = @(x)chik_R0_nonlin(x);
-
-lb = [0.24,0.24,.001,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, param.H0, param.K_v*.05, param.init_infected];
-ub = [0.24,0.24,   1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected];
-
-param_array = struct2array(param, array_names);
-
-options = optimset('Algorithm','sqp');
-[x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
-
-param = array2struct(param, x, array_names); 
-
-%chik_R0_calc(x)
-
-init = get_init_conditions(param);
-[t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
-
-subplot(1,2,2)
-chik_plot_both(t,out,real);
-
-
-param
-
-% figure(5)
-% plot_chik_residual(t,out,real);
-
-
-% figure(4)
-% plot_susceptible_proportions(param,real,array_names, t, lb,ub)
-
-total_infected = chik_cumu_infect_real(real)
-time = chik_percent_real(real, .1, total_infected)
-hold on
-chik_plot_data(real)
-plot(time,real(time),'o');
-
-
+% figure(1)
+% country_names = {'Saint Martin', 'Saint Barthelemy', 'Saint Kitts and Nevis', 'Antigua', 'Monserrat', 'Guadeloupe','Anguilla'};
+% country_epstart(country_names)
+% 
+% figure(2)
+% country_names = {'Guadeloupe','Dominica','Martinique','Saint Lucia','Barbados','Saint Vincent and the Grenadines','Grenada','French Guiana'};
+% country_epstart(country_names)
+% 
+% figure(3)
+% country_names = { 'Saint Martin', 'Saint Barthelemy','Guadeloupe'};
+% country_epstart(country_names)
