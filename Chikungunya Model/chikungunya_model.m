@@ -44,41 +44,44 @@ init = get_init_conditions(param);
 % param_array = struct2array(param,{'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'});
 % R0 = chik_R0_calc(param_array);
 % 
-% figure(2)
-% real_data = chik_get_data();
-% chik_plot_data(real_data)
+figure(2)
+real_data = get_data('Saint Martin','confirmed');
+chik_plot_data(real_data)
+hold on
+realdata = get_data('Sint Maarten','confirmed');
+chik_plot_data(realdata)
 
-figure(3)
-subplot(1,2,1)
-[t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
-
-chik_plot_both(t,out,real);
-
-array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
-
-fn = @(x)chik_obj_fn(x,real,param,array_names,t);
-
-nonlincon = @(x)chik_R0_nonlin(x);
-
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,1,0.5, param.H0, param.K_v* .1, param.init_infected *.001];
-ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected*100];
-
-%param_array = struct2array(param, array_names);
-
-options = optimset('Algorithm','sqp');
-[x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
-
-param = array2struct(param, x, array_names); 
-
-chik_R0_calc(x)
-
-init = get_init_conditions(param);
-[t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
-
-subplot(1,2,2)
-chik_plot_both(t,out,real);
-
-param
-% figure(5)
-% plot_chik_residual(t,out,real);
-
+% figure(3)
+% subplot(1,2,1)
+% [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
+% 
+% chik_plot_both(t,out,real);
+% 
+% array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
+% 
+% fn = @(x)chik_obj_fn(x,real,param,array_names,t);
+% 
+% nonlincon = @(x)chik_R0_nonlin(x);
+% 
+% lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,1,0.5, param.H0, param.K_v* .1, param.init_infected *.001];
+% ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected*100];
+% 
+% %param_array = struct2array(param, array_names);
+% 
+% options = optimset('Algorithm','sqp');
+% [x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
+% 
+% param = array2struct(param, x, array_names); 
+% 
+% chik_R0_calc(x)
+% 
+% init = get_init_conditions(param);
+% [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
+% 
+% subplot(1,2,2)
+% chik_plot_both(t,out,real);
+% 
+% param
+% % figure(5)
+% % plot_chik_residual(t,out,real);
+% 
