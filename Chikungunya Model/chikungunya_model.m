@@ -4,7 +4,7 @@
 %% Setting parameters and initial conditions
 close all;
 
-[real,pop,name] = get_data('Guadeloupe');
+[real,pop,name] = get_data('Martinique');
 init_infected_h = real(1);
 tend = length(real);
 total_pop_h = pop;
@@ -45,36 +45,44 @@ init = get_init_conditions(param);
 % R0 = chik_R0_calc(param_array);
 % 
 % figure(2)
-% real_data = chik_get_data();
-% chik_plot_data(real_data)
+
+ %chik_plot_data(real)
 
 % figure(3)
 % subplot(1,2,1)
 % [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
+% % 
+% % chik_plot_both(t,out,real);
+% % 
+% array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
+% 
+% lb = [0.24,0.24,.001,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, param.H0, param.K_v*.05, param.init_infected];
+% ub = [0.24,0.24,   1,1/(70*365),1/3,.3,1/14,1/11,30,0.5, param.H0, param.K_v, param.init_infected];
+% 
+% param = optimizer(real,lb,ub, param, array_names, t);
+% 
+% 
+% %chik_R0_calc(x)
+% 
+% init = get_init_conditions(param);
+% [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
+ 
 
-% chik_plot_both(t,out,real);
-
-array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','K_v', 'init_infected'};
-
-lb = [0.24,0.24,.001,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, param.H0, param.K_v*.05, param.init_infected];
-ub = [0.24,0.24,   1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.K_v, param.init_infected];
-
-param = optimizer(real,lb,ub, param, array_names, t);
-
-
-%chik_R0_calc(x)
-
-init = get_init_conditions(param);
-[t,out] = chik_balanceANDsolve([0:7:tend*7], init, param);
 
 % subplot(1,2,2)
-% chik_plot_both(t,out,real);
+%chik_plot_both(t,out,real);
 
 
 
 % figure(5)
 % plot_chik_residual(t,out,real);
 
-figure(4)
-plot_susceptible_proportions(param,real,array_names, t, lb,ub)
+% figure(4)
+% plot_susceptible_proportions(param,real,array_names, t, lb,ub)
+
+total_infected = chik_cumu_infect_real(real)
+time = chik_percent_real(real, .1, total_infected)
+hold on
+chik_plot_data(real)
+plot(time,real(time),'o');
 
