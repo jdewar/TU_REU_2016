@@ -1,4 +1,4 @@
-function [ out] = chikungunya_rhs( t, init, param)
+function [ out] = chikungunya_rhs( t, init, param, functions)
 % sir_rhs defines the ode for a simple SIR model
 % parameters are set
     %Input param:
@@ -33,8 +33,9 @@ out(4) = param.gamma_h*ih - param.mu_h*rh;
 out(5) = param.nu_h*eh;
 
 lambda_v = (param.sigma_v*param.sigma_h*param.beta_vh*N_h)/(param.sigma_v*N_v + param.sigma_h *N_h) * (ih/N_h); 
+K_v = functions.K_v(param.min_K,param.max_K,t);
 
-out(6) = (param.psi_v - (param.psi_v - param.mu_v)*(N_v/param.K_v))*N_v - lambda_v*sv - param.mu_v*sv;% Susceptible
+out(6) = (param.psi_v - (param.psi_v - param.mu_v)*(N_v/K_v))*N_v - lambda_v*sv - param.mu_v*sv;% Susceptible
 out(7) = lambda_v*sv - (param.nu_v + param.mu_v)*ev;
 out(8) = param.nu_v*ev - param.mu_v*iv; %Infected
 out(9) = param.nu_v*ev;

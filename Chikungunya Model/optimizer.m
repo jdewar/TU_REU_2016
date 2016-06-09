@@ -1,14 +1,15 @@
-function [ op_param] = optimizer(real_data,lb,ub, param, array_names, t)
+function [ op_param] = optimizer(real_data,lb,ub, param, array_names, t, functions)
 
-fn = @(x)chik_obj_fn(x,real_data,param,array_names,t);
-
-nonlincon = @(x)chik_R0_nonlin(x);
-
+fn = @(x)chik_obj_fn(x,real_data,param,array_names,t, functions);
+               
+ 
+nonlincon = @(x)chik_R0_nonlin(param);
+ 
 options = optimset('Algorithm','sqp');
-
+ 
 [x] = fmincon(fn, (ub+lb)/2, [],[],[],[],lb,ub,nonlincon,options);
-
-op_param = array2struct(param, x, array_names); 
+ 
+ op_param = array2struct(param, x, array_names); 
 
 end
 

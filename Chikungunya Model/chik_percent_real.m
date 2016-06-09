@@ -3,7 +3,6 @@ time = 0;
 for i = 1:length(real_data)
     if (real_data(i) - (percent* total_infected) > - (percent* total_infected)/4) && (real_data(i) - (percent* total_infected) < (percent* total_infected)/4)
         time = i;
-        real_data(i)
         break;
     end
 end

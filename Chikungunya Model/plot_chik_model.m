@@ -18,9 +18,9 @@ hold off
 
 subplot(1,2,2)
 hold on
-%plot(t, Y(:,6), 'g') 
+plot(t, Y(:,6), 'g') 
 plot(t, Y(:,7), 'b')
 plot(t, Y(:,8), 'r')
-legend('exposed','infected')
+legend('susceptible','exposed','infected')
 
 end

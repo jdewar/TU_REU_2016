@@ -1,4 +1,4 @@
-function [] = plot_susceptible_proportions(param,data,array_names, t_in, lb, ub)
+function [] = plot_susceptible_proportions(param,data,array_names, t_in, lb, ub, functions)
 init_suscept_pop = param.H0;
 count = 1;
 for i = .1:.1:1
@@ -6,11 +6,11 @@ for i = .1:.1:1
     lb(11) = param.H0;
     ub(11) = param.H0;
     
-    param  = optimizer(data,lb,ub, param, array_names, t_in);
+    param  = optimizer(data,lb,ub, param, array_names, t_in, functions);
     
     suscept_pop(count) = param.H0
     
-    vals(count) = chik_obj_fn(struct2array(param,array_names),data,param,array_names, t_in);
+    vals(count) = chik_obj_fn(struct2array(param,array_names),data,param,array_names, t_in, functions);
     
     count = count+1;
 end

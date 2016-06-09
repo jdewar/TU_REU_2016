@@ -1,7 +1,11 @@
 function [R0] = chik_R0_calc(params)
-zeta = (params(10)*params(9))/(params(10)* params(12) + params(9)*params(11));
-R_vh = params(1) * params(11) * zeta * (params(8)/((params(7)+params(8))*params(7)));
-R_hv = params(2) * params(12) * zeta * (params(5)/((params(4)+params(5))*(params(4) + params(3))));
+average_K_v = params.min_K;
+
+zeta = (params.sigma_v*params.sigma_h)/(params.sigma_v* average_K_v + params.sigma_h*params.H0);
+
+R_hv = params.beta_hv * params.H0 * zeta * (params.nu_v/((params.mu_v+params.nu_v)*params.mu_v));
+
+R_vh = params.beta_vh* average_K_v * zeta * (params.nu_h/((params.mu_h+params.nu_h)*(params.mu_h + params.gamma_h)));
 
 R0 = sqrt(R_vh * R_hv);
 end
