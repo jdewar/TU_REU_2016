@@ -66,7 +66,7 @@ end
 
 % Walk through the csv data again, for each point of Tycho data add up the number of cases, and store it
 PAHO = NaN(clen,32); % ncols is nweeks, we can estimate low as MATLAB will auto-increase data structure bounds.
-PAHO_confirm = NaN(clen,32); % ncols is nweeks, we can estimate low as MATLAB will auto-increase data structure bounds.
+PAHO_confirmed = NaN(clen,32); % ncols is nweeks, we can estimate low as MATLAB will auto-increase data structure bounds.
 for i = 2:npts % ignore the first line
     year = (data.year(i) - 2014);
     if year < 0 % Ignore 2013 data
@@ -77,9 +77,9 @@ for i = 2:npts % ignore the first line
     % Hunt for the country, for each point in the list (this is very slow)
     j = find(strcmp(data.country{i}, countries),1);
 
-    % Confirmed and Suspected cases, we ignore imported cases
+    % Cumulative and Suspected cases, we ignore imported cases
     PAHO(j,week) = data.ccc(i) + data.csc(i);
-    PAHO_confirm(j,week) = data.ccc(i); % confirmed only;
+    PAHO_confirmed(j,week) = data.ccc(i);
 end
 
 % Now, for each country, for each point of data,
@@ -115,7 +115,7 @@ for i = 1:clen
     database(i).count = PAHO(i,:);
     database(i).count_linear = PAHO_linear(i,:);
     database(i).count_sparse = PAHO_sparse(i,:);
-    database(i).count_confirmed = PAHO_confirm(i,:);
+    database(i).count_confirmed = PAHO_confirmed(i,:);
     I = find(PAHO_sparse(i,:) > 0, 1);
     database(i).first_week = I;
     database(i).first_count = database(i).count_sparse(I);
