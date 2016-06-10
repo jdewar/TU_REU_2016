@@ -1,8 +1,8 @@
 function [] = plot_both(t,Y,data)
 %plot_both plots number infected for model and real data
-title('Real Infected Count and Model Infected Count');
-xlabel('Time in weeks')
-ylabel('population')
+title('Real Infected Count and Model Infected Count','fontsize',18);
+xlabel('Time in Weeks','fontsize',16)
+ylabel('Population','fontsize',16)
 hold on
 t1 = t';
 plot(t1(1:length(data)),data, '*');

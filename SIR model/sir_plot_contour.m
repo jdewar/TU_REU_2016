@@ -9,7 +9,8 @@ end
 z = reshape(z,size(c));
 
 contour(c,gamma,z,40);
-xlabel('c values');
-ylabel('\gamma values');
+xlabel('C Values','fontsize',16);
+ylabel('\gamma Values','fontsize',16);
+title('Comparing C and \gamma to Cumulative Infected','fontsize',18)
 colorbar
 end
