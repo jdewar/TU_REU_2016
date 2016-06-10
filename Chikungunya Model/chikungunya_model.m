@@ -33,7 +33,7 @@ param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, v
 field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
 
-functions.K_v(param.min_K,param.max_K,t);
+functions.K_v(param.min_K,param.max_K,[0:7:(tend*7)]);
 
 %chik_optimize_subset(param)
 
@@ -62,7 +62,7 @@ init = get_init_conditions(param, [0:7:(tend*7)]);
 % 
 % % figure(4)
 % % subplot(1,2,1)
-% [t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param);
+[t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param, functions);
 % 
 % chik_plot_both(t,out,real);
 % 
