@@ -1,4 +1,4 @@
-function [y, pop, name] = get_data(country_name, which)
+function [y, pop, name, firstweek] = get_data(country_name, which)
 %get_data for Dominican Republic
 addpath('../lib')
 
@@ -34,5 +34,6 @@ end
 y = count(db(c).first_week:end);
 pop  = db(c).population;
 name = db(c).name;
+firstweek = db(c).first_week;
 end
 
