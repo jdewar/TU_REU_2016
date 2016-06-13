@@ -4,6 +4,7 @@ hold on
 title('Real Infected Count')
 xlabel('Time in weeks')
 ylabel('Population')
+
 plot(count,'*')
 legend('Total cases')
 
