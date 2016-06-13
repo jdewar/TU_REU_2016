@@ -4,12 +4,13 @@
 %% Setting parameters and initial conditions
 close all;
 
-[real,pop,name] = get_data('Guadeloupe');
+[real,pop,name, firstWeek] = get_data('Guadeloupe');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop*.20;
+total_pop_h = pop*.2;
 min_K = pop *.5;
 max_K = pop * 10;
+tspan = [firstWeek:7:(55*7)];
 
 %parameters
 field1 = 'beta_hv';  value1 = 0.24;
@@ -33,12 +34,13 @@ param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, v
 field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
 
-functions.K_v(param.min_K,param.max_K,[0:7:(tend*7)]);
+functions.K_v(param.min_K,param.max_K,tspan);
 
 %chik_optimize_subset(param)
 
 %initial conditions
-init = get_init_conditions(param, [0:7:(tend*7)]);
+
+init = get_init_conditions(param, tspan);
 
 %% solving
 
@@ -62,19 +64,19 @@ init = get_init_conditions(param, [0:7:(tend*7)]);
 % 
 % % figure(4)
 % % subplot(1,2,1)
-[t,out] = chik_balanceANDsolve([0:7:(tend*7)], init, param, functions);
+% [t,out] = chik_balanceANDsolve(tspan, init, param, functions);
 % 
 % chik_plot_both(t,out,real);
 % 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','min_K','max_K', 'init_infected'};
  
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, param.H0, param.min_K * .5, param.max_K * .5, param.init_infected*.5];
-ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.min_K * 10, param.max_K * 10, param.init_infected*10];
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, param.H0, param.min_K * .5, param.max_K * .5, param.init_infected];
+ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.min_K * 10, param.max_K * 10, param.init_infected];
  
 % param1 = optimizer(real,lb,ub, param, array_names, t, functions)
 % 
 % init = get_init_conditions(param1, t);
-% [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param1, functions);
+% [t,out] = chik_balanceANDsolve(tspan, init, param1, functions);
 % 
 % figure(1)
 % subplot(1,2,1)
@@ -86,20 +88,25 @@ ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.min_K * 1
 %optimizing new infected
 param2 = optimizer_newInfected(real,lb,ub, param, array_names, t, functions)
 
+chik_R0_calc(param2)
+
 
 
 init = get_init_conditions(param2, t);
-[t,out] = chik_balanceANDsolve([0:7:tend*7], init, param2, functions);
+[t,out] = chik_balanceANDsolve(tspan, init, param2, functions);
 
-figure(2)
-subplot(1,2,1)
-chik_plot_both(t,out,real);
+% figure(2)
+% subplot(1,2,1)
+% chik_plot_both(t,out,real);
+% 
+% subplot(1,2,2)
+% chik_plot_both_newlyInfected(t,out,real)
+% 
+% figure(3)
+% plot_chik_residual_newInfected(t,out,real);
 
-subplot(1,2,2)
-chik_plot_both_newlyInfected(t,out,real)
+plot_mosquito(t,out,real);
 
-figure(3)
-plot_chik_residual_newInfected(t,out,real);
 % 
 % param
 % 
