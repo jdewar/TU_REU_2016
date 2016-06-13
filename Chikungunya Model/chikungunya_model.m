@@ -71,17 +71,17 @@ array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v',
 lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, param.H0, param.min_K * .5, param.max_K * .5, param.init_infected*.5];
 ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.min_K * 10, param.max_K * 10, param.init_infected*10];
  
-param1 = optimizer(real,lb,ub, param, array_names, t, functions)
-
-init = get_init_conditions(param1, t);
-[t,out] = chik_balanceANDsolve([0:7:tend*7], init, param1, functions);
-
-figure(1)
-subplot(1,2,1)
-chik_plot_both(t,out,real);
-
-subplot(1,2,2)
-chik_plot_both_newlyInfected(t,out,real)
+% param1 = optimizer(real,lb,ub, param, array_names, t, functions)
+% 
+% init = get_init_conditions(param1, t);
+% [t,out] = chik_balanceANDsolve([0:7:tend*7], init, param1, functions);
+% 
+% figure(1)
+% subplot(1,2,1)
+% chik_plot_both(t,out,real);
+% 
+% subplot(1,2,2)
+% chik_plot_both_newlyInfected(t,out,real)
 
 %optimizing new infected
 param2 = optimizer_newInfected(real,lb,ub, param, array_names, t, functions)
