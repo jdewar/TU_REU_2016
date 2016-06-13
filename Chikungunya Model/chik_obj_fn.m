@@ -10,6 +10,6 @@ new_init = get_init_conditions(params, t_in);
 
 [t,Y] = chik_balanceANDsolve(t_in, new_init, params, functions); 
 
-val = chik_real_model_cmp(Y,data);
+[val,difference] = chik_real_model_cmp(Y,data);
 
 end

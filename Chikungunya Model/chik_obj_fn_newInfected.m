@@ -9,6 +9,6 @@ new_init = get_init_conditions(params, t_in);
 
 [t,Y] = chik_balanceANDsolve(t_in, new_init, params, functions); 
 
-val = chik_cmp_newInfected(Y,data);
+[val,diffence] = chik_cmp_newInfected(Y,data);
 
 end

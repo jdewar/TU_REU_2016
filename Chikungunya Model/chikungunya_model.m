@@ -98,7 +98,8 @@ chik_plot_both(t,out,real);
 subplot(1,2,2)
 chik_plot_both_newlyInfected(t,out,real)
 
-
+figure(3)
+plot_chik_residual_newInfected(t,out,real);
 % 
 % param
 % 

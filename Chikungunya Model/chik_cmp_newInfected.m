@@ -1,4 +1,4 @@
-function [out] = chik_cmp_newInfected(model, infected_real)
+function [out, difference] = chik_cmp_newInfected(model, infected_real)
 
 newly_infected = get_newly_infected_count(infected_real);
 
