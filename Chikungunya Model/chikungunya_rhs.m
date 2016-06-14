@@ -1,6 +1,6 @@
 function [ out] = chikungunya_rhs( t, init, P, F)
 % sir_rhs defines the ode for a simple SIR model
-% Peters are set
+% Parameters are set
     %Input P:
         %t is time
         %init is initial conditions column vector
