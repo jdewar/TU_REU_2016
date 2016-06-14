@@ -2,6 +2,7 @@
 %%% Main script for running sir model
 
 %% Setting parameters and initial conditions
+addpath('../data');
 [real, pop] = get_data('Guadeloupe');
 init_infected = real(1)
 tend = length(real);
@@ -23,10 +24,10 @@ init = [total_pop - param.init_infected;param.init_infected;0;param.init_infecte
 [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
 
 % %plotting
-figure(1)
-
-[t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
-plot_sir_model(t_model,out_model)
+% figure(1)
+% 
+% [t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
+% plot_sir_model(t_model,out_model)
 
 % figure(2)
 % plot_data(real)
@@ -56,18 +57,17 @@ plot_sir_model(t_model,out_model)
 % % end
 % 
 % 
-% [t,out] = sir_balanceANDsolve([0:1:tend], init, param);
-% 
-% new_init = out(1,1:4)';
+[t,out] = sir_balanceANDsolve([0:1:tend], init, param);
+new_init = out(1,1:4)';
 % 
 % figure(3)
 %  plot_both(t,out,real);
 % 
-% % figure(4)
-% %  Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
-% %  sir_sensitivity_analysis(Q, param,'gamma');
-% %  sir_plot_sensitivity(Q, 'gamma',1:20, param);
-% %  ylabel('cumulative infected');
+figure(4)
+ Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
+ sir_sensitivity_analysis(Q, param,'beta');
+ sir_plot_sensitivity(Q, 'beta',.01:.01:.1, param);
+ ylabel('cumulative infected');
 % % 
 % % figure(5)
 % %  Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
