@@ -6,6 +6,6 @@ new_init = chik_init_conditions(params, t_in);
 
 [~,Y] = chik_balanced_solve(t_in, new_init, params, functions); 
 
-val = chik_cmp_real_model(Y, data);
+val = chik_cmp_real_model_newI(Y, data);
 
 end
