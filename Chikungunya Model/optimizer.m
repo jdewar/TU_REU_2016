@@ -3,7 +3,7 @@ function [ op_param, fval ] = optimizer(obj_fn, nonlincon, lb, ub, params)
 
 names = fieldnames(params);
 
-options = optimset('Algorithm','sqp'); % we think we like sqp, but we aren't sure.
+options = optimset('Algorithm','active-set'); % we think we like sqp, but we aren't sure.
 
 init_parray = (ub+lb)/2; % this could be an input / randomized
 
