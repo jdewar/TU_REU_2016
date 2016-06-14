@@ -1,7 +1,12 @@
 function [t,out, te,ye,ie] = chik_output(t_in, Y, param, options, functions)
+
+dydt_fn = @(t,Y) chikungunya_rhs(t, Y, param, functions);
+
 if numel(options) ~= 0
- [t,out, te,ye,ie] = ode45(@(t,Y)chikungunya_rhs(t,Y,param, functions),t_in, Y, options);
+    [t, out, te, ye, ie] = ode45(dydt_fn, t_in, Y, options);
 else
-    [t,out] = ode45(@(t,Y)chikungunya_rhs(t,Y,param, functions),t_in, Y, options);
+    
+    [t, out] = ode45 (dydt_fn, t_in, Y);
 end
+
 end

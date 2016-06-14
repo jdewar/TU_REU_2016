@@ -1,6 +1,8 @@
-function [ K_v] = chik_K_v(min, max, time)
+function K_v = chik_K_v(min, max, time)
 
-    K_v = ((max-min)/2)*sin(time/365 * 2* pi - (pi/2)) + ((max-min)/2) + min;
+half_amp = (max-min)/2;
+
+K_v = half_amp * sin(time * (2 * pi/365) - (pi/2)) + half_amp + min;
 
 end
 

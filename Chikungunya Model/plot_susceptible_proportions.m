@@ -1,16 +1,28 @@
-function [] = plot_susceptible_proportions(param,data,array_names, t_in, lb, ub, functions)
-init_suscept_pop = param.H0;
+function [] = plot_susceptible_proportions(params, data, t_in, lb, ub, functions)
+init_suscept_pop = params.H0;
 count = 1;
-for i = .1:.1:1
-    param.H0 = init_suscept_pop*i;
-    lb(11) = param.H0;
-    ub(11) = param.H0;
+
+names = fieldnames(params);
+
+range = .1:.1:1;
+
+suscept_pop = NaN(size(range));
+vals = NaN(size(range));
+for i = range
+    params.H0 = init_suscept_pop*i;
+    lb(11) = params.H0;
+    ub(11) = params.H0;
+
+    obj_fn = @(parray) chik_obj_fn(parray, data, names, t_in, functions);
+    nonlincon = @(x) chik_nonlincon_R0(x, names, functions, t_in(1));
+
+    % obj_fn, nonlincon, lb, ub, params
+    params  = optimizer(obj_fn, nonlincon, lb, ub, params);
     
-    param  = optimizer(data,lb,ub, param, array_names, t_in, functions);
+    suscept_pop(count) = params.H0
     
-    suscept_pop(count) = param.H0
-    
-    vals(count) = chik_obj_fn(struct2array(param,array_names),data,param,array_names, t_in, functions);
+    parray = struct2array(params, names);
+    vals(count) = chik_obj_fn(parray, data, names, t_in, functions);
     
     count = count+1;
 end

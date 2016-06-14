@@ -1,18 +1,23 @@
 
-%%% Main script for running sir model
+%% Main script for running sir model
 
-%% Setting parameters and initial conditions
-close all;
+% Setting paramseters and initial conditions
+close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
+addpath('../data');
 
-[real,pop,name, firstWeek] = get_data('Guadeloupe');
+country = 'Guadeloupe';
+[real_data, pop, name, firstWeek] = get_data(country);
+
+new_data = get_data(country,'linear_newinf');
+
 init_infected_h = real(1);
 tend = length(real);
 total_pop_h = pop*.2;
 min_K = pop *.5;
 max_K = pop * 10;
-tspan = [firstWeek:7:(55*7)];
+tspan = firstWeek:7:(55*7);
 
-%parameters
+%paramseters
 field1 = 'beta_hv';  value1 = 0.24;
 field2 = 'beta_vh';  value2 = 0.24;
 field3 = 'gamma_h';  value3 = 1/6;
@@ -28,110 +33,93 @@ field12 = 'min_K';     value12 = min_K;
 field13 = 'max_K';     value13 = max_K;
 field14 = 'init_infected'; value14 = init_infected_h;
 
-
-param = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5, value5, field6,value6,field7,value7, field8,value8,field9,value9,field10,value10, field11,value11, field12,value12,field13,value13, field14,value14);
+params = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5,value5,field6,value6,field7,value7,field8,value8,field9,value9,field10,value10,field11,value11,field12,value12,field13,value13,field14,value14);
 
 field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
 
-functions.K_v(param.min_K,param.max_K,tspan);
+% test K_v
+% display(functions.K_v(params.min_K,params.max_K,tspan));
 
-%chik_optimize_subset(param)
-
-%initial conditions
-
-init = get_init_conditions(param, tspan);
-
-%% solving
-
-
-% plotting
-% figure(1)
-% [t_model,out_model] = chik_balanceANDsolve([0 400], init, param);
-% 
-% plot_chik_model(t_model,out_model)
-% 
-% 
-% figure(2)
-%  plot([0:1:365],chik_K_v(min,max,[0:1:365]))
-
-
-% figure(3)
-% 
-%  chik_plot_data(real)
-% 
-% 
-% 
-% % figure(4)
-% % subplot(1,2,1)
-% [t,out] = chik_balanceANDsolve(tspan, init, param, functions);
-% 
-% chik_plot_both(t,out,real);
-% 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','min_K','max_K', 'init_infected'};
  
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, param.H0, param.min_K * .5, param.max_K * .5, param.init_infected];
-ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, param.H0, param.min_K * 10, param.max_K * 10, param.init_infected];
- 
-% param1 = optimizer(real,lb,ub, param, array_names, t, functions)
+lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, params.H0, params.min_K * .5, params.max_K * .5, params.init_infected];
+ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K * 10, params.max_K * 10, params.init_infected];
+
+% plotting
+figure()
+init = chik_init_conditions(params, tspan);
+[t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
+plot_chik_model(t_model,out_model)
+
+figure()
+plot(0:1:365, chik_K_v(params.min_K, params.max_K, 0:1:365))
+xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
+
+figure()
+chik_plot_data(real_data) % ?
+
+% optimizing
+nonlincon = @(x) chik_nonlincon_R0(x, array_names, functions, tspan(1));
+% cumulative infected
+% obj_fn1 = @(parray)chik_obj_fn(parray, real_data, array_names, tspan, functions);
+% opt_params1 = optimizer(obj_fn1, nonlincon, lb, ub, params);
 % 
-% init = get_init_conditions(param1, t);
-% [t,out] = chik_balanceANDsolve(tspan, init, param1, functions);
+% init = chik_init_conditions(opt_params1, t);
+% [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
 % 
-% figure(1)
+% figure()
 % subplot(1,2,1)
-% chik_plot_both(t,out,real);
+% chik_plot_both(t,out,real_data);
 % 
 % subplot(1,2,2)
-% chik_plot_both_newlyInfected(t,out,real)
+% chik_plot_both(t,out,new_data); % newly infected
 
-%optimizing new infected
-param2 = optimizer_newInfected(real,lb,ub, param, array_names, t, functions)
+% new infected
+obj_fn2 = @(parray)chik_obj_fn(parray, new_data, array_names, tspan, functions);
+opt_params2 = optimizer(obj_fn2, nonlincon, lb, ub, params);
 
-chik_R0_calc(param2)
+init = chik_init_conditions(opt_params2, tspan);
+[t,out] = chik_balanced_solve(tspan, init, opt_params2, functions);
+
+%both
+figure()
+subplot(1,2,1)
+chik_plot_both(t, out, real_data);
+
+subplot(1,2,2)
+chik_plot_both(t, out, new_data) % newly infected
+
+%res
+figure()
+plot_chik_residual(t, out, new_data);
+
+%mosq
+figure()
+plot_mosquito(t, out, real_data);
 
 
+figure()
+plot_chik_residual(t,out,real_data);
 
-init = get_init_conditions(param2, t);
-[t,out] = chik_balanceANDsolve(tspan, init, param2, functions);
-
-% figure(2)
-% subplot(1,2,1)
-% chik_plot_both(t,out,real);
+% figure()
+% plot_susceptible_proportions(params, real_data, t, lb, ub, functions) % this won't work given balancing errors
 % 
-% subplot(1,2,2)
-% chik_plot_both_newlyInfected(t,out,real)
-% 
-% figure(3)
-% plot_chik_residual_newInfected(t,out,real);
-
-plot_mosquito(t,out,real);
-
-% 
-% param
-% 
-% % figure(5)
-% % plot_chik_residual(t,out,real);
-% 
-% 
-%  figure(2)
-% plot_susceptible_proportions(param,real,array_names, t, lb,ub, functions)
-
-% total_infected = chik_cumu_infect_real(real)
-% time = chik_percent_real(real, .1, total_infected)
+% total_infected = chik_cumu_infect_real(real_data)
+% time = chik_percent_real(real_data, .1, total_infected)
 % hold on
-% chik_plot_data(real)
+% chik_plot_data(real_data)
 % plot(time,real(time),'o');
-
-% figure(1)
+% 
+% figure()
 % country_names = {'Saint Martin', 'Saint Barthelemy', 'Saint Kitts and Nevis', 'Antigua', 'Monserrat', 'Guadeloupe','Anguilla'};
 % country_epstart(country_names)
 % 
-% figure(2)
+% figure()
 % country_names = {'Guadeloupe','Dominica','Martinique','Saint Lucia','Barbados','Saint Vincent and the Grenadines','Grenada','French Guiana'};
 % country_epstart(country_names)
 % 
-% figure(3)
+% figure()
 % country_names = { 'Saint Martin', 'Saint Barthelemy','Guadeloupe'};
 % country_epstart(country_names)
 % country_names = { 'Saint Martin', 'Saint Barthelemy','Guadeloupe', 'Dominica','Dominican Republic','Martinique','French Guiana'};

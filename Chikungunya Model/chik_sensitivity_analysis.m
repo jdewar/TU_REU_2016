@@ -1,5 +1,5 @@
 function [difference, q_val] = chik_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
-%sensativity analysis, respect to Beta
+%CHIK_SENSITIVITY_ANALYSIS sensitivity analysis, respect to Beta
 params.(param_name) = params.(param_name);
 
 epsilon = 0.001 * params.(param_name);

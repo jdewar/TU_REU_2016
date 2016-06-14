@@ -1,5 +1,5 @@
 function [y, pop, name, firstweek] = get_data(country_name, which)
-%get_data for Dominican Republic
+%GET_DATA make a database (slow) and return data closest to name given
 addpath('../lib')
 
 db = create_database();
@@ -24,6 +24,9 @@ if exist('which','var')
             count = db(c).count_sparse;
         case 'confirmed'
             count = db(c).count_confirmed;
+        case 'linear_newinf'
+            inter = db(c).count_linear;
+            count = [inter(1), inter(2:end) - inter(1:end-1)];
         otherwise
             count = db(c).count;
     end
@@ -31,9 +34,9 @@ else
     count = db(c).count_linear;
 end
 
-y = count(db(c).first_week:end);
+firstweek = db(c).first_week;
+y = count(firstweek:end);
 pop  = db(c).population;
 name = db(c).name;
-firstweek = db(c).first_week;
 end
 
