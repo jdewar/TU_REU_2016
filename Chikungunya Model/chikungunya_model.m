@@ -10,8 +10,8 @@ country = 'Guadeloupe';
 
 new_data = get_data(country,'linear_newinf');
 
-init_infected_h = real(1);
-tend = length(real);
+init_infected_h = real_data(1);
+tend = length(real_data);
 total_pop_h = pop*.2;
 min_K = pop *.5;
 max_K = pop * 10;
@@ -43,24 +43,25 @@ functions = struct(field1,value1);
 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','min_K','max_K', 'init_infected'};
  
-lb = [0.24,0.24,0,1/(70*365),1/3,.3,1/14,1/11,50  ,0.5, params.H0, params.min_K * .5, params.max_K * .5, params.init_infected];
-ub = [0.24,0.24,1,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K * 10, params.max_K * 10, params.init_infected];
+lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.min_K, params.max_K, params.init_infected];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K, params.max_K, params.init_infected];
 
 % plotting
-figure()
-init = chik_init_conditions(params, tspan);
-[t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
-plot_chik_model(t_model,out_model)
+% figure()
+% init = chik_init_conditions(params, tspan);
+% [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
+% plot_chik_model(t_model,out_model)
 
 figure()
 plot(0:1:365, chik_K_v(params.min_K, params.max_K, 0:1:365))
 xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
 
-figure()
-chik_plot_data(real_data) % ?
+% figure()
+% chik_plot_data(real_data) % ?
 
 % optimizing
 nonlincon = @(x) chik_nonlincon_R0(x, array_names, functions, tspan(1));
+
 % cumulative infected
 % obj_fn1 = @(parray)chik_obj_fn(parray, real_data, array_names, tspan, functions);
 % opt_params1 = optimizer(obj_fn1, nonlincon, lb, ub, params);
@@ -73,7 +74,7 @@ nonlincon = @(x) chik_nonlincon_R0(x, array_names, functions, tspan(1));
 % chik_plot_both(t,out,real_data);
 % 
 % subplot(1,2,2)
-% chik_plot_both(t,out,new_data); % newly infected
+% chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
 
 % new infected
 obj_fn2 = @(parray)chik_obj_fn(parray, new_data, array_names, tspan, functions);
@@ -88,19 +89,21 @@ subplot(1,2,1)
 chik_plot_both(t, out, real_data);
 
 subplot(1,2,2)
-chik_plot_both(t, out, new_data) % newly infected
+chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
+
+
 
 %res
-figure()
-plot_chik_residual(t, out, new_data);
+% figure()
+% plot_chik_residual(t, out, new_data);
 
 %mosq
-figure()
-plot_mosquito(t, out, real_data);
-
-
-figure()
-plot_chik_residual(t,out,real_data);
+% figure()
+% plot_mosquito(t, out, real_data);
+% 
+% 
+% figure()
+% plot_chik_residual(t,out,real_data);
 
 % figure()
 % plot_susceptible_proportions(params, real_data, t, lb, ub, functions) % this won't work given balancing errors
