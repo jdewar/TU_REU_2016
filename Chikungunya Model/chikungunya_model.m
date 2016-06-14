@@ -6,7 +6,7 @@ close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
 country = 'Guadeloupe';
-[real_data, pop, name, firstWeek] = get_data(country);
+[real, pop, name, firstWeek] = get_data(country);
 
 new_data = get_data(country,'linear_newinf');
 
