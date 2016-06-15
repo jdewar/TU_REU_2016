@@ -61,11 +61,11 @@ plot_chik_model(t_model,out_model)
 % chik_plot_data(real_data) % ?
 
 % optimizing
-nonlincon = @(x) chik_nonlincon_R0(x, array_names, functions, tspan(1));
+
 
 % cumulative infected
 obj_fn1 = @(parray)chik_obj_fn(parray, new_data, array_names, tspan, functions);
-opt_params1 = optimizer(obj_fn1, nonlincon, lb, ub, params)
+opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
 init = chik_init_conditions(opt_params1, t);
 [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
@@ -93,7 +93,7 @@ chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
 % subplot(1,2,2)
 % chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
 
-chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions)
+%chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'max_K')
 
 %res
 % figure()

@@ -14,7 +14,7 @@ for i = 1:50
 end
 
 figure()
-plot(sig_h_vals,val)
+plot(param_name,val)
 xlabel('sigma h value');
 ylabel('objective function value');
 

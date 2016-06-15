@@ -3,7 +3,7 @@ function val = chik_obj_fn(param_array, data, array_names, t_in, functions)
 
 params = array2struct(param_array, array_names);
 
-c = chik_nonlincon_R0(param_array, array_names, functions, t_in(1));
+c = 1 - chik_calc_R0(params, functions, t_in(1));
 
 new_init = chik_init_conditions(params, t_in);
 [~,Y] = chik_balanced_solve(t_in, new_init, params, functions); 

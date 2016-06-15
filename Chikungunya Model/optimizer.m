@@ -1,4 +1,4 @@
-function [ op_param, fval ] = optimizer(obj_fn, nonlincon, lb, ub, params)
+function [ op_param, fval ] = optimizer(obj_fn, lb, ub, params)
 %OPTIMIZER ...
 
 names = fieldnames(params);
