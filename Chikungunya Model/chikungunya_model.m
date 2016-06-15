@@ -10,8 +10,8 @@ country = 'Guadeloupe';
 
 new_data = get_data(country,'linear_newinf');
 
-init_infected_h = real_data(1);
-tend = length(real_data);
+init_infected_h = real(1);
+tend = length(real);
 total_pop_h = pop*.2;
 min_K = pop *.5;
 max_K = pop * 10;
@@ -46,11 +46,12 @@ array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v',
 lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.min_K, params.max_K, params.init_infected];
 ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K, params.max_K, params.init_infected];
 
-% plotting
-% figure()
-% init = chik_init_conditions(params, tspan);
-% [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
-% plot_chik_model(t_model,out_model)
+%plotting
+figure()
+init = chik_init_conditions(params, tspan);
+[t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
+plot_chik_model(t_model,out_model)
+params
 
 figure()
 plot(0:1:365, chik_K_v(params.min_K, params.max_K, 0:1:365))
@@ -86,11 +87,10 @@ init = chik_init_conditions(opt_params2, tspan);
 %both
 figure()
 subplot(1,2,1)
-chik_plot_both(t, out, real_data);
+chik_plot_both(t, out, real);
 
 subplot(1,2,2)
 chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
-
 
 
 %res
