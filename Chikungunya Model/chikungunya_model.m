@@ -43,8 +43,8 @@ functions = struct(field1,value1);
 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','min_K','max_K', 'init_infected'};
  
-lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.min_K* .1, params.max_K*.1, params.init_infected* .1];
-ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K* 10, params.max_K*10, params.init_infected* 10];
+lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.min_K    , params.max_K   , params.init_infected* .1];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K*100, params.max_K*10, params.init_infected* 10];
 
 %plotting
 figure()
