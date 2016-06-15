@@ -93,7 +93,7 @@ chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
 % subplot(1,2,2)
 % chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
 
-chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'max_K')
+chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'max_K', lb, ub)
 
 %res
 % figure()
