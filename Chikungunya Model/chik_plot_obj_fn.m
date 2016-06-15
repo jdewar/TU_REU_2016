@@ -9,13 +9,13 @@ end
 
 for i = 1:50
     param_array(n) = i;
-    sig_h_vals(i) = param_array(n);
+    param(i) = param_array(n);
     val(i) = chik_obj_fn(param_array, data, array_names, t_in, functions);
 end
 
 figure()
-plot(param_name,val)
-xlabel('sigma h value');
+plot(param,val)
+xlabel(strcat(param_name,' value'));
 ylabel('objective function value');
 
 end
