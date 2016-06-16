@@ -3,6 +3,7 @@
 
 %% Setting parameters and initial conditions
 addpath('../data');
+
 [real, pop] = get_data('Panama');
 init_infected = real(1);
 tend = length(real);
@@ -36,7 +37,11 @@ param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
 
 fn = @(x)sir_obj_fn(x,real,param,array_names,tspan,total_pop);
 lb = [1,0.001,0.001,.01];
+<<<<<<< HEAD
 ub = [1,200,200,mean(real)* .95];
+=======
+ub = [1,300,300,mean(real)* .95];
+>>>>>>> origin/master
 half = (lb+ub)/2;
 options = optimset('Algorithm', 'sqp');
 [parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
