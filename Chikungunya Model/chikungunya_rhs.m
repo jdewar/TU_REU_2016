@@ -33,7 +33,7 @@ out(4) = P.gamma_h*ih - P.mu_h*rh;
 out(5) = P.nu_h*eh;
 
 lambda_v = (P.sigma_v*P.sigma_h*P.beta_vh*N_h)/(P.sigma_v*N_v + P.sigma_h *N_h) * (ih/N_h); 
-K_v = F.K_v(P.min_K,P.max_K,t);
+K_v = F.K_v(P.prop_K,P.max_K,t);
 
 out(6) = (P.psi_v - (P.psi_v - P.mu_v)*(N_v/K_v))*N_v - lambda_v*sv - P.mu_v*sv;% Susceptible
 out(7) = lambda_v*sv - (P.nu_v + P.mu_v)*ev;
