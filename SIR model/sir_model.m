@@ -3,10 +3,10 @@
 
 %% Setting parameters and initial conditions
 addpath('../data');
-[real, pop] = get_data('Martinique');
+[real, pop] = get_data('Panama');
 init_infected = real(1);
 tend = length(real);
-total_pop = pop
+total_pop = pop;
 tspan = [1:tend];
 close all;
 %parameters
@@ -36,7 +36,7 @@ param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
 
 fn = @(x)sir_obj_fn(x,real,param,array_names,tspan,total_pop);
 lb = [1,0.001,0.001,.01];
-ub = [1,100,100,mean(real)* .95];
+ub = [1,200,200,mean(real)* .95];
 half = (lb+ub)/2;
 options = optimset('Algorithm', 'sqp');
 [parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
@@ -66,10 +66,10 @@ figure(1)
  plot_both(t,out,real);
 
 
- 
-figure(2)
-range = linspace(lb(4),ub(4), 40);
-sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'init_cumu_infected', range);
+%  
+% figure(2)
+% range = linspace(lb(4),ub(4), 40);
+% sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'init_cumu_infected', range);
 
 % % 
 % figure(4)
