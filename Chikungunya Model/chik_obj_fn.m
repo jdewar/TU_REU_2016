@@ -7,7 +7,7 @@ c = 1 - chik_calc_R0(params, functions, t_in(1));
 
 new_init = chik_init_conditions(params, t_in);
 [~,Y] = chik_balanced_solve(t_in, new_init, params, functions); 
- val = chik_cmp_real_model_newI(Y, data);
+ val = chik_cmp_real_model(Y, data);
 
  
 %forces optimizer to run over smooth curve when R0 < 1.5 by multiplying by 
