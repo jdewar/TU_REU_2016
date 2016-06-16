@@ -3,52 +3,53 @@
 
 %% Setting parameters and initial conditions
 addpath('../data');
-[real, pop] = get_data('El Salvador');
+[real, pop] = get_data('Martinique');
 init_infected = real(1);
 tend = length(real);
-total_pop = pop;
-
+total_pop = pop
+tspan = [1:tend];
 close all;
 %parameters
 field1 = 'beta';  value1 = 0.024;
 field2 = 'c';  value2 = 9;
 field3 = 'gamma';  value3 = 0.1;
-field4 = 'init_infected'; value4 = init_infected;
+field4 = 'init_cumu_infected'; value4 = init_infected;
 
 param = struct(field1,value1,field2,value2,field3,value3,field4,value4);
 
 %initial conditions
 
-array_names = {'beta','c','gamma','init_infected'};
-param_array = [param.beta,param.c,param.gamma,param.init_infected];
-init = sir_init_conditions(param, t, total_pop);
+array_names = {'beta','c','gamma','init_cumu_infected'};
+param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
+
 %% solving
-[t,out] = sir_balanceANDsolve(1:tend, init, param);
+%[t,out] = sir_balanceANDsolve(1:tend, init, param);
 
 %plot_all
 % %plotting
 %figure(1)
-
-[t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
+% [t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
 %plot_sir_model(t_model,out_model)
 
 % figure()
 % plot_data(real)
 
-fn = @(x)sir_obj_fn(x,real,param,{'beta','c','gamma','init_infected'},t,total_pop);
+fn = @(x)sir_obj_fn(x,real,param,array_names,tspan,total_pop);
 lb = [1,0.001,0.001,.01];
-ub = [1,100,100,param.init_infected* .25];
+ub = [1,100,100,mean(real)* .95];
 half = (lb+ub)/2;
+options = optimset('Algorithm', 'sqp');
+[parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
 
-[parray] = fmincon(fn, half, [],[],[],[],lb,ub);
-
-val = sir_obj_fn(param_array,real, param,array_names,t,total_pop);
+val = sir_obj_fn(param_array,real, param,array_names,tspan,total_pop);
 
 param.beta = parray(1);
 param.c = parray(2);
 param.gamma = parray(3);
-param.init_infected = parray(4);
+param.init_cumu_infected = parray(4);
 param
+
+
 % 
 % % %Check that R0 is greater than 1
 % % R0 = (param.beta*param.c)/param.gamma;
@@ -58,17 +59,17 @@ param
 % % end
 % 
 % 
-new_init = sir_init_conditions(param, 1:tend, total_pop);
-[t,out] = sir_balanceANDsolve(1:tend, new_init, param);
-% 
-figure()
+new_init = sir_init_conditions(param, tspan, total_pop);
+[t,out] = sir_balanceANDsolve(tspan, new_init, param);
+
+figure(1)
  plot_both(t,out,real);
-% 
+
 
  
-figure()
-range = [lb(2):ub(2)];
-sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'c', range);
+figure(2)
+range = linspace(lb(4),ub(4), 40);
+sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'init_cumu_infected', range);
 
 % % 
 % figure(4)
