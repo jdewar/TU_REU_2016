@@ -1,7 +1,5 @@
-function [R0, ceq] = R0_calc(params)
-
-R0 = 1-(params(1)*params(2))/params(3) ;
-ceq = [];
+function [R0] = R0_calc(params)
+R0 = (params.beta*params.c)/params.gamma ;
 
 end
 
