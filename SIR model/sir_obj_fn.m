@@ -7,7 +7,7 @@ for i = 1:length(array_names)
 end
 
 R0 =  R0_calc(params);
-c = 1.001 - R0;
+c = 1.00001 - R0;
 
 new_init = sir_init_conditions(params, t_in, total_pop);
 
@@ -18,7 +18,7 @@ val = real_model_cmp(Y,data);
 if c>0
      val = val * (1+c);
 end
-mean(data);
+
 
 
 end
