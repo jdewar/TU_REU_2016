@@ -19,36 +19,35 @@ param = struct(field1,value1,field2,value2,field3,value3,field4,value4);
 
 %initial conditions
 
+array_names = {'beta','c','gamma','init_infected'};
+param_array = [param.beta,param.c,param.gamma,param.init_infected];
 init = sir_init_conditions(param, t, total_pop);
 %% solving
 [t,out] = sir_balanceANDsolve(1:tend, init, param);
 
+%plot_all
 % %plotting
-% figure(1)
-% 
-% [t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
-% plot_sir_model(t_model,out_model)
+%figure(1)
 
-% figure(2)
+[t_model,out_model] = sir_balanceANDsolve([0 200], init, param);
+%plot_sir_model(t_model,out_model)
+
+% figure()
 % plot_data(real)
 
-% figure(2)
-% plot_both(t,out,real);
-% 
-% val = sir_obj_fn([param.beta,param.c,param.gamma,param.init_infected],real,param,{'beta','c','gamma','init_infected'},t,init);
-% 
 fn = @(x)sir_obj_fn(x,real,param,{'beta','c','gamma','init_infected'},t,total_pop);
 lb = [1,0.001,0.001,.01];
 ub = [1,100,100,param.init_infected* .25];
 half = (lb+ub)/2;
 
-[x] = fmincon(fn, half, [],[],[],[],lb,ub);
+[parray] = fmincon(fn, half, [],[],[],[],lb,ub);
 
-param.beta = x(1);
-param.c = x(2);
-param.gamma = x(3);
-param.init_infected = x(4);
+val = sir_obj_fn(param_array,real, param,array_names,t,total_pop);
 
+param.beta = parray(1);
+param.c = parray(2);
+param.gamma = parray(3);
+param.init_infected = parray(4);
 param
 % 
 % % %Check that R0 is greater than 1
@@ -62,9 +61,16 @@ param
 new_init = sir_init_conditions(param, 1:tend, total_pop);
 [t,out] = sir_balanceANDsolve(1:tend, new_init, param);
 % 
-% figure(3)
+figure()
  plot_both(t,out,real);
 % 
+
+ 
+figure()
+range = [lb(2):ub(2)];
+sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'c', range);
+
+% % 
 % figure(4)
 %  Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
 %  sir_sensitivity_analysis(Q, param,'beta');
