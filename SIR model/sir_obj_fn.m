@@ -1,6 +1,5 @@
 
-function [val] = sir_obj_fn(param_array,data,param_base,array_names, t_in, total_pop)
-params = param_base;
+function [val] = sir_obj_fn(param_array,data,params,array_names, t_in, total_pop)
 
 for i = 1:length(array_names)
     name = array_names{i}; 
@@ -19,6 +18,7 @@ val = real_model_cmp(Y,data);
 if c>0
      val = val * (1+c);
 end
+mean(data);
 
 
 end
