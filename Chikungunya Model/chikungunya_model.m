@@ -43,8 +43,8 @@ functions = struct(field1,value1);
 
 array_names = {'beta_hv', 'beta_vh', 'gamma_h', 'mu_h', 'nu_h', 'psi_v', 'mu_v', 'nu_v', 'sigma_h', 'sigma_v', 'H0','min_K','max_K', 'init_infected'};
  
-lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.min_K    , params.max_K   , params.init_infected* .1];
-ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.min_K*100, params.max_K*10, params.init_infected* 10];
+lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.max_K, params.max_K   , params.init_infected];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.max_K, params.max_K, params.init_infected];
 
 %plotting
 figure()
@@ -71,11 +71,11 @@ init = chik_init_conditions(opt_params1, t);
 [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
 
 figure()
-subplot(1,2,1)
-chik_plot_both(t, out, real);
-
-
-subplot(1,2,2)
+% subplot(1,2,1)
+% chik_plot_both(t, out, real);
+% 
+% 
+% subplot(1,2,2)
 chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
 
 % new infected
@@ -93,7 +93,7 @@ chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
 % subplot(1,2,2)
 % chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
 
-chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'max_K', lb, ub)
+%chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'sigma_h', lb, ub)
 
 %res
 % figure()
