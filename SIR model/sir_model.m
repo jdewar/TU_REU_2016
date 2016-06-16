@@ -3,8 +3,8 @@
 
 %% Setting parameters and initial conditions
 addpath('../data');
-[real, pop] = get_data('Guadeloupe');
-init_infected = real(1)
+[real, pop] = get_data('El Salvador');
+init_infected = real(1);
 tend = length(real);
 total_pop = pop;
 
@@ -18,10 +18,10 @@ field4 = 'init_infected'; value4 = init_infected;
 param = struct(field1,value1,field2,value2,field3,value3,field4,value4);
 
 %initial conditions
-init = [total_pop - param.init_infected;param.init_infected;0;param.init_infected];
 
+init = sir_init_conditions(param, t, total_pop);
 %% solving
-[t,out] = sir_balanceANDsolve([0:1:tend], init, param);
+[t,out] = sir_balanceANDsolve(1:tend, init, param);
 
 % %plotting
 % figure(1)
@@ -37,17 +37,19 @@ init = [total_pop - param.init_infected;param.init_infected;0;param.init_infecte
 % 
 % val = sir_obj_fn([param.beta,param.c,param.gamma,param.init_infected],real,param,{'beta','c','gamma','init_infected'},t,init);
 % 
-% fn = @(x)sir_obj_fn(x,real,param,{'beta','c','gamma','init_infected'},t,init);
-% params = [10,10,10,10];
-% 
-% [x] = fmincon(fn, params, [],[],[],[],[1,0.001,0.001,param.init_infected*.001],[1,20,10,param.init_infected *10],@R0_calc);
-% 
-% param.beta = x(1);
-% param.c = x(2);
-% param.gamma = x(3);
-% param.init_infected = x(4);
-% 
-% param
+fn = @(x)sir_obj_fn(x,real,param,{'beta','c','gamma','init_infected'},t,total_pop);
+lb = [1,0.001,0.001,.01];
+ub = [1,100,100,param.init_infected* .25];
+half = (lb+ub)/2;
+
+[x] = fmincon(fn, half, [],[],[],[],lb,ub);
+
+param.beta = x(1);
+param.c = x(2);
+param.gamma = x(3);
+param.init_infected = x(4);
+
+param
 % 
 % % %Check that R0 is greater than 1
 % % R0 = (param.beta*param.c)/param.gamma;
@@ -57,17 +59,17 @@ init = [total_pop - param.init_infected;param.init_infected;0;param.init_infecte
 % % end
 % 
 % 
-[t,out] = sir_balanceANDsolve([0:1:tend], init, param);
-new_init = out(1,1:4)';
+new_init = sir_init_conditions(param, 1:tend, total_pop);
+[t,out] = sir_balanceANDsolve(1:tend, new_init, param);
 % 
 % figure(3)
-%  plot_both(t,out,real);
+ plot_both(t,out,real);
 % 
-figure(4)
- Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
- sir_sensitivity_analysis(Q, param,'beta');
- sir_plot_sensitivity(Q, 'beta',.01:.01:.1, param);
- ylabel('cumulative infected');
+% figure(4)
+%  Q = @(params)sir_cumu_infect(params,total_pop, [0:1:tend],new_init);
+%  sir_sensitivity_analysis(Q, param,'beta');
+%  sir_plot_sensitivity(Q, 'beta',.01:.01:.1, param);
+%  ylabel('cumulative infected');
 % % 
 % % figure(5)
 % %  Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
@@ -82,3 +84,16 @@ figure(4)
 %  figure(7)
 %  residual = residual_calc(init,real)
 %  plot(t,residual,'o')
+
+
+% param = 
+% 
+%              beta: 1
+%                 c: 3.525457468235504
+%             gamma: 3.486563794602791
+%     init_infected: 1300
+% 
+% 
+% ans =
+% 
+%     -6.219152650581727e-07
