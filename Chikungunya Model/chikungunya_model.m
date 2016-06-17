@@ -5,13 +5,13 @@
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Saint Bart';
+country = 'Columbia';
 [real, pop, name, firstWeek] = get_data(country);
 
 %new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop* .32;
+total_pop_h = pop;
 %min_K = pop *.5;
 max_K = pop * 10;
 tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
