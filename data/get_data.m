@@ -8,7 +8,7 @@ bestdist = intmax;
 
 uname = upper(country_name);
 for i = 1:length(db)
-    cdist = strdist (upper(db(i).name), uname);
+    cdist = strdist(upper(db(i).name), uname);
     if cdist < bestdist
         bestidx = i;
         bestdist = cdist;
