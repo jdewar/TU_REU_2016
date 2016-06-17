@@ -9,12 +9,12 @@ init_infected = real(1);
 tend = length(real);
 total_pop = pop;
 tspan = [1:tend];
-tspan_predictions = [1:tend + 10];
+tspan_predictions = [1:tend + 20];
 close all;
 %parameters
 field1 = 'beta';  value1 = 0.024;
 field2 = 'c';  value2 = 9;
-field3 = 'gamma';  value3 = 0.1;
+field3 = 'gamma';  value3 = 1/6;
 field4 = 'init_cumu_infected'; value4 = init_infected;
 
 param = struct(field1,value1,field2,value2,field3,value3,field4,value4);
@@ -50,7 +50,7 @@ param.beta = parray(1);
 param.c = parray(2);
 param.gamma = parray(3);
 param.init_cumu_infected = parray(4);
-param
+
 
 
 % 
@@ -81,12 +81,28 @@ figure(1)
 %  sir_plot_sensitivity(Q, 'beta',.01:.01:.1, param);
 %  ylabel('cumulative infected');
 % % 
-% % figure(5)
-% %  Q = @(params)sir_time_to_percent(params,total_pop, [0:1:tend],new_init,.01);
-% %  sir_sensitivity_analysis(Q, param,'c')
-% %  sir_sensitivity_analysis(Q, param,'gamma')
-% %  sir_plot_sensitivity(Q, 'c',1:20, param);
-% %  ylabel('time to 1% infected');
+figure()
+Q = @(params)sir_cumu_infect(params,out, t, new_init);
+% sir_sensitivity_analysis(Q, param,'c')
+% sir_sensitivity_analysis(Q, param,'gamma')
+sir_plot_sensitivity(Q, 'gamma',1:20, param);
+ylabel('cumulative infected');
+
+figure()
+Q = @(params)sir_cumu_infect(params,out, t, new_init);
+% sir_sensitivity_analysis(Q, param,'c')
+% sir_sensitivity_analysis(Q, param,'gamma')
+sir_plot_sensitivity(Q, 'c',1:20, param);
+ylabel('cumulative infected');
+
+
+figure()
+Q = @(params)sir_cumu_infect(params,out, t, new_init);
+% sir_sensitivity_analysis(Q, param,'c')
+% sir_sensitivity_analysis(Q, param,'gamma')
+sir_sensitivity_analysis(Q, param,'init_cumu_infected')
+%sir_plot_sensitivity(Q, 'init_cumu_infected',.001:(mean(real)* .95), param);
+ylabel('cumulative infected');
 % 
 %  figure(6)
 %  sir_plot_contour(Q,1:20,1:20, param);
