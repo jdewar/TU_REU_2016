@@ -4,11 +4,12 @@
 %% Setting parameters and initial conditions
 addpath('../data');
 
-[real, pop] = get_data('Panama');
+[real, pop] = get_data('Columbia');
 init_infected = real(1);
 tend = length(real);
 total_pop = pop;
 tspan = [1:tend];
+tspan_predictions = [1:tend + 10];
 close all;
 %parameters
 field1 = 'beta';  value1 = 0.024;
@@ -37,11 +38,8 @@ param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
 
 fn = @(x)sir_obj_fn(x,real,param,array_names,tspan,total_pop);
 lb = [1,0.001,0.001,.01];
-<<<<<<< HEAD
 ub = [1,200,200,mean(real)* .95];
-=======
-ub = [1,300,300,mean(real)* .95];
->>>>>>> origin/master
+
 half = (lb+ub)/2;
 options = optimset('Algorithm', 'sqp');
 [parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
@@ -65,7 +63,7 @@ param
 % 
 % 
 new_init = sir_init_conditions(param, tspan, total_pop);
-[t,out] = sir_balanceANDsolve(tspan, new_init, param);
+[t,out] = sir_balanceANDsolve(tspan_predictions, new_init, param);
 
 figure(1)
  plot_both(t,out,real);
