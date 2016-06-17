@@ -1,25 +1,19 @@
-function [] = chik_plot_contour(Q,range_gamma_h, range_sigma_h, param)
-[gamma_h, sigma_h] = meshgrid(range_gamma_h, range_sigma_h);
-for i = 1:numel(gamma_h)
+function [] = chik_plot_contour(Q, param,range_init_cumu_infected, range_sigma_h)
+[init_cumu_infected, sigma_h] = meshgrid(range_init_cumu_infected, range_sigma_h);
+how_many = numel(init_cumu_infected);
+for i = 1:how_many
     params1 = param;
-%     params1.beta_hv = beta_hv(i);
-%     params1.beta_vh = beta_vh(i);
-    params1.gamma_h = gamma_h(i);
-%     params1.mu_h = mu_h(i);
-%     params1.nu_h = nu_h(i);
-%     params1.psi_v = psi_v(i);
-%     params1.mu_v = mu_v(i);
-%     params1.nu_v = nu_v(i);
-    params1.sigma_h = sigma_h(i);
-%     params1. sigma_v =  sigma_v(i);
-%     params1. H0 =  H0(i);
-%     params1. K_v =  K_v(i);
-    z(i) = Q(params1);
-end
-z = reshape(z,size(gamma_h));
+    params1.init_cumu_infected = init_cumu_infected(i);
 
-contour(sigma_h,gamma_h,z,40);
+    params1.sigma_h = sigma_h(i);
+
+    z(i) = Q(params1);
+    
+end
+z = reshape(z,size(init_cumu_infected));
+
+contour(sigma_h,init_cumu_infected,z,40);
 xlabel('sigma_h values');
-ylabel('gamma_h values');
+ylabel('init cumulative infected values');
 colorbar
 end
