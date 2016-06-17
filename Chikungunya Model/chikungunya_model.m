@@ -5,17 +5,17 @@
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Guadeloupe';
+country = 'Saint Bart';
 [real, pop, name, firstWeek] = get_data(country);
 
-new_data = get_data(country,'linear_newinf');
-
+%new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop* .2;
+total_pop_h = pop* .32;
 %min_K = pop *.5;
 max_K = pop * 10;
-tspan = firstWeek:7:(55*7);
+tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
+
 
 param_struct = ...
     {'beta_hv', 0.24;
@@ -44,8 +44,8 @@ functions = struct(field1,value1);
 % test K_v
 % display(functions.K_v(params.min_K,params.max_K,tspan));
  
-lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1  ,0.5, params.H0, params.prop_K, params.max_K   , .001];
-ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
+lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
 
 %plotting
 % figure()
@@ -59,7 +59,7 @@ ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.prop_
 % xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
 
 % figure()
-% chik_plot_data(real_data) % ?
+%  chik_plot_data(real) % ?
 
 % optimizing
 
@@ -68,12 +68,14 @@ ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.prop_
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
-init = chik_init_conditions(opt_params1, t);
+init = chik_init_conditions(opt_params1, tspan);
 [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
+[rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
 
 figure()
-% subplot(1,2,1)
- chik_plot_both(t, out, real);
+% % subplot(1,2,1)
+chik_plot_both(t, out, real);
+drawnow
 % 
 % 
 % subplot(1,2,2)
@@ -93,8 +95,8 @@ figure()
 % 
 % subplot(1,2,2)
 % chik_plot_both_NewlyInfected(t,out,new_data) % newly infected
-
-%chik_plot_obj_fn(struct2array(opt_params1, array_names), new_data, array_names, tspan, functions, 'sigma_h', lb, ub)
+% range = linspace(lb(14), ub(14), 40);
+% chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'init_cumu_infected', range)
 
 %res
 % figure()
@@ -130,3 +132,10 @@ figure()
 % country_epstart(country_names)
 % country_names = { 'Saint Martin', 'Saint Barthelemy','Guadeloupe', 'Dominica','Dominican Republic','Martinique','French Guiana'};
 % country_epstart(country_names)
+
+% Q1 = @(params)chik_Q_cumu_infect (params, out, t, functions);
+% Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
+% Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan, functions);
+% figure()
+% chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
+
