@@ -1,4 +1,4 @@
-
+function [] = chikungunya_model()
 %% Main script for running sir model
 
 % Setting paramseters and initial conditions
@@ -139,3 +139,4 @@ drawnow
 % figure()
 % chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
 
+end
