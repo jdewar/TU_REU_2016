@@ -108,7 +108,7 @@ title('Balanced SIR Derivatives')
 
 %% Optimizing
 lb = [1, 0.001, 0.001, 0.01]; %boundaries for parameters [beta, c, gamma, init_cumu_inf]
-ub = [1,   200,   200, mean(count)* .95];
+ub = [1,   200,   200, pop];
 %mean(count)* .95
 half = (lb + ub) / 2; %set this as starting point for optimization
 opt_func = @(param_array)objective_function(count, param, array_names, param_array, tdata, pop); %call obj fn with inputs
