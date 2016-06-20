@@ -12,9 +12,9 @@ close all;
 %% Plot Data
 figure()
 plot(count, '*');  %plots data points from get_data
-title(name);  %plots name of country as title
-xlabel('Time');
-ylabel('Total Number Infected');
+title(name, 'fontsize', 18);  %plots name of country as title
+xlabel('Time', 'fontsize', 16);
+ylabel('Total Number Infected', 'fontsize', 16);
 
 
 %% Set Parameters
@@ -26,7 +26,7 @@ field4 = 'init_cumu_inf'; value4 = init_cumu_inf;
 param = struct(field1,value1,field2,value2,field3,value3,field4,value4);
 
 array_names = {'beta', 'c', 'gamma', 'init_cumu_inf'};
-param_array = {param.beta, param.c, param.gamma, param.init_cumu_inf};
+param_array = [param.beta, param.c, param.gamma, param.init_cumu_inf];
  
  
 %% Initial Conditions
@@ -38,13 +38,13 @@ figure (2)
 subplot(2,2,1)
 [t, soln] = solve_rhs_equations (tdata, init, param, []); %calls ode45 to solve odes
 hold on
-plot(t, soln(:,1), 'g'); %plot susceptible
+%plot(t, soln(:,1), 'g'); %plot susceptible
 plot(t, soln(:,2), 'k'); %plot infected
 plot(t, soln(:,3), 'b'); %plot recovered
 plot(t, soln(:,4), 'r'); %plot cumulative infected
-title('SIR Unbalanced Population Dynamics')
-xlabel('Time')
-ylabel('Population')
+title('Unbalanced SIR Dynamics', 'fontsize', 18)
+xlabel('Time', 'fontsize', 16)
+ylabel('Population', 'fontsize', 16)
 legend('Susceptible', 'Infected', 'Recovered', 'Cumulative Infected', 'Location', 'best')
 
 
@@ -61,7 +61,7 @@ hold on
 plot(t, deriv(:,2), 'k');
 plot(t, deriv(:,3), 'b');
 plot(t, deriv(:,4), 'r');
-title('Balanced SIR Derivatives')
+title('Balanced SIR Derivatives', 'fontsize', 18)
 
 
 %% Balancing
@@ -79,13 +79,13 @@ new_init = Y(end, :); %when event is triggered, endpoints become new_init
 %% Plot Balanced SIR Dynamics
 subplot(2,2,3)
 hold on
-plot(t, bal_soln(:,1), 'g'); %plot susceptible
+%plot(t, bal_soln(:,1), 'g'); %plot susceptible
 plot(t, bal_soln(:,2), 'k'); %plot infected
 plot(t, bal_soln(:,3), 'b'); %plot recovered
 plot(t, bal_soln(:,4), 'r'); %plot cumulative infected
-title('SIR Balanced Population Dynamics')
-xlabel('Time')
-ylabel('Population')
+title('Balanced SIR Dynamics', 'fontsize', 18)
+xlabel('Time', 'fontsize', 16)
+ylabel('Population', 'fontsize', 16)
 legend('Susceptible', 'Infected', 'Recovered', 'Cumulative Infected', 'Location', 'best')
 
 
@@ -103,12 +103,12 @@ hold on
 plot(t, bal_deriv(:,2), 'k');
 plot(t, bal_deriv(:,3), 'b');
 plot(t, bal_deriv(:,4), 'r');
-title('Balanced SIR Derivatives')
+title('Balanced SIR Derivatives', 'fontsize', 18)
 
 
 %% Optimizing
 lb = [1, 0.001, 0.001, 0.01]; %boundaries for parameters [beta, c, gamma, init_cumu_inf]
-ub = [1,   200,   200, pop];
+ub = [1,   200,   200, mean(count)* .95];
 %mean(count)* .95
 half = (lb + ub) / 2; %set this as starting point for optimization
 opt_func = @(param_array)objective_function(count, param, array_names, param_array, tdata, pop); %call obj fn with inputs
@@ -135,9 +135,32 @@ hold on
 plot(t, opt_soln(:,4), 'r'); %plot cumu inf with data
 plot(count, '*')
 title(name)
-xlabel('Time')
-ylabel('Population')
+xlabel('Time', 'fontsize', 18)
+ylabel('Population', 'fontsize', 16)
 legend('Model', 'Data', 'Location', 'best')
+
+
+% %% Plot Objective Function
+% n = 1;
+% for i = 1:length(array_names)
+%     if strcmp('init_cumu_inf',array_names{i}) == 1
+%         n = i;
+%         break;
+%     end
+% end
+% 
+% range = linspace(lb(4),ub(4), 40);
+% for i = 1:length(range) 
+%     %param.(array_names{i})
+%     %param_array(n)
+%     param_array(n) = range(i);
+%     param.(array_names{i}) = param_array(n);
+%     val(i) = objective_function(count, param, array_names, param_array, tdata, pop);
+% end
+% 
+% plot((param),(val))
+% xlabel(strcat(param_name,'value'));
+% ylabel('objective function value');
 end 
 
 
@@ -190,13 +213,14 @@ function [difference] = objective_function (count, param, array_names, param_arr
         param.(name) = param_array(i); %change parameters from struct to array
     end
 
-initial = [pop - param.init_cumu_inf, param.init_cumu_inf, 0, param.init_cumu_inf];
+initial = [pop - param.init_cumu_inf, param.init_cumu_inf, 0, param.init_cumu_inf]; %defines initial conditions in order to optimize
 [t, out] = solve_rhs_equations (tdata, initial, param, []); %call solutions from solver
+
 squared_diff = (out(:,4) - (count)').^2; %squared difference between model and data
 difference = sum(squared_diff); %take sum of squared diff, this value is what is being optimized
 
 R0 = calculate_R0 (param); 
-c = 1.0001 - R0; %need R0>1, need c to be negative
+c = 1.000001 - R0; %need R0>1, need c to be negative
 
     if c>0
         difference = difference * (1+c); %if R0 is less than 1, add linear portion to optimizer so it is not flat
