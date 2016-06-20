@@ -1,6 +1,6 @@
 function [y, pop, name, firstweek] = get_data(country_name, which)
 %GET_DATA make a database (slow) and return data closest to name given
-addpath('../lib')
+addpath('../TU_REU_2016/lib')
 
 db = create_database();
 bestidx = 1;
