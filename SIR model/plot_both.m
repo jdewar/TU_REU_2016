@@ -5,7 +5,6 @@ xlabel('Time in Weeks','fontsize',16)
 ylabel('Population','fontsize',16)
 hold on
 t1 = t';
-size(t1)
 plot(t1(:,1:length(data)),data, '*');
 plot(t1,Y(:,4), 'b')
 legend('Real infected count','Model infected count','Location','best')
