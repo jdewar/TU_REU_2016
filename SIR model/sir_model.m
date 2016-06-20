@@ -65,8 +65,8 @@ param.init_cumu_infected = parray(4);
 new_init = sir_init_conditions(param, tspan, total_pop);
 [t,out] = sir_balanceANDsolve(tspan_predictions, new_init, param);
 
-figure(1)
- plot_both(t,out,real);
+% figure(1)
+%  plot_both(t,out,real);
 
 
 %  
@@ -81,28 +81,28 @@ figure(1)
 %  sir_plot_sensitivity(Q, 'beta',.01:.01:.1, param);
 %  ylabel('cumulative infected');
 % % 
-figure()
-Q = @(params)sir_cumu_infect(params,out, t, new_init);
-% sir_sensitivity_analysis(Q, param,'c')
-% sir_sensitivity_analysis(Q, param,'gamma')
-sir_plot_sensitivity(Q, 'gamma',1:20, param);
-ylabel('cumulative infected');
+% figure()
+% Q = @(params)sir_cumu_infect(params,out, t, new_init);
+% % sir_sensitivity_analysis(Q, param,'c')
+% % sir_sensitivity_analysis(Q, param,'gamma')
+% sir_plot_sensitivity(Q, 'gamma',1:20, param);
+% ylabel('cumulative infected');
+% 
+% figure()
+% Q = @(params)sir_cumu_infect(params,out, t, new_init);
+% % sir_sensitivity_analysis(Q, param,'c')
+% % sir_sensitivity_analysis(Q, param,'gamma')
+% sir_plot_sensitivity(Q, 'c',1:20, param);
+% ylabel('cumulative infected');
+
 
 figure()
-Q = @(params)sir_cumu_infect(params,out, t, new_init);
-% sir_sensitivity_analysis(Q, param,'c')
-% sir_sensitivity_analysis(Q, param,'gamma')
-sir_plot_sensitivity(Q, 'c',1:20, param);
-ylabel('cumulative infected');
-
-
-figure()
-Q = @(params)sir_cumu_infect(params,out, t, new_init);
+Q = @(params)sir_cumu_infect(params, t, total_pop);
 % sir_sensitivity_analysis(Q, param,'c')
 % sir_sensitivity_analysis(Q, param,'gamma')
 sir_sensitivity_analysis(Q, param,'init_cumu_infected')
-%sir_plot_sensitivity(Q, 'init_cumu_infected',.001:(mean(real)* .95), param);
-ylabel('cumulative infected');
+sir_plot_sensitivity(Q, 'init_cumu_infected',1:(mean(real)* .95), param);
+%ylabel('cumulative infected');
 % 
 %  figure(6)
 %  sir_plot_contour(Q,1:20,1:20, param);
