@@ -1,21 +1,87 @@
 function [] = chikungunya_model()
 %% Main script for running sir model
 
-% Setting paramseters and initial conditions
+%Setting parameters and initial conditions
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Columbia';
-[real, pop, name, firstWeek] = get_data(country);
+country = 'Dominican Republic';
+% [real, pop, name, firstWeek] = get_data(country);
+% %new_data = get_data(country,'linear_newinf');
+% init_infected_h = real(1);
+% tend = length(real);
+% total_pop_h = pop;
+% max_K = pop * 10;
+% tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
+% 
+% param_struct = ...
+%     {'beta_hv', 0.24;
+%      'beta_vh', 0.24;
+%      'gamma_h', 1/6;
+%      'mu_h', 1/(70*365);
+%      'nu_h', 1/3;
+%      'psi_v', 0.3;
+%      'mu_v', 1/14;
+%      'nu_v', 1/11;
+%      'sigma_h', 19;
+%      'sigma_v', 0.5;
+%      'H0', total_pop_h;
+%      'prop_K', 1;
+%      'max_K', max_K;
+%      'init_cumu_infected', init_infected_h;
+%     }';
+% params = struct(param_struct{:});
+% array_names = param_struct(1,:);
+% 
+% %params = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5,value5,field6,value6,field7,value7,field8,value8,field9,value9,field10,value10,field11,value11,field12,value12,field13,value13,field14,value14);
+% 
+% field1 = 'K_v';  value1 = @chik_K_v;
+% functions = struct(field1,value1);
+% 
+% % test K_v
+% % display(functions.K_v(params.min_K,params.max_K,tspan));
+%  
+% lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
+% ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
+% 
+% %plotting
+% % figure()
+% % init = chik_init_conditions(params, tspan);
+% % [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
+% % plot_chik_model(t_model,out_model)
+% 
+% 
+% % figure()
+% % plot(0:1:365, chik_K_v(params.min_K, params.max_K, 0:1:365))
+% % xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
+% 
+% %  figure()
+% %  chik_plot_data(real) 
+% 
+% % optimizing
+% 
+% 
+% % cumulative infected
+% obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
+% opt_params1 = optimizer(obj_fn1, lb, ub, params)
+% 
+% init = chik_init_conditions(opt_params1, tspan);
+% [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
+% [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
+% 
+% figure()
+% subplot(1,2,1)
+% chik_plot_both(t, out, real);
 
+
+%% 2015 plot
+[real, pop, name, firstWeek] = get_data2015(country);
 %new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);
 tend = length(real);
 total_pop_h = pop;
-%min_K = pop *.5;
 max_K = pop * 10;
-tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
-
+tspan = (firstWeek*7):7:((tend+firstWeek-1)*7); % tspan not size of real data
 
 param_struct = ...
     {'beta_hv', 0.24;
@@ -36,35 +102,12 @@ param_struct = ...
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
 
-%params = struct(field1,value1,field2,value2,field3,value3,field4,value4,field5,value5,field6,value6,field7,value7,field8,value8,field9,value9,field10,value10,field11,value11,field12,value12,field13,value13,field14,value14);
-
 field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
-
-% test K_v
-% display(functions.K_v(params.min_K,params.max_K,tspan));
  
 lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
 ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
 
-%plotting
-% figure()
-% init = chik_init_conditions(params, tspan);
-% [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
-% plot_chik_model(t_model,out_model)
-
-
-% figure()
-% plot(0:1:365, chik_K_v(params.min_K, params.max_K, 0:1:365))
-% xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
-
-% figure()
-%  chik_plot_data(real) % ?
-
-% optimizing
-
-
-% cumulative infected
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
@@ -72,10 +115,9 @@ init = chik_init_conditions(opt_params1, tspan);
 [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
 [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
 
-figure()
-% % subplot(1,2,1)
 chik_plot_both(t, out, real);
-drawnow
+
+%%
 % 
 % 
 % subplot(1,2,2)
