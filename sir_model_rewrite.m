@@ -7,11 +7,10 @@ addpath('../data')
 init_cumu_inf = count(1);  %sets initial cumulative infected to value of first infected
 tend = length(count);  %sets tend to fit the length of data
 tdata = [1:tend];  %sets time range as values between 1 and last data point
-time = [0 50];
 close all;
 
 %% Plot Data
-figure(1)
+figure()
 plot(count, '*');  %plots data points from get_data
 title(name);  %plots name of country as title
 xlabel('Time');
@@ -35,8 +34,8 @@ init = [pop - init_cumu_inf, init_cumu_inf, 0, init_cumu_inf];
 
 
 %% Plot Unbalanced SIR Dyanmics
-figure (2)
-[t, soln] = solve_rhs_equations (time, init, param, []);
+figure ()
+[t, soln] = solve_rhs_equations (tdata, init, param, []);
 hold on
 plot(t, soln(:,1), 'g');
 plot(t, soln(:,2), 'k');
@@ -61,7 +60,7 @@ new_init = Y(end, :);
 
 
 %% Plot Balanced SIR Dynamics
-figure (3)
+figure ()
 hold on
 plot(t, bal_soln(:,1), 'g');
 plot(t, bal_soln(:,2), 'k');
@@ -75,26 +74,30 @@ legend('Susceptible', 'Infected', 'Recovered', 'Cumulative Infected')
 
 %% Optimizing
 lb = [1, 0.001, 0.001, 0.01];
-ub = [1,   200,   200,  300];
-[new_param] = fmincon(@(param)objective_function(bal_soln, count, param), new_init, [], [], [], [], lb, ub, []);
+ub = [1,   200,   200, mean(count)* .95];
+half = (lb + ub) / 2;
+opt_func = @(param_array)objective_function(bal_soln, count, param, array_names, param_array, tdata, new_init);
+options = optimset('Algorithm', 'sqp');
+param
+init_cumu_inf
+
+[new_param] = fmincon(opt_func, half, [], [], [], [], lb, ub, [], options);
 
 param.beta = new_param(1);
 param.c = new_param(2);
 param.gamma = new_param(3);
 param.init_cumu_inf = new_param(4);
+param
 
-for i = 1:length(new_param);
-    name = new_param{i};
-    param.(name) = new_param(i);
-end
+new_init = [pop - param.init_cumu_inf, param.init_cumu_inf, 0, param.init_cumu_inf]
 
-[t, opt_soln] = solve_rhs_equations(time, new_init, new_param, []);
+[tdata, opt_soln] = solve_rhs_equations(tdata, new_init, param, []);
 
 
 %% Plot Optimized Model & Data
-figure (4)
+figure ()
 hold on
-plot(t, opt_soln(:,4), 'r');
+plot(tdata, opt_soln(:,4), 'r');
 plot(count, '*')
 title(name)
 xlabel('Time')
@@ -104,7 +107,7 @@ end
 
 
 %% RHS Equations
-    function[out] = rhs_equations(time, init, param)
+function[out] = rhs_equations(tdata, init, param)
 out = zeros(size(init)); %sets place for all outputs of rhs
 s = init(1);
 i = init(2);
@@ -112,13 +115,13 @@ r = init(3);
 cumu_i = init(4);
 
 n = s + i + r; %total human population is sum of susceptible, infected, recovered
-lambda = param.beta * param.c * (i/n) %sets value for lambda
+lambda = param.beta * param.c * (i/n); %sets value for lambda
 
 out(1) = -lambda .* s; %change in susceptible population
 out(2) = lambda * s - param.gamma * i; %change in infected population
 out(3) = param.gamma * i; %change in exposed population
 out(4) = lambda * s; %cumulative infected people (positive lambda)
-    end
+end
 
 
 %% Solve RHS Equations
@@ -128,6 +131,12 @@ if numel(options) ~= 0
 else
 [t, soln] = ode45(@(time, init)rhs_equations(time, init, param), time, init, options);
 end
+end
+
+
+%% Calculate R0
+function [R0] = calculate_R0 (params)
+R0 = (params.beta * params.c) / params.gamma;
 end
 
     
@@ -140,7 +149,21 @@ end
 
 
 %% Objective Function
-function [difference] = objective_function (bal_soln, count, param)
-squared_diff = (bal_soln(:,4) - (count)').^2;
+function [difference] = objective_function (bal_soln, count, param, array_names, param_array, tdata, new_init)
+    for i = 1:length(array_names)
+        name = array_names{i}; 
+        param.(name) = param_array(i);
+    end
+    
+[t, out] = solve_rhs_equations (tdata, new_init, param, []);
+squared_diff = (out(:,4) - (count)').^2;
 difference = sum(squared_diff);
+
+R0 = calculate_R0 (param);
+c = 1.0001 - R0;
+
+    if c>0
+        difference = difference * (1+c);
+    end
+    
 end
