@@ -17,27 +17,7 @@ for i = 1:length(db)
 end
 c = bestidx;
 
-if exist('which','var')
-    switch which
-        case 'linear'
-            count = db(c).count_linear;
-        case 'sparse'
-            count = db(c).count_sparse;
-        case 'confirmed'
-            count = db(c).count_confirmed;
-        case 'linear_newinf'
-            inter = db(c).count_linear;
-            count = [inter(1), inter(2:end) - inter(1:end-1)];
-        otherwise
-            count = db(c).count;
-    end
-else
-    count = db(c).count_linear;
-end
+[y, pop, name, firstweek] = data_from_entry(db(c));
 
-firstweek = db(c).first_week;
-y = count(firstweek:end);
-pop  = db(c).population;
-name = db(c).name;
 end
 
