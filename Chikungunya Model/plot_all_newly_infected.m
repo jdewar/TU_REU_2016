@@ -18,13 +18,15 @@ sum_data = zeros(1,107);
         for j = 1:length(no_data_2015)
            if strcmp(name, no_data_2015{j}) == 1
                newly_infected = get_newly_infected_count(data2014);
+               
                c = 1;
                for k = 1:length(sum_data)
                    if k >= firstWeek2014 && c <= length(data2014)
-                       sum_data(k) = newly_infected(c);
+                       sum_data(1,k) = sum_data(1,k)+ newly_infected(c);
                        c = c+1;
                    end
                end
+               
                hold all
                chik_plot_NewlyInfected(tspan,newly_infected)
                str = sprintf('%s',name);
@@ -47,7 +49,7 @@ sum_data = zeros(1,107);
                c = 1;
                for k = 1:length(sum_data)
                    if (k >= firstWeek2014) && (c <= length(newly_infected_combined))
-                       sum_data(k) = newly_infected_combined(c);
+                       sum_data(1,k) = sum_data(1,k)+ newly_infected_combined(c);
                        c = c+1;
                    end
                end
