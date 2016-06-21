@@ -76,6 +76,7 @@ addpath('../data');
 %% 2015 plot
 country = 'Colombia';
 [real2014, pop2014,name,firstWeek2014] = get_data(country);
+firstWeek2014
 [real, pop, name, firstWeek] = get_data2015(country);
 %new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);

@@ -4,7 +4,7 @@ hold on
 title('Real Infected Count')
 xlabel('Time in weeks')
 ylabel('Population')
-plot(tspan, count,'*')
+plot(tspan./7, count,'*')
 legend('Total cases')
 
 end
