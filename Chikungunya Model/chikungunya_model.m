@@ -74,14 +74,14 @@ addpath('../data');
 
 
 %% 2015 plot
-country = 'Colombia';
+country = 'French Guiana';
 [real2014, pop2014,name,firstWeek2014] = get_data(country);
 firstWeek2014
 [real, pop, name, firstWeek] = get_data2015(country);
 %new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop;
+total_pop_h = pop*.14;
 max_K = pop * 10;
 tspan = (firstWeek*7):7:((tend+firstWeek-1)*7); % tspan not size of real data
 tspan_full_count = (firstWeek2014*7):7:((tend+length(real2014)+firstWeek2014-1)*7);
@@ -118,19 +118,19 @@ newly_infected = get_newly_infected_count(real);
 %chik_plot_data(real)
 
 full_count = combine_data(real2014,newly_infected);
-chik_plot_data(full_count, tspan_full_count);
+%chik_plot_data(full_count, tspan_full_count);
  
-% lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
-% ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
-% 
-% obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
-% opt_params1 = optimizer(obj_fn1, lb, ub, params);
-% 
-% init = chik_init_conditions(opt_params1, tspan);
-% [t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
+ lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
+ ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
+ 
+ obj_fn1 = @(parray)chik_obj_fn(parray, full_count, array_names, tspan_full_count, functions);
+ opt_params1 = optimizer(obj_fn1, lb, ub, params);
+ 
+ init = chik_init_conditions(opt_params1, tspan_full_count);
+ [t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
 % [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
 % 
-% chik_plot_both(t, out, real);
+ chik_plot_both(t, out, full_count);
 
 %%
 % 
