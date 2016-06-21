@@ -83,6 +83,8 @@ tend = length(real);
 total_pop_h = pop;
 max_K = pop * 10;
 tspan = (firstWeek*7):7:((tend+firstWeek-1)*7); % tspan not size of real data
+tspan_full_count = (firstWeek2014*7):7:((tend+length(real2014)+firstWeek2014-1)*7);
+
 
 param_struct = ...
     {'beta_hv', 0.24;
@@ -115,7 +117,7 @@ newly_infected = get_newly_infected_count(real);
 %chik_plot_data(real)
 
 full_count = combine_data(real2014,newly_infected);
-chik_plot_data(tspan,full_count);
+chik_plot_data(full_count, tspan_full_count);
  
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
 % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
