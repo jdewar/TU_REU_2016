@@ -7,7 +7,7 @@ hold on
 t1 = t'./7;
 plot(t1,data, '*');
 plot(t1,Y(:,5), 'b')
-legend('Real infected count','Model infected count')
+legend('Real infected count','Model infected count', 'Location', 'best')
 
 
 end
