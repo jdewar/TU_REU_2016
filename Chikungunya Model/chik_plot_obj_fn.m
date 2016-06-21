@@ -13,7 +13,6 @@ for i = 1:length(range)
     val(i) = chik_obj_fn(param_array, data, array_names, t_in, functions);
 end
 
-figure()
 plot(param,val)
 xlabel(strcat(param_name,' value'));
 ylabel('objective function value');
