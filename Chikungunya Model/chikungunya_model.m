@@ -74,7 +74,8 @@ addpath('../data');
 
 
 %% 2015 plot
-country = 'Puerto Rico';
+country = 'Colombia';
+[real2014, pop2014,name,firstWeek2014] = get_data(country);
 [real, pop, name, firstWeek] = get_data2015(country);
 %new_data = get_data(country,'linear_newinf');
 init_infected_h = real(1);
@@ -107,11 +108,14 @@ functions = struct(field1,value1);
 
 %Newly infected 2015
 figure()
-subplot(1,2,1)
+%subplot(1,2,1)
 newly_infected = get_newly_infected_count(real);
-plot(1:tend,newly_infected, '*')
-subplot(1,2,2)
-chik_plot_data(real)
+%plot(1:tend,newly_infected, 'r')
+%subplot(1,2,2)
+%chik_plot_data(real)
+
+full_count = combine_data(real2014,newly_infected);
+chik_plot_data(tspan,full_count);
  
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
 % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
