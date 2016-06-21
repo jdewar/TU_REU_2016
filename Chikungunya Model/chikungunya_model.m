@@ -111,9 +111,13 @@ functions = struct(field1,value1);
 %Newly infected 2015
 figure()
 newly_infected = get_newly_infected_count(real);
-%subplot(1,2,1)
+subplot(1,2,1)
 full_count = combine_data(real2014,newly_infected);
-%chik_plot_data(full_count, tspan_full_count);
+chik_plot_data(full_count, tspan_full_count);
+
+subplot(1,2,2)
+newly_infected_combined = get_newly_infected_count(full_count);
+plot(tspan_full_count,newly_infected_combined)
  
  lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
  ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
@@ -125,10 +129,9 @@ full_count = combine_data(real2014,newly_infected);
  [t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
 % [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
 % 
- chik_plot_both(t, out, full_count);
-%subplot(1,2,2)
-newly_infected_combined = get_newly_infected_count(full_count);
-plot(tspan_full_count,newly_infected_combined)
+figure()
+chik_plot_both(t, out, full_count);
+
  
 %%
 % 
