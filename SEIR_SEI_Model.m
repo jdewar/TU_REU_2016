@@ -26,22 +26,22 @@ plot(t, out(:,1), 'g')
 plot(t, out(:,2), 'b') 
 plot(t, out(:,3), 'r') 
 plot(t, out(:,4), 'k')
-legend('Exposed','Infected','Recovered', 'Cumulative Infected', 'Location', 'best')
+legend('exposed','infected','recovered', 'cumulative infected')
 hold off
 
-xlabel('Time in Weeks', 'fontsize', 16)
-ylabel('Human Population', 'fontsize', 16)
-title('Human SEIR Dynamics', 'fontsize', 18)
+xlabel('time in weeks')
+ylabel('human population')
+title('human SEI dynamics')
 subplot(1,2,2)
 hold on
 plot(t, out(:,6), 'g') 
 plot(t, out(:,7), 'b')
 plot(t, out(:,8), 'r')
-legend('Susceptible','Exposed','Infected', 'Location', 'best')
+legend('susceptible','exposed','infected')
 
-xlabel('Time in Weeks', 'fontsize', 16)
-ylabel('Mosquito Population','fontsize', 16)
-title('Mosquito SEI dynamics', 'fontsize', 18)
+xlabel('time in weeks')
+ylabel('mosquito population')
+title('mosquito SEI dynamics')
 
 end
 
