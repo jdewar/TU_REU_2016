@@ -4,28 +4,28 @@ function [] = plot_chik_model(t,Y)
 
 subplot(1,2,1)
 hold on
-%plot(t, Y(:,1), 'g') %plots susceptible graph
-plot(t, Y(:,2), 'b') %plots exposed graph
-plot(t, Y(:,3), 'r') %plots infected graph
-plot(t, Y(:,4), 'k')
-plot(t, Y(:,5), 'm')
-legend('exposed','infected','recovered', 'cumulative infected')
+plot(t, Y(:,1), 'g', 'linewidth', 2) %plots susceptible graph
+plot(t, Y(:,2), 'b', 'linewidth', 2) %plots exposed graph
+plot(t, Y(:,3), 'r', 'linewidth', 2) %plots infected graph
+plot(t, Y(:,4), 'k', 'linewidth', 2)
+plot(t, Y(:,5), 'm', 'linewidth', 2)
+legend('Exposed','Infected','Recovered', 'Cumulative infected', 'Location', 'best')
 hold off
 
-xlabel('time in weeks')
-ylabel('human population')
-title('human SEI dynamics')
+xlabel('Time in Weeks')
+ylabel('Human Population')
+title('Human SEIR Dynamics')
 
 
 subplot(1,2,2)
 hold on
-plot(t, Y(:,6), 'g') 
-plot(t, Y(:,7), 'b')
-plot(t, Y(:,8), 'r')
-legend('susceptible','exposed','infected')
+plot(t, Y(:,6), 'g', 'linewidth', 2) 
+plot(t, Y(:,7), 'b', 'linewidth', 2)
+plot(t, Y(:,8), 'r', 'linewidth', 2)
+legend('Susceptible','Exposed','Infected', 'Location', 'best')
 
-xlabel('time in weeks')
-ylabel('mosquito population')
-title('mosquito SEI dynamics')
+xlabel('Time in Weeks')
+ylabel('Mosquito Population')
+title('Mosquito SEI Dynamics')
 
 end
