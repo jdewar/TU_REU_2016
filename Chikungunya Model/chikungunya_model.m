@@ -5,11 +5,11 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Guadeloupe';
+country = 'El Salvador';
 [real, pop, name, firstWeek] = get_data(country);
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop*.195;
+total_pop_h = pop*.025;
 max_K = pop * 10;
 tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
 
@@ -37,23 +37,23 @@ field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
 
 %% Plot Cumulative vs. Newly Infected
-figure()
-subplot(1,2,1)
-chik_plot_data(real, tspan)
-
-subplot(1,2,2)
-newly_infected = get_newly_infected_count(real);
-plot(tspan,newly_infected)
+% figure()
+% subplot(1,2,1)
+% chik_plot_data(real, tspan)
+% 
+% subplot(1,2,2)
+% newly_infected = get_newly_infected_count(real);
+% plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
-figure()
-init = chik_init_conditions(params, tspan);
-[t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
-plot_chik_model(t_model,out_model)
+% figure()
+% init = chik_init_conditions(params, tspan);
+% [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
+% plot_chik_model(t_model,out_model)
 
 %% Optimization & Plot
 lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
-ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10,pop];% mean(real)* .95];
 
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
@@ -65,14 +65,14 @@ figure()
 chik_plot_both(t, out, real);
 
 %% Plot Objective Function
-figure()
-subplot(1,2,1)
-chik_plot_both(t, out, real);
-hold on
-
-subplot(1,2,2)
-range = linspace(lb(14), ub(14), 40);
-chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'init_cumu_infected', range)
+% figure()
+% subplot(1,2,1)
+% chik_plot_both(t, out, real);
+% hold on
+% 
+% subplot(1,2,2)
+% range = linspace(lb(14), ub(14), 40);
+% chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'init_cumu_infected', range)
 
 %% Sensitivity Analysis
 % Q1 = @(params)chik_Q_cumu_infect (params, out, t, functions);
