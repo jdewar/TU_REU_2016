@@ -5,13 +5,16 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'El Salvador';
-[real, pop, name, firstWeek] = get_data(country);
+country = 'Guadeloupe';
+[real_full, pop, name, firstWeek] = get_data(country);
+real = real_full(1:20);
+full_count = combine_data(country);
 init_infected_h = real(1);
 tend = length(real);
-total_pop_h = pop*.025;
-max_K = pop * 10;
-tspan = (firstWeek*7):7:(55*7); % tspan not size of real data
+max_K = pop * 2;
+tspan = [(firstWeek*7):7:((tend+firstWeek-1)*7)];
+% tspan_full_count = (firstWeek2014*7):7:((tend+length(real2014)+firstWeek2014-1)*7);
+tspan_predictions = [(firstWeek*7):7:((length(real_full)+firstWeek-1)*7)];
 
 %% Param & Function Struct
 param_struct = ...
@@ -25,7 +28,7 @@ param_struct = ...
      'nu_v', 1/11;
      'sigma_h', 19;
      'sigma_v', 0.5;
-     'H0', total_pop_h;
+     'H0', pop;
      'prop_K', 1;
      'max_K', max_K;
      'init_cumu_infected', init_infected_h;
@@ -52,17 +55,38 @@ functions = struct(field1,value1);
 % plot_chik_model(t_model,out_model)
 
 %% Optimization & Plot
-lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
-ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10,pop];% mean(real)* .95];
+lb = struct2array(params,array_names);
+ub = struct2array(params,array_names);
 
-obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan, functions);
+
+[lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
+[lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
+[lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real)* .95, array_names);
+% lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
+% ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
+
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+optimized;
+
+obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
-init = chik_init_conditions(opt_params1, tspan);
-[t,out] = chik_balanced_solve(tspan, init, opt_params1, functions);
+init = chik_init_conditions(opt_params1, tspan_predictions);
+[t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
 
 figure()
-chik_plot_both(t, out, real);
+chik_plot_both(tspan_predictions, out, real_full);
+hold on
+plot([tend,tend], [0,max(real_full)]);
+plot([tend+3,tend+3], [0,max(real_full)]);
+
+%chik_calc_R0(opt_params1, functions, t(1))
 
 %% Plot Objective Function
 % figure()
