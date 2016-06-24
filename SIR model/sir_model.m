@@ -33,7 +33,7 @@ param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
 % R0 = (param.beta*param.c)/param.gamma
 % plot_sir_model(t_model,out_model)
 
-%  figure()
+ figure()
 %  plot_data(real)
 %  drawnow
 fn = @(x)sir_obj_fn(x,real,param,array_names,tspan_predictions,total_pop);

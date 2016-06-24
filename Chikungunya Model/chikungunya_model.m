@@ -5,14 +5,15 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Guadeloupe';
+country = 'El Salvador';
 [real_full, pop, name, firstWeek] = get_data(country);
-real = real_full(1:20);
+real = real_full(1:length(real_full));
 full_count = combine_data(country);
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
 tspan = [(firstWeek*7):7:((tend+firstWeek-1)*7)];
+%tend = (tend+firstWeek-1);
 % tspan_full_count = (firstWeek2014*7):7:((tend+length(real2014)+firstWeek2014-1)*7);
 tspan_predictions = [(firstWeek*7):7:((length(real_full)+firstWeek-1)*7)];
 
@@ -77,26 +78,36 @@ optimized;
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
+opt_params1.H0/pop * 100
+
 init = chik_init_conditions(opt_params1, tspan_predictions);
 [t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
 
-figure()
-chik_plot_both(tspan_predictions, out, real_full);
-hold on
-plot([tend,tend], [0,max(real_full)]);
-plot([tend+3,tend+3], [0,max(real_full)]);
+% figure()
+% chik_plot_both(tspan_predictions, out, real_full);
+% hold on
+% plot([tend,tend], [0,max(real_full)]);
+% plot([tend+3,tend+3], [0,max(real_full)]);
 
 %chik_calc_R0(opt_params1, functions, t(1))
 
 %% Plot Objective Function
 % figure()
 % subplot(1,2,1)
+% opt_params1.H0 = 591400;
+% [t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
 % chik_plot_both(t, out, real);
-% hold on
 % 
 % subplot(1,2,2)
-% range = linspace(lb(14), ub(14), 40);
-% chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'init_cumu_infected', range)
+% opt_params1.H0 = 632200;
+% [t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
+% chik_plot_both(t, out, real);
+
+figure()
+r = linspace(lb(11), ub(11), 100);
+[val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'H0', r);
+hold on
+plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 
 %% Sensitivity Analysis
 % Q1 = @(params)chik_Q_cumu_infect (params, out, t, functions);
