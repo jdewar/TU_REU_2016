@@ -62,7 +62,7 @@ sum_data = zeros(1,107);
     end
     
     figure()
-    plot(sum_data)
+    plot(sum_data,'*')
     xlabel('Time in Weeks', 'fontsize', 16)
     ylabel('Total New Cases', 'fontsize', 16)
     title('Total Newly Infected Cases', 'fontsize', 18)
