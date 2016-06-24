@@ -1,4 +1,4 @@
-function [time, difference] = chik_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
+function [sensitivity] = chik_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
 %CHIK_SENSITIVITY_ANALYSIS sensitivity analysis, respect to Beta
 params.(param_name) = params.(param_name);
 
@@ -14,7 +14,7 @@ te2 = Q(params2);
 te3 = Q(params);
 
 time = (te1-te2)/(2*epsilon);
-difference = time * params.(param_name)/te3;
+sensitivity = time * params.(param_name)/te3;
 
 
 end

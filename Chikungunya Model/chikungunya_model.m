@@ -8,7 +8,7 @@ addpath('../data');
 country = 'Colombia';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-real = full_count(1:60);
+real = full_count(1:length(real2014)+50);
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
@@ -113,9 +113,13 @@ plot([tend+3,tend+3], [0,max(full_count)]);
 % plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 
 %% Sensitivity Analysis
-% Q1 = @(params)chik_Q_cumu_infect (params, out, t, functions);
+%Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
 % Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
-% Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan, functions);
+ Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan, functions);
+[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'max_K')
+[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'init_cumu_infected')
+[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'sigma_h')
+[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'H0')
 % figure()
 % chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
 
