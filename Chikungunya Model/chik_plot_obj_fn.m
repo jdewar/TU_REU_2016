@@ -1,4 +1,4 @@
-function [val] = chik_plot_obj_fn(param_array, data, array_names, t_in, functions, param_name, range)
+function [param,val] = chik_plot_obj_fn(param_array, data, array_names, t_in, functions, param_name, range)
 n = 1;
 for i = 1:length(array_names)
     if strcmp(param_name,array_names{i}) == 1
