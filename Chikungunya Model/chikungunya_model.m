@@ -5,10 +5,10 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Colombia';
+country = 'Dominica';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-real = full_count(1:length(real2014)+50);
+real = full_count(1:20);
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
@@ -61,10 +61,10 @@ functions = struct(field1,value1);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
-[lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
+%[lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
 [lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
-[lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
-[lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real)* .95, array_names);
+%[lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
+%[lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real)* .95, array_names);
 
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
 % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
@@ -92,7 +92,7 @@ hold on
 plot([tend,tend], [0,max(full_count)]);
 plot([tend+3,tend+3], [0,max(full_count)]);
 
-%chik_calc_R0(opt_params1, functions, t(1))
+chik_calc_R0(opt_params1, functions, t(1))
 
 %% Plot Objective Function
 % figure()
@@ -106,22 +106,35 @@ plot([tend+3,tend+3], [0,max(full_count)]);
 % [t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
 % chik_plot_both(t, out, real);
 % 
+figure()
+r = linspace(lb(11), ub(11), 100);
+[param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'H0', r);
+hold on
+plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
+
 % figure()
-% r = linspace(lb(11), ub(11), 100);
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'H0', r);
+% r = linspace(lb(9), ub(9), 100);
+% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'sigma_h', r);
 % hold on
-% plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
+% plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
+% 
+% figure()
+% r = linspace(lb(13), ub(13), 100);
+% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'max_K', r);
+% hold on
+% plot([opt_params1.max_K,opt_params1.max_K], [0,max(val)]);
+
 
 %% Sensitivity Analysis
-%Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
+Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
 % Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
- Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan, functions);
-[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'max_K')
-[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'init_cumu_infected')
-[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'sigma_h')
-[sensitivity] = chik_sensitivity_analysis(Q3,opt_params1,'H0')
-% figure()
-% chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
+Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan_predictions, functions);
+%figure()
+%chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
+sensitivity_H0  = chik_sensitivity_analysis(Q1,opt_params1,'H0')
+sensitivity_sigma_h  = chik_sensitivity_analysis(Q1,opt_params1,'sigma_h')
+sensitivity_max_K  = chik_sensitivity_analysis(Q1,opt_params1,'max_K')
+%sensitivity_init_cumu_infected  = chik_sensitivity_analysis(Q1,opt_params1,'init_cumu_infected')
 
 %% Calculate Biting Rates
 % [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
