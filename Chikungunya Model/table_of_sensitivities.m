@@ -1,4 +1,4 @@
-function [sensitivity_table] = table_of_sensitivities(params,firstWeek2014, full_count, array_names, lb, ub)
+function [sensitivity_table] = table_of_sensitivities(params,functions, firstWeek2014, full_count,tspan_full_count, array_names, lb, ub)
 
 c = 1;
 
@@ -21,7 +21,7 @@ for i = 10:10:length(full_count)
     c = c+1;
 end
 
-sensitivity_table = table(weeks', sensitivity_H0', sensitivity_sigma_h', sensitivity_max_K','VariableNames', {'Weeks','H0 Sensitivity', 'sigma_h Sensitivity', 'max_K Sensitivity'});
+sensitivity_table = table(weeks', sensitivity_H0', sensitivity_sigma_h', sensitivity_max_K','VariableNames', {'weeks','sensitivity_H0', 'sensitivity_sigma_h', 'sensitivity_max_K'});
 plot_sensitivities(sensitivity_H0, sensitivity_sigma_h, sensitivity_max_K)
 
 end

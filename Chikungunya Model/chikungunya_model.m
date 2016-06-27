@@ -9,15 +9,15 @@ addpath('../data');
 country = 'Dominican Republic';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-%real = full_count(1:50);
-init_infected_h = real2014(1);
-%tend = length(real);
+real = full_count(1:50);
+init_infected_h = real(1);
+tend = length(real);
 max_K = pop * 2;
-% tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
+tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
 % tend = (tend+firstWeek2014-1);
  tspan_full_count = (firstWeek2014*7):7:((length(full_count)+firstWeek2014-1)*7);
-% tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
-%tspan_predictions = tspan_full_count;
+ tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
+ tspan_predictions = tspan_full_count;
 
 
 %% Param & Function Struct
@@ -65,7 +65,7 @@ ub = struct2array(params,array_names);
  [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
  [lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
  [lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
- [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real)* .95, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real2014)* .95, array_names);
 
 
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
@@ -162,7 +162,7 @@ ub = struct2array(params,array_names);
 
 
 %% table of sensitivities
-sensitivities = table_of_sensitivities(params,firstWeek2014, full_count, array_names, lb, ub);
+sensitivities = table_of_sensitivities(params,functions, firstWeek2014, full_count,tspan_full_count, array_names, lb, ub);
 sensitivities
 
 %% Guadeloupe sensitivity of sigma_h by week
