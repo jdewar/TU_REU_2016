@@ -5,7 +5,6 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-<<<<<<< HEAD
 country = 'Dominica';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
