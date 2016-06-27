@@ -5,10 +5,11 @@ function [] = chikungunya_model()
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
-country = 'Guadeloupe';
+
+country = 'Dominican Republic';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-real = full_count(1:26);
+real = full_count(1:50);
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
@@ -62,11 +63,10 @@ functions = struct(field1,value1);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
-
  [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
  [lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
  [lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
- [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real)* .95, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real2014)* .95, array_names);
 
 
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
@@ -153,15 +153,19 @@ difference2 = prediction_diff(out2, full_count, tfuture)
 
 
 %% Sensitivity Analysis
-% Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
-% % Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
+
+%Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
+% Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
 % Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan_predictions, functions);
-% %figure()
-% %chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
-% sensitivity_H0  = chik_sensitivity_analysis(Q1,opt_params1,'H0')
-% sensitivity_sigma_h  = chik_sensitivity_analysis(Q1,opt_params1,'sigma_h')
-% sensitivity_max_K  = chik_sensitivity_analysis(Q1,opt_params1,'max_K')
-% %sensitivity_init_cumu_infected  = chik_sensitivity_analysis(Q1,opt_params1,'init_cumu_infected')
+%figure()
+%chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
+%
+%sensitivity_H0  = chik_sensitivity_analysis(Q1,opt_params1,'H0')
+%sensitivity_sigma_h  = chik_sensitivity_analysis(Q1,opt_params1,'sigma_h')
+%sensitivity_max_K  = chik_sensitivity_analysis(Q1,opt_params1,'max_K')
+
+%sensitivity_init_cumu_infected  = chik_sensitivity_analysis(Q1,opt_params1,'init_cumu_infected')
+
 % r = linspace(lb(13), ub(13), 100);
 % figure()
 % [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'max_K', r);
@@ -169,18 +173,29 @@ difference2 = prediction_diff(out2, full_count, tfuture)
 % plot([opt_params1.max_K,opt_params1.max_K], [0,max(val)]);
 % r = linspace(lb(11), ub(11), 100);
 % min(val)
+
 % figure()
 % [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'H0', r);
 % hold on
 % plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 % r = linspace(lb(9), ub(9), 100);
 % min(val)
+
 % figure()
 % [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'sigma_h', r);
 % hold on
 % plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
 % 
 % min(val)
+
+
+%% table of sensitivities
+sensitivities = table_of_sensitivities(params,functions, firstWeek2014, full_count,tspan_full_count, array_names, lb, ub);
+sensitivities
+
+%% Guadeloupe sensitivity of sigma_h by week
+% sensitivity = [0.0140,0.0181,0.0036,0.0418,0.0425,0.0437,0.0376,0.0421];
+% plot(sensitivity)
 
 %% Calculate Biting Rates
 % [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
