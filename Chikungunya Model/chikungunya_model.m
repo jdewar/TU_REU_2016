@@ -6,10 +6,10 @@ close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
 
 
-country = 'Dominican Republic';
+country = 'French Guiana';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-real = full_count(1:50);
+real = full_count;
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
@@ -17,7 +17,7 @@ tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
 % tend = (tend+firstWeek2014-1);
  tspan_full_count = (firstWeek2014*7):7:((length(full_count)+firstWeek2014-1)*7);
  tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
- tspan_predictions = tspan_full_count;
+ %tspan_predictions = tspan_full_count;
 
 
 %% Param & Function Struct
@@ -44,9 +44,9 @@ field1 = 'K_v';  value1 = @chik_K_v;
 functions = struct(field1,value1);
 
 %% Plot Cumulative vs. Newly Infected
-% figure()
+ figure()
 % subplot(1,2,1)
-% chik_plot_data(real, tspan)
+ chik_plot_data(full_count, tspan_full_count)
 % 
 % subplot(1,2,2)
 % newly_infected = get_newly_infected_count(real);
@@ -70,31 +70,31 @@ ub = struct2array(params,array_names);
 
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
 % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
-% 
-% c = 1;
-% for i = 1:length(lb)
-%     if lb(i) ~= ub(i)
-%         optimized{c} = array_names{i};
-%         c = c+1;
-%     end
-% end
-% %optimized;
-% 
-% obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
-% opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
-% percent_pop = opt_params1.H0/pop * 100
-% 
-% init = chik_init_conditions(opt_params1, tspan_full_count);
-% [t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
-% 
-% figure()
-% chik_plot_both(tspan_full_count, out, full_count);
-% hold on
-% plot([tend,tend], [0,max(full_count)]);
-% plot([tend+3,tend+3], [0,max(full_count)]);
-% 
-% chik_calc_R0(opt_params1, functions, t(1))
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+%optimized;
+
+obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
+opt_params1 = optimizer(obj_fn1, lb, ub, params)
+
+percent_pop = opt_params1.H0/pop * 100
+
+init = chik_init_conditions(opt_params1, tspan_full_count);
+[t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
+
+figure()
+chik_plot_both(tspan_full_count, out, full_count);
+hold on
+plot([tend,tend], [0,max(full_count)]);
+plot([tend+3,tend+3], [0,max(full_count)]);
+
+chik_calc_R0(opt_params1, functions, t(1))
 
 %% Plot Objective Function
 % figure()
@@ -162,8 +162,8 @@ ub = struct2array(params,array_names);
 
 
 %% table of sensitivities
-sensitivities = table_of_sensitivities(params,functions, firstWeek2014, full_count,tspan_full_count, array_names, lb, ub);
-sensitivities
+% sensitivities = table_of_sensitivities(params,functions, firstWeek2014, full_count,tspan_full_count, array_names, lb, ub);
+% sensitivities
 
 %% Guadeloupe sensitivity of sigma_h by week
 % sensitivity = [0.0140,0.0181,0.0036,0.0418,0.0425,0.0437,0.0376,0.0421];
