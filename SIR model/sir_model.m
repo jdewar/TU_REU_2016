@@ -1,9 +1,9 @@
 function [] = sir_model()
 %% Setting parameters and initial conditions
 addpath('../data');
-country = 'Dominica Republic';
-[real_full, pop] = get_data(country);
-real = real_full(1:25);
+country = 'Suriname';
+[real_full, pop] = get_data(country, '');
+real = real_full;
 full_count = combine_data(country);
 init_infected = real(1);
 tend = length(real);
@@ -11,6 +11,7 @@ total_pop = pop;
 tspan = [1:tend];
 %tspan_predictions = [1:length(full_count)];
 tspan_predictions = [1:length(real_full)];
+tspan_predictions = tspan;
 close all;
 %parameters
 field1 = 'beta';  value1 = 1;
@@ -33,42 +34,46 @@ param_array = [param.beta,param.c,param.gamma,param.init_cumu_infected];
 % R0 = (param.beta*param.c)/param.gamma
 % plot_sir_model(t_model,out_model)
 
+%% Plot Real Data
  figure()
-%  plot_data(real)
-%  drawnow
-fn = @(x)sir_obj_fn(x,real,param,array_names,tspan_predictions,total_pop);
-lb = [1,0.001,0.001,.01];
-ub = [1,200,200,mean(real)* .95];
-
-half = (lb+ub)/2;
-options = optimset('Algorithm', 'sqp');
-[parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
-
-val = sir_obj_fn(param_array,real, param,array_names,tspan,total_pop);
-
-param.beta = parray(1);
-param.c = parray(2);
-param.gamma = parray(3);
-param.init_cumu_infected = parray(4);
-
-% %Check that R0 is greater than 1
-% R0 = (param.beta*param.c)/param.gamma;
-% if (R0 <=1)
-%     display('R0 is less than 1')
-%     return
-% end
-
-
-new_init = sir_init_conditions(param, tspan_predictions, total_pop);
-[t,out] = sir_balanceANDsolve(tspan_predictions, new_init, param);
-
-figure()
-%plot_both(tspan_predictions,out,full_count);
-%hold on
-%plot([tend,tend], [0,max(full_count)]);
-plot_both(tspan_predictions,out,real_full);
-hold on
-plot([tend,tend], [0,max(real_full)]);
+  plot_data(real)
+  drawnow
+  
+ %% Optimization
+% fn = @(x)sir_obj_fn(x,real,param,array_names,tspan_predictions,total_pop);
+% lb = [1,0.001,0.001,.01];
+% ub = [1,200,200,mean(real)* .95];
+% 
+% half = (lb+ub)/2;
+% options = optimset('Algorithm', 'sqp');
+% [parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
+% 
+% val = sir_obj_fn(param_array,real, param,array_names,tspan,total_pop);
+% 
+% param.beta = parray(1);
+% param.c = parray(2);
+% param.gamma = parray(3);
+% param.init_cumu_infected = parray(4);
+% param
+% 
+% % %Check that R0 is greater than 1
+% % R0 = (param.beta*param.c)/param.gamma;
+% % if (R0 <=1)
+% %     display('R0 is less than 1')
+% %     return
+% % end
+% 
+% 
+% new_init = sir_init_conditions(param, tspan_predictions, total_pop);
+% [t,out] = sir_balanceANDsolve(tspan_predictions, new_init, param);
+% 
+% figure()
+% %plot_both(tspan_predictions,out,full_count);
+% %hold on
+% %plot([tend,tend], [0,max(full_count)]);
+% plot_both(tspan_predictions,out,real_full);
+% hold on
+% plot([tend,tend], [0,max(real_full)]);
 
 
 % % %  

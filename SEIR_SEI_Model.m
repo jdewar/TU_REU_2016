@@ -1,11 +1,11 @@
 function [] = SEIR_SEI_Model()
 
-country = 'Haiti';
-[real, pop, name, firstWeek] = get_data(country);
-init_infected_h = real(1);
-tend = length(real);
-total_pop_h = pop;
-max_K = pop * 10;
+country = 'Guadeloupe';
+[real2014, pop, name, firstWeek] = get_data(country);
+init_infected_h = real2014(1);
+tend = length(real2014);
+total_pop_h = pop * .192;
+max_K = pop*10;
 tspan = (firstWeek*7):7:(55*7);
 param_struct = ...
     {'beta_hv', 0.24;
@@ -25,21 +25,31 @@ param_struct = ...
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
 %chik_plot_data(real, tspan)
-init = chik_init_conditions(params, tspan);
-%[t,out] = ode45(@(t,Y)rhs_seir_sei(t,Y,params), 0:400, init);
+% weeks = 30;
 
- 
+% init = [total_pop_h,0,init_infected_h,0,init_infected_h,max_K,0,0,0];
+% [t,out] = ode45(@(t,Y)rhs_seir_sei(t,Y,params), [0 weeks], init);
+% 
+% [t_model,out_model] = chik_balanced_solve([0 weeks], init, params);
+% 
+% maxyrange = [0 max(max(max(out_model(:,2:4)), max(max(out(:,2:4)))))/2]
+
+
+figure()
+% subplot(1,2,1)
 % hold on
-% plot(t, out(:,1), 'g') 
+% %plot(t, out(:,1), 'g') 
 % plot(t, out(:,2), 'b') 
 % plot(t, out(:,3), 'r') 
 % plot(t, out(:,4), 'k')
-% legend('Exposed','Infected','Recovered', 'Cumulative Infected')
+% legend('Exposed','Infected','Recovered')
 % hold off
+% ylim(maxyrange)
 % 
-% xlabel('Time in Weeks')
-% ylabel('Human Population')
-% title('Human SEIR Dynamics')
+%  xlabel('Time in Weeks')
+%  ylabel('Human Population')
+%  title('Human SEIR Dynamics')
+%  
 % subplot(1,2,2)
 % hold on
 % plot(t, out(:,6), 'g') 
@@ -51,13 +61,26 @@ init = chik_init_conditions(params, tspan);
 % ylabel('Mosquito Population')
 % title('Mosquito SEI Dynamics')
 
-% lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1 ,0.5, params.H0, params.K_v, 1];
-% ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.K_v, 100];
-% obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan);
-% opt_params1 = optimizer(obj_fn1, lb, ub, params)
+lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,1 ,0.5, params.H0, params.K_v, params.init_cumu_infected];
+ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,100,0.5, params.H0, params.K_v,params.init_cumu_infected ];
+obj_fn1 = @(parray)chik_obj_fn(parray, real2014, array_names, tspan);
+opt_params1 = optimizer(obj_fn1, lb, ub, params)
+
+init = chik_init_conditions(opt_params1);
+[t,out] = chik_balanced_solve(tspan, init, opt_params1);
+
+chik_plot_both(t,out,real2014)
+% subplot(1,2,2)
+% hold on
+% %plot(t_model, out_model(:,1), 'g') 
+% plot(t_model, out_model(:,2), 'b') 
+% plot(t_model, out_model(:,3), 'r') 
+% plot(t_model, out_model(:,4), 'k')
+% ylim(maxyrange)
 % 
-[t_model,out_model] = chik_balanced_solve([0 400], init, params);
-plot_chik_model(t_model,out_model)
+% legend('Exposed','Infected','Recovered')
+% hold off
+% plot_chik_model(t_model,out_model)
 
 % range = linspace(lb(9), ub(9), 40);
 % chik_plot_obj_fn(opt_params1, real, array_names, t, 'sigma_h', range)
@@ -118,7 +141,7 @@ function val = chik_obj_fn(param_array, data, array_names, t_in)
 params = array2struct(param_array, array_names);
 
 
-new_init = chik_init_conditions(params, t_in);
+new_init = chik_init_conditions(params);
 
 [~,Y] = chik_balanced_solve(t_in, new_init, params); 
 val = chik_cmp_real_model(Y, data);
@@ -154,7 +177,7 @@ balance_init(3) = .0001;
 balance_init(5) = balance_init(3);
 balance_init(1) = balance_init(1) + init(3) - balance_init(3);
 
-options = odeset('Events',@(t,Y)chik_balancing_event(t, Y, init(5)));
+options = odeset('Events',@(t,Y)chik_balancing_event(t, Y, param.init_cumu_infected));
 
 
 t_balance = 1000; % how long we're willing to wait to balance
@@ -210,15 +233,15 @@ end
 
 end
 
-function [init] = chik_init_conditions(param, t)
+function [init] = chik_init_conditions(param)
 %CHIK_INIT_CONDITIONS Given tspan, return desired initial conditions
 
 init = [...
     param.H0; ...
     0; ...
-    10; ...
+    param.init_cumu_infected; ...
     0; ...
-    10; ...
+    param.init_cumu_infected; ...
     param.K_v; ...
     0; ...
     0; ...
@@ -275,4 +298,16 @@ xlabel('Time in Weeks', 'fontsize', 16)
 ylabel('Mosquito Population', 'fontsize', 16)
 title('Mosquito SEI Dynamics', 'fontsize', 16)
 
+end
+
+function [] = chik_plot_both(t,Y,data)
+%plot_both plots number infected for model and real data
+title('Real Infected Count and Model Infected Count', 'fontsize', 18);
+xlabel('Time in weeks', 'fontsize', 16)
+ylabel('Population', 'fontsize', 16)
+hold on
+t1 = t'./7;
+plot(t1(1:length(data)),data, '*');
+plot(t1,Y(:,5), 'b')
+legend('Real infected count','Model infected count', 'Location', 'best')
 end

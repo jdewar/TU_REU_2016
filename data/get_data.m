@@ -16,8 +16,10 @@ for i = 1:length(db)
     end
 end
 c = bestidx;
-
-[y, pop, name, firstweek] = data_from_entry(db(c));
+if ~exist('which','var')
+    which = 'linear';
+end
+[y, pop, name, firstweek] = data_from_entry(db(c), which);
 
 end
 

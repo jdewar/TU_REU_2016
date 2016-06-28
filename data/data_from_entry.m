@@ -1,4 +1,4 @@
-function [y, pop, name, firstweek] = data_from_entry(entry)
+function [y, pop, name, firstweek] = data_from_entry(entry, which)
 
 if exist('which','var')
     switch which
