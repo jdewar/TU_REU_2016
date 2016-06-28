@@ -14,10 +14,18 @@ init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
 tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
+<<<<<<< HEAD
 % tend = (tend+firstWeek2014-1);
  tspan_full_count = (firstWeek2014*7):7:((length(full_count)+firstWeek2014-1)*7);
  tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
  %tspan_predictions = tspan_full_count;
+=======
+tend = (tend+firstWeek2014-1);
+tspan_full_count = (firstWeek2014*7):7:((length(full_count)+firstWeek2014-1)*7);
+tspan_predictions = [(firstWeek2014*7):7:((length(real2014)+firstWeek2014-1)*7)];
+tspan_predictions = tspan_full_count;
+tfuture = tend+3;
+>>>>>>> origin/master
 
 
 %% Param & Function Struct
@@ -58,7 +66,7 @@ functions = struct(field1,value1);
 % [t_model,out_model] = chik_balanced_solve([0 400], init, params, functions);
 % plot_chik_model(t_model,out_model)
 
-%% Optimization & Plot
+%% Optimization & Plot - Original Obj Fn
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
@@ -83,18 +91,45 @@ end
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
 opt_params1 = optimizer(obj_fn1, lb, ub, params)
 
-percent_pop = opt_params1.H0/pop * 100
 
-init = chik_init_conditions(opt_params1, tspan_full_count);
-[t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
+percent_pop1 = opt_params1.H0/pop * 100
+
+init1 = chik_init_conditions(opt_params1, tspan_predictions);
+[t1,out1] = chik_balanced_solve(tspan_predictions, init1, opt_params1, functions);
+
+%val_real = chik_cmp_real_model(out, full_count)
 
 figure()
-chik_plot_both(tspan_full_count, out, full_count);
+subplot(1,2,1)
+chik_plot_both(tspan_predictions, out1, full_count);
 hold on
 plot([tend,tend], [0,max(full_count)]);
-plot([tend+3,tend+3], [0,max(full_count)]);
+plot([tfuture,tfuture], [0,max(full_count)]);
 
-chik_calc_R0(opt_params1, functions, t(1))
+difference1 = prediction_diff(out1, full_count, tfuture)
+
+%R01 = chik_calc_R0(opt_params1, functions, t(1))
+
+%% Optimization & Plot - New Obj Fn
+
+obj_fn2 = @(parray)chik_obj_fn_recent(parray, real, array_names, tspan_predictions, functions);
+opt_params2 = optimizer(obj_fn2, lb, ub, params)
+
+percent_pop2 = opt_params2.H0/pop * 100
+
+init2 = chik_init_conditions(opt_params2, tspan_predictions);
+[t2,out2] = chik_balanced_solve(tspan_predictions, init2, opt_params2, functions);
+
+%val_recent = chik_cmp_recent(out, full_count)
+
+subplot(1,2,2)
+chik_plot_both(tspan_predictions, out2, full_count);
+hold on
+plot([tend,tend], [0,max(full_count)]);
+plot([tfuture,tfuture], [0,max(full_count)]);
+difference2 = prediction_diff(out2, full_count, tfuture)
+
+%R02 = chik_calc_R0(opt_params2, functions, t(1))
 
 %% Plot Objective Function
 % figure()
@@ -126,6 +161,7 @@ chik_calc_R0(opt_params1, functions, t(1))
 
 
 %% Sensitivity Analysis
+
 %Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
 % Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
 % Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan_predictions, functions);
