@@ -1,4 +1,4 @@
-function [] = sir_model()
+function [hes, grad] = sir_model()
 %% Setting parameters and initial conditions
 addpath('../data');
 country = 'Guadeloupe';
@@ -43,10 +43,19 @@ lb = [1,0.001,0.001,.01];
 ub = [1,200,200,mean(real)* .95];
 
 half = (lb+ub)/2;
-options = optimset('Algorithm', 'sqp');
-[parray] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
+options = optimset('Algorithm', 'interior-point');
+[parray,~,~,~,~,grad, hes] = fmincon(fn, half, [],[],[],[],lb,ub, [], options);
 
-val = sir_obj_fn(param_array,real, param,array_names,tspan,total_pop);
+val = sir_obj_fn(parray,real, param,array_names,tspan,total_pop)
+
+parray2 = parray;
+parray2(3) = parray(3) - .00001;
+val2 = sir_obj_fn(parray2,real, param,array_names,tspan,total_pop)
+
+parray3 = parray;
+parray3(3) = parray(3) + .00001;
+val3 = sir_obj_fn(parray3,real, param,array_names,tspan,total_pop)
+
 
 param.beta = parray(1);
 param.c = parray(2);
@@ -73,12 +82,16 @@ plot_both(tspan_predictions,out,real_full);
 % hold on
 % plot([tend,tend], [0,max(real_full)]);
 
+%% Hessian
+% hes = hess_fdm(parray,fn);
+% grad = grad_fdm(parray,fn,2);
+
 %% Sensitivity
 
 %  
-% figure(2)
-% range = linspace(lb(4),ub(4), 40);
-% sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'init_cumu_infected', range);
+figure(2)
+range = linspace(lb(4),mean(real)/10, 40);
+sir_plot_obj_fn(parray, real,param, array_names, t, total_pop, 'init_cumu_infected', range);
 
 % % 
 % figure(4)

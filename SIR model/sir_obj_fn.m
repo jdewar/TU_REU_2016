@@ -19,7 +19,7 @@ if c>0
      val = val * (1+c);
 end
 
-
+% val = val/total_pop;
 
 end
 
