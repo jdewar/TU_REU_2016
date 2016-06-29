@@ -15,7 +15,7 @@ function [grad] = grad_fdm(X,func,mord,atol)
 % e.g.  grad = [f_x; f_y; f_z; ...]
 
 nx = length(X);
-dx = 1.e-3; % dimensional delta X, use atol to set
+dx = 1.e-6; % dimensional delta X, use atol to set
 xdiff=X;
 grad = NaN(size(X));
 

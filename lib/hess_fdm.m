@@ -15,7 +15,7 @@ function [hess] = hess_fdm(X,func,mord,atol)
 
 nx = length(X);
 hess = NaN(nx,nx);
-dx = 1.e-3; % dimensional delta X
+dx = 1.e-6; % dimensional delta X
 xdiff=X;
 
 for ix=1:nx
