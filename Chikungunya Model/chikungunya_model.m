@@ -1,6 +1,6 @@
 %%% Main script for running sir model
 
-function [] = chikungunya_model()
+function [grad, hes, fval] = chikungunya_model()
 %% 2014 Initial Conditions
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
@@ -9,7 +9,7 @@ addpath('../data');
 country = 'Guadeloupe';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = combine_data(country);
-real = full_count(1:31);
+real = full_count;
 init_infected_h = real(1);
 tend = length(real);
 max_K = pop * 2;
@@ -83,10 +83,13 @@ end
 %optimized;
 
 obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
-opt_params1 = optimizer(obj_fn1, lb, ub, params)
-
-
+[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+grad = grad([9,11,13,14]);
+hes = hes([9,11,13,14],[9,11,13,14]);
+hes = eig(hes);
 percent_pop1 = opt_params1.H0/pop * 100
+
+opt_params1
 
 init1 = chik_init_conditions(opt_params1, tspan_full_count);
 [t1,out1] = chik_balanced_solve(tspan_full_count, init1, opt_params1, functions);
@@ -96,9 +99,9 @@ init1 = chik_init_conditions(opt_params1, tspan_full_count);
 figure()
 % subplot(1,2,1)
 chik_plot_both(tspan_full_count, out1, full_count);
-hold on
-plot([tend,tend], [0,max(full_count)]);
-plot([tfuture,tfuture], [0,max(full_count)]);
+% hold on
+% plot([tend,tend], [0,max(full_count)]);
+% plot([tfuture,tfuture], [0,max(full_count)]);
 
 % difference1 = prediction_diff(out1, full_count, tfuture)
 
