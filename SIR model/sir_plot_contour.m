@@ -8,9 +8,9 @@ for i = 1:numel(c)
 end
 z = reshape(z,size(c));
 
-contour(c,gamma,z,40);
+contour(c,gamma,z,linspace(0, 1, 10));
 xlabel('C Values','fontsize',16);
 ylabel('\gamma Values','fontsize',16);
-title('Comparing C and \gamma to Cumulative Infected','fontsize',18)
+title('Comparing C and \gamma to Objective Function Value','fontsize',18)
 colorbar
 end
