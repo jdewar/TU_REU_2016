@@ -9,7 +9,7 @@ plot(t, Y(:,2), 'b', 'linewidth', 2) %plots exposed graph
 plot(t, Y(:,3), 'r', 'linewidth', 2) %plots infected graph
 plot(t, Y(:,4), 'k', 'linewidth', 2)
 plot(t, Y(:,5), 'm', 'linewidth', 2)
-legend('Exposed','Infected','Recovered', 'Cumulative infected', 'Location', 'best')
+legend('Susceptible','Exposed','Infected','Recovered', 'Cumulative infected', 'Location', 'best')
 hold off
 
 xlabel('Time in Weeks')
