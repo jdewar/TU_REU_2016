@@ -1,4 +1,4 @@
-function [residual] = plot_chik_residual(t,model,infected_real)
+function [residual] = plot_4910_residual(t,model,infected_real)
 
 residual = model(1:length(infected_real),5) - infected_real';
 
