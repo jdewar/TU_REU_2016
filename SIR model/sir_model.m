@@ -83,9 +83,9 @@ hold on
 plot([tend,tend], [0,max(real_full)]);
 
 
-param2 = param;
-param2.c = 3.207;
-param2.gamma = 2.931;
+ param2 = param;
+% param2.c = 3.207;
+% param2.gamma = 2.931;
 
 new_init = sir_init_conditions(param2, tspan_predictions, total_pop);
 [t,out] = sir_balanceANDsolve(tspan_predictions, new_init, param2);
