@@ -1,0 +1,6 @@
+for i = 1:50
+r0 = i;
+rinf = 5;
+x0 = rinf;
+fzero(@(r_inf)Rt(r0,r_inf),x0) 
+end
