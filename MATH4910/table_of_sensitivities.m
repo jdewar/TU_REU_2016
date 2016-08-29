@@ -7,20 +7,20 @@ for i = 10:10:40
     tend = length(real1);
     tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
     
-    obj_fn1 = @(parray)chik_obj_fn(parray, real1, array_names, tspan_predictions, functions);
+    obj_fn1 = @(parray)math4910_obj_fn(parray, real1, array_names, tspan_predictions, functions);
     opt_params1 = optimizer(obj_fn1, lb, ub, params);
     
-    init = chik_init_conditions(opt_params1, tspan_full_count);
-    [t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
+    init = math4910_init_conditions(opt_params1, tspan_full_count);
+    [t,out] = math4910_balanced_solve(tspan_full_count, init, opt_params1, functions);
     
-    Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
+    Q1 = @(opt_params1)math4910_Q_cumu_infect (opt_params1, out, t, functions);
     weeks(c) = i;
     H0_values(c) = opt_params1.H0;
     sigma_h_values(c) = opt_params1.sigma_h;
     max_K_values(c) = opt_params1.max_K;
-    [sensitivity_H0(c), H0_Q_vals(c)]  = chik_sensitivity_analysis(Q1,opt_params1,'H0');
-    [sensitivity_sigma_h(c), sigma_h_Q_vals(c)]  = chik_sensitivity_analysis(Q1,opt_params1,'sigma_h');
-    [sensitivity_max_K(c), max_K_Q_vals(c)]  = chik_sensitivity_analysis(Q1,opt_params1,'max_K');
+    [sensitivity_H0(c), H0_Q_vals(c)]  = math4910_sensitivity_analysis(Q1,opt_params1,'H0');
+    [sensitivity_sigma_h(c), sigma_h_Q_vals(c)]  = math4910_sensitivity_analysis(Q1,opt_params1,'sigma_h');
+    [sensitivity_max_K(c), max_K_Q_vals(c)]  = math4910_sensitivity_analysis(Q1,opt_params1,'max_K');
     c = c+1;
 end
 

@@ -13,8 +13,8 @@ for i = range
     lb(11) = params.H0;
     ub(11) = params.H0;
 
-    obj_fn = @(parray) chik_obj_fn(parray, data, names, t_in, functions);
-    nonlincon = @(x) chik_nonlincon_R0(x, names, functions, t_in(1));
+    obj_fn = @(parray) math4910_obj_fn(parray, data, names, t_in, functions);
+    nonlincon = @(x) math4910_nonlincon_R0(x, names, functions, t_in(1));
 
     % obj_fn, nonlincon, lb, ub, params
     params  = optimizer(obj_fn, nonlincon, lb, ub, params);
@@ -22,7 +22,7 @@ for i = range
     suscept_pop(count) = params.H0
     
     parray = struct2array(params, names);
-    vals(count) = chik_obj_fn(parray, data, names, t_in, functions);
+    vals(count) = math4910_obj_fn(parray, data, names, t_in, functions);
     
     count = count+1;
 end
