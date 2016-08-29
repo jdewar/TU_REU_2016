@@ -7,7 +7,7 @@ for i = 10:10:40
     tend = length(real1);
     tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
     
-    obj_fn1 = @(parray)chik_obj_fn(parray, real1, array_names, tspan_predictions, functions);
+    obj_fn1 = @(parray)4910_obj_fn(parray, real1, array_names, tspan_predictions, functions);
     opt_params1 = optimizer(obj_fn1, lb, ub, params);
     
     init = chik_init_conditions(opt_params1, tspan_full_count);
