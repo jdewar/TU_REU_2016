@@ -1,4 +1,4 @@
-function [] = plot_chik_model(t,Y)
+function [] = plot_4910_model(t,Y)
 %Plot_sir_model
 %   takes time span, t, and solved sir matrix, Y, and graphs
 

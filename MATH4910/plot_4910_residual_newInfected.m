@@ -1,7 +1,7 @@
-function [difference] = plot_chik_residual_newInfected(t,model,infected_real)
+function [difference] = plot_4910_residual_newInfected(t,model,infected_real)
 
-[val,difference1] = chik_cmp_newInfected(model, infected_real);
-[val,difference2] = chik_real_model_cmp(model, infected_real);
+[val,difference1] = math4910_cmp_newInfected(model, infected_real);
+[val,difference2] = math4910_real_model_cmp(model, infected_real);
 
 
 

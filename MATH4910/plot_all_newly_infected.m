@@ -28,7 +28,7 @@ sum_data = zeros(1,107);
                end
                
                hold all
-               chik_plot_NewlyInfected(tspan,newly_infected)
+               math4910_plot_NewlyInfected(tspan,newly_infected)
                str = sprintf('%s',name);
                title(str);
                no2015 = true;
@@ -56,7 +56,7 @@ sum_data = zeros(1,107);
               
 
                hold all
-               chik_plot_NewlyInfected(tspan_full_count,newly_infected_combined)
+               math4910_plot_NewlyInfected(tspan_full_count,newly_infected_combined)
              
          end
     end
