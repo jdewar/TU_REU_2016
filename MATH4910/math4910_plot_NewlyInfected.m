@@ -1,4 +1,4 @@
-function [ ] = chik_plot_NewlyInfected(t,new_count)
+function [ ] = math4910_plot_NewlyInfected(t,new_count)
 %chik_plot_data_infected plots newly infected
 
 hold on

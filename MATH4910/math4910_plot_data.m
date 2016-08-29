@@ -1,4 +1,4 @@
-function [ ] = chik_plot_data(count, tspan)
+function [ ] = math4910_plot_data(count, tspan)
 %plot_data plots real data
 hold on
 title('Real Infected Count', 'fontsize', 18)

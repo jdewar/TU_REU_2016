@@ -1,4 +1,4 @@
-function [] = chik_plot_both(t,Y,data)
+function [] = math4910_plot_both(t,Y,data)
 %plot_both plots number infected for model and real data
 title('Real Infected Count and Model Infected Count', 'fontsize', 18);
 xlabel('Time in weeks', 'fontsize', 16)

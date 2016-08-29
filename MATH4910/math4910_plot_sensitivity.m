@@ -1,4 +1,4 @@
-function [] = chik_plot_sensitivity(Q_fn, param_name, param_range, params)
+function [] = math4910_plot_sensitivity(Q_fn, param_name, param_range, params)
  
     for i = 1:length(param_range) 
        params.(param_name) = param_range(i);

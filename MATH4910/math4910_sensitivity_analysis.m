@@ -1,4 +1,4 @@
-function [sensitivity, te3] = chik_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
+function [sensitivity, te3] = math4910_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
 %CHIK_SENSITIVITY_ANALYSIS sensitivity analysis, respect to Beta
 params.(param_name) = params.(param_name);
 

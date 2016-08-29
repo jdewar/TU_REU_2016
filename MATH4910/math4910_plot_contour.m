@@ -1,4 +1,4 @@
-function [] = chik_plot_contour(Q, param,range_init_cumu_infected, range_sigma_h)
+function [] = math4910_plot_contour(Q, param,range_init_cumu_infected, range_sigma_h)
 [init_cumu_infected, sigma_h] = meshgrid(range_init_cumu_infected, range_sigma_h);
 how_many = numel(init_cumu_infected);
 for i = 1:how_many
