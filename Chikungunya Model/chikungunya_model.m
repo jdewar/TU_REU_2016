@@ -55,62 +55,62 @@ functions = struct(field1,value1);
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
-figure()
-init = [1000,0,10,0,10,10000,0,0,0];
-params.H0 = 1000;
-params.max_K = 10000;
-params.init_cumu_infected = 10;
-% init = chik_init_conditions(params, [0 400]);
-[t_model,out_model] = chik_balanced_solve([0 200], init, params, functions);
-plot_chik_model(t_model,out_model)
-drawnow
+% figure()
+% init = [1000,0,10,0,10,10000,0,0,0];
+% params.H0 = 1000;
+% params.max_K = 10000;
+% params.init_cumu_infected = 10;
+% % init = chik_init_conditions(params, [0 400]);
+% [t_model,out_model] = chik_balanced_solve([0 200], init, params, functions);
+% plot_chik_model(t_model,out_model)
+% drawnow
 
 %% Optimization & Plot - Original Obj Fn
-% lb = struct2array(params,array_names);
-% ub = struct2array(params,array_names);
-% 
-%  [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
-%  [lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
-%  [lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
-%  [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real2014)* .95, array_names);
-% 
-% 
-% % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
-% % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
-% 
-% c = 1;
-% for i = 1:length(lb)
-%     if lb(i) ~= ub(i)
-%         optimized{c} = array_names{i};
-%         c = c+1;
-%     end
-% end
-% %optimized;
-% 
-% obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
-% [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-% grad = grad([9,11,13,14]);
-% hes = hes([9,11,13,14],[9,11,13,14]);
-% hes = eig(hes);
-% percent_pop1 = opt_params1.H0/pop * 100
-% 
-% opt_params1
-% 
-% init1 = chik_init_conditions(opt_params1, tspan_full_count);
-% [t1,out1] = chik_balanced_solve(tspan_full_count, init1, opt_params1, functions);
-% 
-% %val_real = chik_cmp_real_model(out, full_count)
-% 
-% figure()
-% % subplot(1,2,1)
-% chik_plot_both(tspan_full_count, out1, full_count);
-% hold on
-% plot([tend,tend], [0,max(full_count)]);
-% plot([tfuture,tfuture], [0,max(full_count)]);
+lb = struct2array(params,array_names);
+ub = struct2array(params,array_names);
+
+ [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
+ [lb, ub] = range(lb, ub, 'H0', params.H0 * .01, params.H0, array_names);
+ [lb, ub] = range(lb, ub, 'max_K', params.max_K * .01, params.max_K*10, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumu_infected', .001, mean(real2014)* .95, array_names);
+
+
+% lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0 * .01, params.prop_K, params.max_K, .001];
+% ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K, mean(real)* .95];
+
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+%optimized;
+
+obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
+[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+grad = grad([9,11,13,14]);
+hes = hes([9,11,13,14],[9,11,13,14]);
+hes = eig(hes);
+percent_pop1 = opt_params1.H0/pop * 100
+
+opt_params1
+
+init1 = chik_init_conditions(opt_params1, tspan_full_count);
+[t1,out1] = chik_balanced_solve(tspan_full_count, init1, opt_params1, functions);
+
+%val_real = chik_cmp_real_model(out, full_count)
+
+figure()
+% subplot(1,2,1)
+chik_plot_both(tspan_full_count, out1, full_count);
+hold on
+plot([tend,tend], [0,max(full_count)]);
+plot([tfuture,tfuture], [0,max(full_count)]);
 
 % difference1 = prediction_diff(out1, full_count, tfuture)
-
-%R01 = chik_calc_R0(opt_params1, functions, t(1))
+% 
+% R01 = chik_calc_R0(opt_params1, functions, t(1))
 
 %% Optimization & Plot - New Obj Fn
 % 
