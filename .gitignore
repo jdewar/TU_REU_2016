@@ -2,3 +2,5 @@
 *.asv
 SIR model/sir_model.asv
 *.asv
+
+MATH4910/4910_rhs.m
