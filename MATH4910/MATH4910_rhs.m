@@ -1,4 +1,4 @@
-function [ out] = chikungunya_rhs( t, init, P, F)
+function [ out] = MATH4910_rhs( t, init, P, F)
 % sir_rhs defines the ode for a simple SIR model
 % Parameters are set
     %Input P:
