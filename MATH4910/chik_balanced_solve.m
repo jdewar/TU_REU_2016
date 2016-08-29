@@ -1,10 +1,10 @@
 function [t,out] = chik_balanced_solve(t_in, init, param, functions)
 balance_init = init;
-balance_init(3) = .0001;
-balance_init(5) = balance_init(3);
-balance_init(1) = balance_init(1) + init(3) - balance_init(3);
+balance_init(2) = .0001;
+balance_init(4) = balance_init(2);
+balance_init(1) = balance_init(1) + init(2) - balance_init(2);
 
-options = odeset('Events',@(t,Y)chik_balancing_event(t, Y, init(5)));
+options = odeset('Events',@(t,Y)chik_balancing_event(t, Y, init(4)));
 bal_fn = functions;
 fixed_K_v = functions.K_v(param.prop_K, param.max_K, t_in(1));
 bal_fn.K_v = @(kmin,kmax,t)fixed_K_v;
