@@ -1,7 +1,7 @@
-function [init] = chik_init_conditions(param, t)
+function [init] = math4910_init_conditions(param, t)
 %CHIK_INIT_CONDITIONS Given tspan, return desired initial conditions
 
-K_v = chik_K_v(param.prop_K, param.max_K, t(1));
+K_v = math4910_K_v(param.prop_K, param.max_K, t(1));
 
 S_h = param.H0 - param.init_cumu_infected;
 

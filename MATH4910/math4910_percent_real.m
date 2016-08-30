@@ -1,4 +1,4 @@
-function [time] = chik_percent_real(real_data, percent, total_infected)
+function [time] = math4910_percent_real(real_data, percent, total_infected)
 
 time = 0;
 for i = 1:length(real_data)

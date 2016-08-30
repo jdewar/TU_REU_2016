@@ -1,6 +1,6 @@
 %%% Main script for running sir model
 
-function [grad, hes, fval] = chikungunya_model()
+function [grad, hes, fval] = math4910_model()
 %% 2014 Initial Conditions
 close all; clc; clf; set(0,'DefaultFigureWindowStyle','docked');
 addpath('../data');
@@ -48,7 +48,7 @@ functions = struct(field1,value1);
 %% Plot Cumulative vs. Newly Infected
 %  figure()
 % subplot(1,2,1)
-%  chik_plot_data(full_count, tspan_full_count)
+%  math4910_plot_data(full_count, tspan_full_count)
 % 
 % subplot(1,2,2)
 % newly_infected = get_newly_infected_count(real);
@@ -60,9 +60,9 @@ functions = struct(field1,value1);
 % params.H0 = 1000;
 % params.max_K = 10000;
 % params.init_cumu_infected = 10;
-% % init = chik_init_conditions(params, [0 400]);
-% [t_model,out_model] = chik_balanced_solve([0 200], init, params, functions);
-% plot_chik_model(t_model,out_model)
+% % init = math4910_init_conditions(params, [0 400]);
+% [t_model,out_model] = math4910_balanced_solve([0 200], init, params, functions);
+% plot_4910_model(t_model,out_model)
 % drawnow
 
 %% Optimization & Plot - Original Obj Fn
@@ -87,7 +87,7 @@ for i = 1:length(lb)
 end
 %optimized;
 
-obj_fn1 = @(parray)chik_obj_fn(parray, real, array_names, tspan_predictions, functions);
+obj_fn1 = @(parray)math4910_obj_fn(parray, real, array_names, tspan_predictions, functions);
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 grad = grad([9,11,13,14]);
 hes = hes([9,11,13,14],[9,11,13,14]);
@@ -96,103 +96,103 @@ percent_pop1 = opt_params1.H0/pop * 100
 
 opt_params1
 
-init1 = chik_init_conditions(opt_params1, tspan_full_count);
-[t1,out1] = chik_balanced_solve(tspan_full_count, init1, opt_params1, functions);
+init1 = math4910_init_conditions(opt_params1, tspan_full_count);
+[t1,out1] = math4910_balanced_solve(tspan_full_count, init1, opt_params1, functions);
 
-%val_real = chik_cmp_real_model(out, full_count)
+%val_real = math4910_cmp_real_model(out, full_count)
 
 figure()
 % subplot(1,2,1)
-chik_plot_both(tspan_full_count, out1, full_count);
+math4910_plot_both(tspan_full_count, out1, full_count);
 hold on
 plot([tend,tend], [0,max(full_count)]);
 plot([tfuture,tfuture], [0,max(full_count)]);
 
 % difference1 = prediction_diff(out1, full_count, tfuture)
 % 
-% R01 = chik_calc_R0(opt_params1, functions, t(1))
+% R01 = math4910_calc_R0(opt_params1, functions, t(1))
 
 %% Optimization & Plot - New Obj Fn
 % 
-% obj_fn2 = @(parray)chik_obj_fn_recent(parray, real, array_names, tspan_predictions, functions);
+% obj_fn2 = @(parray)math4910_obj_fn_recent(parray, real, array_names, tspan_predictions, functions);
 % opt_params2 = optimizer(obj_fn2, lb, ub, params)
 % 
 % percent_pop2 = opt_params2.H0/pop * 100
 % 
-% init2 = chik_init_conditions(opt_params2, tspan_predictions);
-% [t2,out2] = chik_balanced_solve(tspan_predictions, init2, opt_params2, functions);
+% init2 = math4910_init_conditions(opt_params2, tspan_predictions);
+% [t2,out2] = math4910_balanced_solve(tspan_predictions, init2, opt_params2, functions);
 % 
-% %val_recent = chik_cmp_recent(out, full_count)
+% %val_recent = math4910_cmp_recent(out, full_count)
 % 
 % subplot(1,2,2)
-% chik_plot_both(tspan_predictions, out2, full_count);
+% math4910_plot_both(tspan_predictions, out2, full_count);
 % hold on
 % plot([tend,tend], [0,max(full_count)]);
 % plot([tfuture,tfuture], [0,max(full_count)]);
 % difference2 = prediction_diff(out2, full_count, tfuture)
 
-%R02 = chik_calc_R0(opt_params2, functions, t(1))
+%R02 = math4910_calc_R0(opt_params2, functions, t(1))
 
 %% Plot Objective Function
 % figure()
 % subplot(1,2,1)
-% chik_plot_both(tspan_predictions, out, full_count);
+% math4910_plot_both(tspan_predictions, out, full_count);
 %  
 % subplot(1,2,2)
 % opt_params1.H0 = 632200;
-% [t,out] = chik_balanced_solve(tspan_predictions, init, opt_params1, functions);
-% chik_plot_both(t, out, real);
+% [t,out] = math4910_balanced_solve(tspan_predictions, init, opt_params1, functions);
+% math4910_plot_both(t, out, real);
 % 
 % figure()
 % r = linspace(lb(11), ub(11), 100);
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'H0', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'H0', r);
 % hold on
 % plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 
 % figure()
 % r = linspace(lb(9), ub(9), 100);
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'sigma_h', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'sigma_h', r);
 % hold on
 % plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
 % 
 % figure()
 % r = linspace(lb(13), ub(13), 100);
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'max_K', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, functions, 'max_K', r);
 % hold on
 % plot([opt_params1.max_K,opt_params1.max_K], [0,max(val)]);
 
 
 %% Sensitivity Analysis
 
-%Q1 = @(opt_params1)chik_Q_cumu_infect (opt_params1, out, t, functions);
-% Q2 = @(params)chik_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
-% Q3 = @(params)chik_obj_fn(struct2array(params, array_names), real, array_names, tspan_predictions, functions);
+%Q1 = @(opt_params1)math4910_Q_cumu_infect (opt_params1, out, t, functions);
+% Q2 = @(params)math4910_Q_time_to_percent(params,out(end,5), tspan,init, .01, functions);
+% Q3 = @(params)math4910_obj_fn(struct2array(params, array_names), real, array_names, tspan_predictions, functions);
 %figure()
-%chik_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
+%math4910_plot_contour(Q3,opt_params1,linspace(1,200,40), linspace(1, 20, 40));
 %
-%sensitivity_H0  = chik_sensitivity_analysis(Q1,opt_params1,'H0')
-%sensitivity_sigma_h  = chik_sensitivity_analysis(Q1,opt_params1,'sigma_h')
-%sensitivity_max_K  = chik_sensitivity_analysis(Q1,opt_params1,'max_K')
+%sensitivity_H0  = math4910_sensitivity_analysis(Q1,opt_params1,'H0')
+%sensitivity_sigma_h  = math4910_sensitivity_analysis(Q1,opt_params1,'sigma_h')
+%sensitivity_max_K  = math4910_sensitivity_analysis(Q1,opt_params1,'max_K')
 
-%sensitivity_init_cumu_infected  = chik_sensitivity_analysis(Q1,opt_params1,'init_cumu_infected')
+%sensitivity_init_cumu_infected  = math4910_sensitivity_analysis(Q1,opt_params1,'init_cumu_infected')
 
 % r = linspace(lb(13), ub(13), 100);
 % figure()
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'max_K', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'max_K', r);
 % hold on
 % plot([opt_params1.max_K,opt_params1.max_K], [0,max(val)]);
 % r = linspace(lb(11), ub(11), 100);
 % min(val)
 
 % figure()
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'H0', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'H0', r);
 % hold on
 % plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 % r = linspace(lb(9), ub(9), 100);
 % min(val)
 
 % figure()
-% [param,val] = chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'sigma_h', r);
+% [param,val] = math4910_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, tspan_predictions, functions, 'sigma_h', r);
 % hold on
 % plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
 % 
@@ -208,23 +208,23 @@ plot([tfuture,tfuture], [0,max(full_count)]);
 % plot(sensitivity)
 
 %% Calculate Biting Rates
-% [rate_vh, rate_hv] = chik_calc_biting_rates(opt_params1, out);
+% [rate_vh, rate_hv] = math4910_calc_biting_rates(opt_params1, out);
 
 %% Plotting K_v - Not Needed
 % figure()
-% plot(0:1:365, chik_K_v(params.prop_K, params.max_K, 0:1:365))
+% plot(0:1:365, math4910_K_v(params.prop_K, params.max_K, 0:1:365))
 % xlabel('Days'); ylabel('Mosquito Carrying Capacity'); title('Seasonal K_v')
 
 %% Optimizing Newly Infected - Not Needed
 %new_data = get_data(country,'linear_newinf');
-% obj_fn2 = @(parray)chik_obj_fn(parray, new_data, array_names, tspan, functions);
+% obj_fn2 = @(parray)math4910_obj_fn(parray, new_data, array_names, tspan, functions);
 % opt_params2 = optimizer(obj_fn2, nonlincon, lb, ub, params)
 % 
-% init = chik_init_conditions(opt_params2, tspan);
-% [t,out] = chik_balanced_solve(tspan, init, opt_params2, functions);
+% init = math4910_init_conditions(opt_params2, tspan);
+% [t,out] = math4910_balanced_solve(tspan, init, opt_params2, functions);
 % 
 % subplot(1,2,2)
-% chik_plot_both_NewlyInfected(t,out,new_data);% newly infected
+% math4910_plot_both_NewlyInfected(t,out,new_data);% newly infected
 
 
 %% 2015 Initial Conditions
@@ -266,7 +266,7 @@ plot([tfuture,tfuture], [0,max(full_count)]);
 % newly_infected = get_newly_infected_count(real);
 % subplot(1,2,1)
 % full_count = combine_data(real2014,newly_infected);
-% chik_plot_data(full_count, tspan_full_count);
+% math4910_plot_data(full_count, tspan_full_count);
 % 
 % subplot(1,2,2)
 % newly_infected_combined = get_newly_infected_count(full_count);
@@ -276,36 +276,36 @@ plot([tfuture,tfuture], [0,max(full_count)]);
 % lb = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,.1,0.5, params.H0, params.prop_K*.01, params.max_K, .001];
 % ub = [0.24,0.24,1/6,1/(70*365),1/3,.3,1/14,1/11,50,0.5, params.H0, params.prop_K, params.max_K*10, mean(real)* .95];
 %  
-% obj_fn1 = @(parray)chik_obj_fn(parray, full_count, array_names, tspan_full_count, functions);
+% obj_fn1 = @(parray)math4910_obj_fn(parray, full_count, array_names, tspan_full_count, functions);
 % opt_params1 = optimizer(obj_fn1, lb, ub, params);
 %  
-% init = chik_init_conditions(opt_params1, tspan_full_count);
-% [t,out] = chik_balanced_solve(tspan_full_count, init, opt_params1, functions);
+% init = math4910_init_conditions(opt_params1, tspan_full_count);
+% [t,out] = math4910_balanced_solve(tspan_full_count, init, opt_params1, functions);
 % 
 % figure()
-% chik_plot_both(t, out, full_count);
+% math4910_plot_both(t, out, full_count);
 
 %% Plot Objective Function
 % figure()
 % subplot(1,2,1)
-% chik_plot_both(t, out, full_count);
+% math4910_plot_both(t, out, full_count);
 % 
 % subplot(1,2,2)
 % range = linspace(lb(14), ub(14), 40);
-% chik_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, t, functions, 'init_cumu_infected', range)
+% math4910_plot_obj_fn(struct2array(opt_params1, array_names), full_count, array_names, t, functions, 'init_cumu_infected', range)
 % 
 
 %% Unused Functions (for 2014 data)
 % figure()
-% plot_chik_residual(t, out, new_data);
+% plot_4910_residual(t, out, new_data);
 
 % figure()
-% plot_chik_residual(t,out,real_data);
+% plot_4910_residual(t,out,real_data);
 
-% total_infected = chik_cumu_infect_real(real_data)
-% time = chik_percent_real(real_data, .1, total_infected)
+% total_infected = math4910_cumu_infect_real(real_data)
+% time = math4910_percent_real(real_data, .1, total_infected)
 % hold on
-% chik_plot_data(real_data)
+% math4910_plot_data(real_data)
 % plot(time,real(time),'o');
 
 % figure()
