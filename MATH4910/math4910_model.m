@@ -42,7 +42,7 @@ param_struct = ...
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
 
-field1 = 'K_v';  value1 = @chik_K_v;
+field1 = 'K_v';  value1 = @math4910_K_v;
 functions = struct(field1,value1);
 
 %% Plot Cumulative vs. Newly Infected
@@ -55,15 +55,15 @@ functions = struct(field1,value1);
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
-% figure()
+figure()
 % init = [1000,0,10,0,10,10000,0,0,0];
 % params.H0 = 1000;
 % params.max_K = 10000;
 % params.init_cumu_infected = 10;
-% % init = math4910_init_conditions(params, [0 400]);
-% [t_model,out_model] = math4910_balanced_solve([0 200], init, params, functions);
-% plot_4910_model(t_model,out_model)
-% drawnow
+init = math4910_init_conditions(params, [0 400]);
+[t_model,out_model] = math4910_balanced_solve([0 800], init, params, functions);
+plot_4910_model(t_model,out_model)
+drawnow
 
 %% Optimization & Plot - Original Obj Fn
 lb = struct2array(params,array_names);
@@ -88,10 +88,10 @@ end
 %optimized;
 
 obj_fn1 = @(parray)math4910_obj_fn(parray, real, array_names, tspan_predictions, functions);
-[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-grad = grad([9,11,13,14]);
-hes = hes([9,11,13,14],[9,11,13,14]);
-hes = eig(hes);
+[opt_params1,fval] = optimizer(obj_fn1, lb, ub, params);
+% grad = grad([9,11,13,14]);
+% hes = hes([9,11,13,14],[9,11,13,14]);
+% hes = eig(hes);
 percent_pop1 = opt_params1.H0/pop * 100
 
 opt_params1

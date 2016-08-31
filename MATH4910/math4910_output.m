@@ -6,7 +6,7 @@ if numel(options) ~= 0
     [t, out, te, ye, ie] = ode23s(dydt_fn, t_in, Y, options);
 else
     
-    [t, out] = ode23s(dydt_fn, t_in, Y);
+    [t, out] = ode45(dydt_fn, t_in, Y);
 end
 
 end

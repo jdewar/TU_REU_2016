@@ -3,12 +3,12 @@ function [val_real] = math4910_obj_fn(param_array, data, array_names, t_in, func
 
 params = array2struct(param_array, array_names);
 
-c = 1.00001 - math4910_calc_R0(params, functions, t_in(1));
+c = 1.00001 - math4910_calc_R0(params, functions, t_in(1))
 
 new_init = math4910_init_conditions(params, t_in);
 
 [~,Y] = math4910_balanced_solve(t_in, new_init, params, functions); 
-val_real = math4910_cmp_real_model(Y, data);
+val_real = math4910_cmp_real_model(Y, data)
 
 
  

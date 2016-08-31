@@ -4,7 +4,7 @@ balance_init(2) = .0001;
 balance_init(3) = balance_init(2);
 balance_init(1) = balance_init(1) + init(2) - balance_init(2);
 
-options = odeset('Events',@(t,Y)math4910_balancing_event(t, Y, init(4)));
+options = odeset('Events',@(t,Y)math4910_balancing_event(t, Y, init(3)));
 bal_fn = functions;
 fixed_K_v = functions.K_v(param.prop_K, param.max_K, t_in(1));
 bal_fn.K_v = @(kmin,kmax,t)fixed_K_v;

@@ -3,11 +3,9 @@ function R0 = math4910_calc_R0(P, functions, t0)
 
 K_v = math4910_calc_K_v(P, functions, t0);
 
-zeta = (P.sigma_v * P.sigma_h) / (P.sigma_v * K_v + P.sigma_h * P.H0);
+R_hv = (P.sigma_v * P.sigma_h * P.beta_hv * P.H0) / ((P.sigma_v * K_v + P.sigma_h * P.H0) * (P.gamma_h + P.mu_h));
 
-R_hv = P.beta_hv * P.H0 * zeta * (P.nu_v / ((P.mu_v + P.nu_v) * P.mu_v));
-
-R_vh = P.beta_vh * K_v * zeta * (P.nu_h / ((P.mu_h + P.nu_h) * (P.mu_h + P.gamma_h)));
+R_vh = (P.sigma_v * P.sigma_h * P.beta_hv * P.H0) / (P.mu_v * (P.sigma_v * K_v + P.sigma_h * P.H0));
 
 R0 = sqrt(R_vh * R_hv);
 
