@@ -1,7 +1,7 @@
 function [t,out] = math4910_balanced_solve(t_in, init, param, functions)
 balance_init = init;
 balance_init(2) = .0001;
-balance_init(4) = balance_init(2);
+balance_init(3) = balance_init(2);
 balance_init(1) = balance_init(1) + init(2) - balance_init(2);
 
 options = odeset('Events',@(t,Y)math4910_balancing_event(t, Y, init(4)));
