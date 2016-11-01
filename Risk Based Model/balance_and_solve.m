@@ -11,5 +11,4 @@ t_balance = 10000; % how long we're willing to wait to balance
 new_init = Y(end,:)';
 
 [t,out] = output(t_in, new_init, param, []);
-%SIRC-SEI
 end

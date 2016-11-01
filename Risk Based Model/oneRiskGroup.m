@@ -46,10 +46,45 @@ array_names = param_struct(1,:);
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
+% figure()
+% init = [10000,1,0,1,100000,0,0,0];
+% params.H0 = 1000;
+% params.init_cumulative_infected = 1;
+% [t_model,out_model] = balance_and_solve([0 200], init, params);
+% plot_model(t_model,out_model)
+% drawnow
+%% Optimization & Plot - Original Obj Fn
+lb = struct2array(params,array_names);
+ub = struct2array(params,array_names);
+
+ [lb, ub] = range(lb, ub, 'sigma_h', .1, 20, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_v', .1, 20, array_names);
+ [lb, ub] = range(lb, ub, 'theta', params.theta * .01, params.theta, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected*10, array_names);
+
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+optimized;
+
+obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan);
+[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+
+opt_params1
+real;
+ 
+init1 = get_init_conditions(opt_params1, tspan);
+[t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 figure()
-init = [10000,1,0,1,100000,0,0,0];
-params.H0 = 1000;
-params.init_cumulative_infected = 1;
-[t_model,out_model] = balance_and_solve([0 200], init, params);
-plot_model(t_model,out_model)
-drawnow
+plot_both(tspan, out1, full_count);
+% hold on
+% plot([tend,tend], [0,max(full_count)]);
+% plot([tfuture,tfuture], [0,max(full_count)]);
+
+% difference1 = prediction_diff(out1, full_count, tfuture)
+% 
+% R01 = chik_calc_R0(opt_params1, functions, t(1))
