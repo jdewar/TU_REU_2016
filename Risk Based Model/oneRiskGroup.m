@@ -59,9 +59,11 @@ ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h', .1, 20, array_names);
  [lb, ub] = range(lb, ub, 'sigma_v', .1, 20, array_names);
- [lb, ub] = range(lb, ub, 'theta', params.theta * .01, params.theta, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected*10, array_names);
-
+ [lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected*1000, array_names);
+ [lb, ub] = range(lb, ub, 'K_v', params.H0 * 0.1, params.H0 * 10, array_names);
+ [lb, ub] = range(lb, ub, 'H0', params.H0 *0.05, params.H0, array_names);
+ 
 c = 1;
 for i = 1:length(lb)
     if lb(i) ~= ub(i)
@@ -79,6 +81,7 @@ real;
  
 init1 = get_init_conditions(opt_params1, tspan);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
+
 figure()
 plot_both(tspan, out1, full_count);
 % hold on
