@@ -57,7 +57,7 @@ array_names = param_struct(1,:);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- [lb, ub] = range(lb, ub, 'sigma_h', .1, 100, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
  %[lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
