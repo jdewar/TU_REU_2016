@@ -1,4 +1,4 @@
-function [val_real] = obj_fn(param_array, data, array_names, t_in)
+function [val_real] = obj_fn(param_array, data, array_names, t_in, init)
 %chik_obj_fn returns the value that the objective function optimizes over
 
 params = array2struct(param_array, array_names);

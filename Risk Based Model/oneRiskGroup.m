@@ -72,7 +72,7 @@ for i = 1:length(lb)
 end
 optimized;
 
-obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan);
+obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 
 opt_params1
@@ -88,29 +88,23 @@ plot_both(tspan, out1, full_count);
 % plot([tfuture,tfuture], [0,max(full_count)]);
 
 % difference1 = prediction_diff(out1, full_count, tfuture)
-% 
-% R01 = chik_calc_R0(opt_params1, functions, t(1))
+
 
 figure()
 r = linspace(lb(9), ub(9), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
-%hold on
-%plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
 
 figure()
 r = linspace(lb(13), ub(13), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
-%hold on
-%plot([opt_params1.init_cumulative_infected,opt_params1.init_cumulative_infected], [0,max(val)]);
 
 figure()
 r = linspace(lb(11), ub(11), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'H0', r);
-%hold on
-%plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
 
 figure()
 r = linspace(lb(14), ub(14), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
-%hold on
-%plot([opt_params1.K_v,opt_params1.K_v], [0,max(val)]);
+
+R01 = calc_R0(opt_params1, out1(:,1))
+
