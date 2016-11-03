@@ -57,9 +57,9 @@ array_names = param_struct(1,:);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- [lb, ub] = range(lb, ub, 'sigma_h', .1, 20, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h', 1, 50, array_names);
  %[lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected*2, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  [lb, ub] = range(lb, ub, 'H0', params.H0 *0.2, params.H0, array_names);
  
@@ -83,12 +83,6 @@ init1 = get_init_conditions(opt_params1, tspan);
 
 figure()
 plot_both(tspan, out1, full_count);
-% hold on
-% plot([tend,tend], [0,max(full_count)]);
-% plot([tfuture,tfuture], [0,max(full_count)]);
-
-% difference1 = prediction_diff(out1, full_count, tfuture)
-
 
 figure()
 r = linspace(lb(9), ub(9), 100);
