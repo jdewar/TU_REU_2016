@@ -59,7 +59,7 @@ ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h', .1, 20, array_names);
  %[lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
- %[lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  [lb, ub] = range(lb, ub, 'H0', params.H0 *0.2, params.H0, array_names);
  
@@ -90,3 +90,27 @@ plot_both(tspan, out1, full_count);
 % difference1 = prediction_diff(out1, full_count, tfuture)
 % 
 % R01 = chik_calc_R0(opt_params1, functions, t(1))
+
+figure()
+r = linspace(lb(9), ub(9), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
+%hold on
+%plot([opt_params1.sigma_h,opt_params1.sigma_h], [0,max(val)]);
+
+figure()
+r = linspace(lb(13), ub(13), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
+%hold on
+%plot([opt_params1.init_cumulative_infected,opt_params1.init_cumulative_infected], [0,max(val)]);
+
+figure()
+r = linspace(lb(11), ub(11), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'H0', r);
+%hold on
+%plot([opt_params1.H0,opt_params1.H0], [0,max(val)]);
+
+figure()
+r = linspace(lb(14), ub(14), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
+%hold on
+%plot([opt_params1.K_v,opt_params1.K_v], [0,max(val)]);
