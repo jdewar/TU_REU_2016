@@ -83,12 +83,6 @@ init1 = get_init_conditions(opt_params1, tspan);
 
 figure()
 plot_both(tspan, out1, full_count);
-% hold on
-% plot([tend,tend], [0,max(full_count)]);
-% plot([tfuture,tfuture], [0,max(full_count)]);
-
-% difference1 = prediction_diff(out1, full_count, tfuture)
-
 
 figure()
 r = linspace(lb(9), ub(9), 100);
