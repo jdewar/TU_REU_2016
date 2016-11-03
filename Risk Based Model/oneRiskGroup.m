@@ -47,7 +47,7 @@ array_names = param_struct(1,:);
 
 %% Plot ODE Solutions
 % figure()
-% init = [10000,1,0,1,100000,0,0,0];
+% init = [10000,1,0,1,100000,0,0];
 % params.H0 = 1000;
 % params.init_cumulative_infected = 1;
 % [t_model,out_model] = balance_and_solve([0 200], init, params);
@@ -58,11 +58,10 @@ lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h', .1, 20, array_names);
- [lb, ub] = range(lb, ub, 'sigma_v', .1, 20, array_names);
- [lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected*1000, array_names);
- [lb, ub] = range(lb, ub, 'K_v', params.H0 * 0.1, params.H0 * 10, array_names);
- [lb, ub] = range(lb, ub, 'H0', params.H0 *0.05, params.H0, array_names);
+ %[lb, ub] = range(lb, ub, 'theta', params.theta, params.theta, array_names);
+ %[lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected, params.init_cumulative_infected, array_names);
+ [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
+ [lb, ub] = range(lb, ub, 'H0', params.H0 *0.2, params.H0, array_names);
  
 c = 1;
 for i = 1:length(lb)
