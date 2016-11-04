@@ -1,0 +1,99 @@
+%% Main script for running model with no and high risk groups and no behavior change
+close all; 
+addpath('../data');
+country = 'Guadeloupe';
+[real2014, pop, name, firstWeek2014] = get_data(country);
+full_count = real2014;
+real = full_count;
+init_infected_h = real(1);
+tend = length(real);
+tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
+tend = (tend+firstWeek2014-1);
+
+
+%% Parameter values
+
+param_struct = ...
+    {'beta_h', 0.24;
+     'beta_v', 0.24;
+     'gamma_h', 1/6;
+     'mu_h', 1/(70*365);
+     'nu_h', 1/3;
+     'psi_v', 0.3;
+     'mu_v', 1/14;
+     'nu_v', 1/11;
+     'sigma_h', 19;
+     'sigma_v', 0.5;
+     'H0', pop;
+     'theta', 1;
+     'init_cumulative_infected', init_infected_h;
+     'K_v' , pop * 2;
+    }';
+params = struct(param_struct{:});
+array_names = param_struct(1,:);
+%% Plot Cumulative vs. Newly Infected
+%  figure()
+%  subplot(1,2,1)
+%  plot_data(full_count, tspan_full_count)
+% 
+% subplot(1,2,2)
+% newly_infected = get_newly_infected_count(real);
+% plot(tspan,newly_infected)
+
+%% Plot ODE Solutions
+% figure()
+% init = [10000,1,0,1,100000,0,0];
+% params.H0 = 1000;
+% params.init_cumulative_infected = 1;
+% [t_model,out_model] = balance_and_solve([0 200], init, params);
+% plot_model(t_model,out_model)
+% drawnow
+%% Optimization & Plot - Original Obj Fn
+lb = struct2array(params,array_names);
+ub = struct2array(params,array_names);
+
+ [lb, ub] = range(lb, ub, 'sigma_h', .1, 50, array_names);
+ [lb, ub] = range(lb, ub, 'theta', params.theta*.01, params.theta*.5, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
+ [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
+ %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
+ 
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+optimized;
+
+obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
+[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+
+opt_params1
+real;
+ 
+init1 = get_init_conditions(opt_params1, tspan);
+[t1,out1] = balance_and_solve(tspan, init1, opt_params1);
+
+figure()
+plot_both(tspan, out1, full_count);
+drawnow
+figure()
+r = linspace(lb(9), ub(9), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
+
+figure()
+r = linspace(lb(13), ub(13), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
+
+figure()
+r = linspace(lb(12), ub(12), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta', r);
+
+figure()
+r = linspace(lb(14), ub(14), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
+
+R01 = calc_R0(opt_params1, out1(:,1))
+
