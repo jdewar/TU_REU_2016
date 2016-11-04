@@ -7,13 +7,8 @@ full_count = real2014;
 real = full_count;
 init_infected_h = real(1);
 tend = length(real);
-max_K = pop * 2;
 tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
 tend = (tend+firstWeek2014-1);
-tspan_full_count = (firstWeek2014*7):7:((length(full_count)+firstWeek2014-1)*7);
-tspan_predictions = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
-tspan_predictions = tspan_full_count;
-tfuture = tend+3;
 
 
 %% Parameter values
