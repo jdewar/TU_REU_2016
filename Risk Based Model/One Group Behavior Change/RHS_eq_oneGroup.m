@@ -18,9 +18,9 @@ I_v = init_conditions(7);
 N_h = parameters.theta * parameters.H0;
 N_v = S_v + E_v + I_v;
 
-lambda_h = parameters.beta_h * (I_v/N_v) * (calc_b_T(parameters.sigma_h,parameters.sigma_v, init_conditions))/N_h;
+lambda_h = parameters.beta_h * (I_v/N_v) * (calc_b_T(parameters.sigma_h,parameters.sigma_v, parameters.pi, init_conditions))/N_h;
 %all bites happening on population 1, bT = theta* bT
-lambda_v = parameters.beta_v * (I_h/N_h) * (calc_b_T(parameters.sigma_h,parameters.sigma_v, init_conditions)/N_v);
+lambda_v = parameters.beta_v * (I_h/N_h) * (calc_b_T(parameters.sigma_h,parameters.sigma_v, parameters.pi, init_conditions)/N_v);
 %host
 out(1) = (parameters.mu_h*(parameters.theta*parameters.H0)) - (lambda_h * S_h) - (parameters.mu_h*S_h);
 out(2) = (lambda_h * S_h) - (parameters.gamma_h + parameters.mu_h)*I_h;

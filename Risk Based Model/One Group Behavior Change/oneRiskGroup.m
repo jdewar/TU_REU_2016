@@ -28,6 +28,7 @@ param_struct = ...
      'theta', 1;
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
+     'pi', 1;
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
@@ -57,6 +58,7 @@ ub = struct2array(params,array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
+ [lb, ub] = range(lb, ub, 'pi', params.pi*0.01, params.pi, array_names);
  
 c = 1;
 for i = 1:length(lb)
