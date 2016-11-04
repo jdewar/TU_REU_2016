@@ -57,8 +57,8 @@ ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 50, array_names);
  [lb, ub] = range(lb, ub, 'sigma_h2', .1, 50, array_names);
- [lb, ub] = range(lb, ub, 'theta1', .01, 1, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', params.theta*.01, params.theta*.5, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', params.theta*.01, params.theta*.5, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
@@ -80,10 +80,10 @@ real;
  
 init1 = get_init_conditions(opt_params1, tspan);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
-
-figure()
-plot_both(tspan, out1, full_count);
-drawnow
+% 
+% figure()
+% plot_both(tspan, out1, full_count);
+% drawnow
 % figure()
 % r = linspace(lb(9), ub(9), 100);
 % [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);

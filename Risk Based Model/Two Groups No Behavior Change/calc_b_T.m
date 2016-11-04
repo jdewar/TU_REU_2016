@@ -1,6 +1,6 @@
 function [ b_T ] = calc_b_T(P, init)
-c1 = get_init_conditions1(P,init);
-c2 = get_init_conditions2(P,init);
+c1 = get_init_conditions1(P);
+c2 = get_init_conditions2(P);
 b_hw1 = P.sigma_h1 * c1(1) + P.sigma_h1 * c1(2) + P.sigma_h1 * c1(3);
 b_hw2 = P.sigma_h2 * c2(1) + P.sigma_h2 * c2(2) + P.sigma_h2 * c2(3);
 b_hw = b_hw1+b_hw2;
