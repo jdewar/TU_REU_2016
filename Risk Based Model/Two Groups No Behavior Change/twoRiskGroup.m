@@ -55,11 +55,11 @@ array_names = param_struct(1,:);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- [lb, ub] = range(lb, ub, 'sigma_h1', .1, 50, array_names);
- [lb, ub] = range(lb, ub, 'sigma_h2', .1, 50, array_names);
- [lb, ub] = range(lb, ub, 'theta1', .01, 1, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', .3, 1, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .01, .3, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 50, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
  
@@ -84,21 +84,28 @@ init1 = get_init_conditions(opt_params1, tspan);
 figure()
 plot_both(tspan, out1, full_count);
 drawnow
-% figure()
-% r = linspace(lb(9), ub(9), 100);
-% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
-% 
-% figure()
-% r = linspace(lb(13), ub(13), 100);
-% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
-% 
-% figure()
-% r = linspace(lb(12), ub(12), 100);
-% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta', r);
-% 
-% figure()
-% r = linspace(lb(14), ub(14), 100);
-% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
-% 
-% R01 = calc_R0(opt_params1, out1(:,1))
-% 
+figure()
+r = linspace(lb(9), ub(9), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h1', r);
+
+r = linspace(lb(10), ub(10), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h2', r);
+
+figure()
+r = linspace(lb(15), ub(15), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
+
+figure()
+r = linspace(lb(13), ub(13), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta1', r);
+
+figure()
+r = linspace(lb(14), ub(14), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta1', r);
+
+figure()
+r = linspace(lb(16), ub(16), 100);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
+
+R01 = calc_R0(opt_params1, out1(:,1))
+
