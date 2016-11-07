@@ -10,7 +10,11 @@ tend = length(real);
 tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
 tend = (tend+firstWeek2014-1);
 
+%switch L_MODEL
+%CASE 'SINGLE'
+%CASE 'DOUBLE'
 
+%make struct with model and params
 %% Parameter values
 
 param_struct = ...
@@ -55,14 +59,14 @@ array_names = param_struct(1,:);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- [lb, ub] = range(lb, ub, 'sigma_h1', .1, 50, array_names);
- [lb, ub] = range(lb, ub, 'sigma_h2', .1, 50, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h1', .1, 30, array_names);
+ [lb, ub] = range(lb, ub, 'sigma_h2', .1, 30, array_names);
  [lb, ub] = range(lb, ub, 'theta1', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
- 
+ %I* from integrating steady state
 c = 1;
 for i = 1:length(lb)
     if lb(i) ~= ub(i)
