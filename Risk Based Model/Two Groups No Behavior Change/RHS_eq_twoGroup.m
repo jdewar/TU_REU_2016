@@ -40,7 +40,7 @@ Y(6) = (lambda_h2 * S_h2) - (parameters.gamma_h + parameters.mu_h)*I_h2;
 Y(7) = (parameters.gamma_h * I_h2) - (parameters.mu_h * R_h2);
 Y(8) = (lambda_h2 * S_h2);
 
-P_HI = (I_h1 + I_h2)/(parameters.H0);
+P_HI = (I_h1 + I_h2)/(parameters.H0 * (parameters.theta1 + parameters.theta2));
 lambda_v = parameters.beta_v * P_HI * (calc_b_T(parameters, init_conditions)/N_v);
 %vector
 Y(9) = (parameters.psi_v - (parameters.psi_v - parameters.mu_v)*(N_v/parameters.K_v))*N_v - (lambda_v*S_v) - (parameters.mu_v * S_v);

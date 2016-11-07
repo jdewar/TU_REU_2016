@@ -61,9 +61,9 @@ ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
- [lb, ub] = range(lb, ub, 'theta1', .2, 1, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, .2, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 50, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
  %I* from integrating steady state
@@ -88,10 +88,12 @@ init1 = get_init_conditions(opt_params1, tspan);
 figure()
 plot_both(tspan, out1, full_count);
 drawnow
+
 figure()
 r = linspace(lb(9), ub(9), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h1', r);
 
+figure()
 r = linspace(lb(10), ub(10), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h2', r);
 
@@ -105,7 +107,7 @@ r = linspace(lb(13), ub(13), 100);
 
 figure()
 r = linspace(lb(14), ub(14), 100);
-[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta1', r);
+[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta2', r);
 
 figure()
 r = linspace(lb(16), ub(16), 100);
