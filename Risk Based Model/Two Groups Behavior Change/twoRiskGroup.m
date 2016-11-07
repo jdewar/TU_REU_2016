@@ -26,16 +26,16 @@ param_struct = ...
      'psi_v', 0.3;
      'mu_v', 1/14;
      'nu_v', 1/11;
-     'sigma_h1', 19;
-     'sigma_h2',2;
+     'sigma_h1', 3; %low risk contacts
+     'sigma_h2', 10; %high risk contacts
      'sigma_v', 0.5;
      'H0', pop;
-     'theta1', 0.9;
-     'theta2', 0.1;
+     'theta1', 0.7; %proportion of population in group 1
+     'theta2', 0.1;% proportion of population in group 2
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
-     'pi1', 1;
-     'pi2', 1;
+     'pi1', 1; %proportion that continues to be bitten in infected group 1
+     'pi2', 1; %proportion that continues to be bitten in infected group 2
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
@@ -93,6 +93,9 @@ figure()
 plot_both(tspan, out1, full_count);
 drawnow
 
+R01 = calc_R0(opt_params1, out1(:,1))
+
+%% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);
 % [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h1', r);
@@ -117,5 +120,4 @@ drawnow
 % r = linspace(lb(16), ub(16), 100);
 % [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
 
-R01 = calc_R0(opt_params1, out1(:,1))
 
