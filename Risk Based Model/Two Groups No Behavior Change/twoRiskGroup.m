@@ -63,9 +63,9 @@ ub = struct2array(params,array_names);
 
  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
- [lb, ub] = range(lb, ub, 'theta1', .2, .8, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, .2, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 20, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  [lb, ub] = range(lb, ub, 'pi1', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'pi2', .01, 1, array_names);
@@ -92,6 +92,7 @@ init1 = get_init_conditions(opt_params1, tspan);
 figure()
 plot_both(tspan, out1, full_count);
 drawnow
+
 figure()
 r = linspace(lb(9), ub(9), 100);
 [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h1', r);
