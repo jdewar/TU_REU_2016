@@ -93,7 +93,7 @@ figure()
 plot_both(tspan, out1, full_count);
 drawnow
 
-R01 = calc_R0(opt_params1, out1(:,1))
+R01 = calc_R0(opt_params1, out1(1,:))
 
 %% Plot Objective Functions
 % figure()
