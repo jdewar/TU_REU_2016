@@ -1,7 +1,7 @@
 function chikungunya_run
 
 addpath(genpath('lib')) % Add local libraries
-addpath(genpath('../Risk Based Model/Two Groups Behavior Change/twoRiskGroup.m')) % Add remote libraries
+addpath(genpath('../bbox_ebola/ebola_model')) % Add remote libraries
 
 % For this run:
 blackboxHandle = @qp_wrapper; % Function this run
@@ -14,7 +14,7 @@ clear('range','var')
 npts = 12;
 
 % Get baseline parameters
-data = load('../Risk Based Model/Two Groups Behavior Change/filename.mat');
+data = load('../bbox_ebola/filename.mat');
 bb=data.baseline;
 
 % dirname = 'data/ebola/c';
@@ -64,15 +64,15 @@ bb=data.baseline;
 % tau.med_dead = 7; % avg time spent in the hospital of those that die there
 % tau.medical_response = 7; % avg days to a hospital, due to availability/behavior; not fixed???
 
-params.base = base;
-params.range = range;
+% params.base = base;
+% params.range = range;
 
 %data.pnames = fn;% {'beta_I','beta_M','beta_F','b_EM','b_IF','b_IM'};
 %data.qnames = {'Cumu Exposed','Cumu Medical','Cumu Funerals','Cumu Deaths'};
 %data = get_range_data(data, params, true, blackboxHandle)
 
-disp('gen plots')
-generate_plots_2(params.base, params.range, ptitles, xlbl, dirname, blackboxHandle);
+% disp('gen plots')
+% generate_plots_2(params.base, params.range, ptitles, xlbl, dirname, blackboxHandle);
 
 % disp('gen table')
 % generate_table(params.base, dirname, blackboxHandle);
