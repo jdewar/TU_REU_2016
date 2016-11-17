@@ -13,7 +13,7 @@ tend = (tend+firstWeek2014-1);
 %switch L_MODEL
 %CASE 'SINGLE'
 %CASE 'DOUBLE'
-
+%commit
 %make struct with model and params
 %% Parameter values
 
