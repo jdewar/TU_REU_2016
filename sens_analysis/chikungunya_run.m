@@ -14,7 +14,7 @@ clear('range','var')
 npts = 12;
 
 % Get baseline parameters
-data = load('../data/filename.mat');
+data = load('../Risk Based Model/Two Groups Behavior Change/filename.mat');
 bb=data.baseline;
 
 % dirname = 'data/ebola/c';
