@@ -1,6 +1,6 @@
 %% Main script for running model with no and high risk groups and no behavior change
 close all; 
-addpath('../data');
+addpath('../data_chik');
 country = 'Guadeloupe';
 [real2014, pop, name, firstWeek2014] = get_data(country);
 full_count = real2014;

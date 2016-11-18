@@ -1,6 +1,6 @@
 function [y, pop, name, firstweek] = get_data2015(country_name)
 
-addpath('../lib') % for strdist
+addpath('../lib1') % for strdist
 
 db = create_database_2015();
 bestidx = 1;

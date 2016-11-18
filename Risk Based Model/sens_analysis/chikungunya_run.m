@@ -3,6 +3,7 @@ function chikungunya_run
 close all; clear all;
 restoredefaultpath      % Purge accumulated knowledge of fns in other folders, for jeremy's sanity
 addpath(genpath('lib')) % Add local libraries
+addpath(genpath('../Two Groups Behavior Change')) % Add local libraries
 
 clear('pbase','prange')
 c1=clock;
