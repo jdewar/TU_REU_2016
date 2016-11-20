@@ -1,7 +1,7 @@
 function [sensitivity, te3] = chik_sensitivity_analysis(Q,params,param_name) %#ok<*INUSL>
 params.(param_name) = params.(param_name);
 
-epsilon = 0.0001 * params.(param_name);
+epsilon = .0001 * params.(param_name);
 params1 = params;
 params2 = params;
 
@@ -17,4 +17,3 @@ sensitivity = time * params.(param_name)/te3;
 
 
 end
-

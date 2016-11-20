@@ -7,7 +7,6 @@ ylbls = {'Total Exposed','Proportion Exposed to Medical','Proportion Exposed to 
 
 pnames = fieldnames(pbase);
 plen   = length(pnames);
-
 q = blackboxHandle(pbase); % Calculate the baseline
 qnames = fieldnames(q);
 qlen   = length(qnames);
