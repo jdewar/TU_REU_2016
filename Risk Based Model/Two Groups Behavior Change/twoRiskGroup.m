@@ -91,11 +91,12 @@ real;
 init1 = get_init_conditions(opt_params1, tspan);
 [t1,out1] = balance_and_solve([0 200], init, opt_params1);
 
-figure()
-plot_model(t1, out1);
-drawnow
+% figure()
+% plot_model(t1, out1);
+% drawnow
 
 R01 = calc_R0(opt_params1, out1(1,:))
+
 
 %% Plot Objective Functions
 % figure()
@@ -124,12 +125,14 @@ R01 = calc_R0(opt_params1, out1(1,:))
 
 
 %% Sensitivity Analysis
-% 
-% Q1 = @(params) Q_Reff(params, out1, t1);
+
+%sensitivity_time(opt_params1, out1, t1)
+derivatives_time(t1, init1, params)
+
+%Q1 = @(params) Q_Reff(params, out1,t1);
 % Q2 = @(params) Q_Iend(params,out1,t1);
 % Q3 = @(params) Q_R0(params,out1,t1);
-% 
-% 
+
 % sensitivity_theta1 = chik_sensitivity_analysis(Q1, opt_params1, 'theta1')
 % sensitivity_theta2 = chik_sensitivity_analysis(Q1, opt_params1, 'theta2')
 % sensitivity_pi1 = chik_sensitivity_analysis(Q1, opt_params1, 'pi1')
