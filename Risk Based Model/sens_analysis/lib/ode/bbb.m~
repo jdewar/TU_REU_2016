@@ -1,4 +1,4 @@
-function Q = bbb(pbase)
+function Q = bbb(P)
 
 % This function is the 'blackbox' that takes the parameters and returns the quantities we
 %  want to test for sensitivity. This is where you define what the quantities of interest are.
@@ -14,20 +14,18 @@ P.psi_v  = 0.3;
 P.mu_v  = 1/14;
 P.nu_v  = 1/11;
 P.sigma_h1  = pbase.sigma_h1;
-P.sigma_h2  = pbase.sigma_h2;
+P.sigma_h2  = 10;
 P.sigma_v  = 0.5;
 P.H0  = 1000000;
-P.theta1  = pbase.theta1;
-P.theta2  = pbase.theta1;
-P.init_cumulative_infected  = pbase.init_cumulative_infected;
-P.K_v  = pbase.K_v;
-P.pi1  = pbase.pi1;
-P.pi2  = pbase.pi2;
+P.theta1  = 0.7;
+P.theta2  = 0.1;
+P.init_cumulative_infected  = 10;
+P.K_v  = 1000000 *2;
+P.pi1  = 1;
+P.pi2  = 1;
 
 [T, Y] = solve_ode([1:50], [490000,10,0,10,1000000,0,0], P);
 
-%create R0,Reff @ time in middle?, and max_inf
-%use event to get time when some % infected
 Q.num_recovered = Y(end,3);
 Q.max_infected = max(Y(:,2));
 

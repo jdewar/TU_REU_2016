@@ -57,7 +57,10 @@ for i=1:qlen
         else
             ylabel(ylbls{i},'fontsize',14)
         end
-        ylim([min(in),max(ax)])
+
+        min_in = min(in);
+        max_ax = max(ax);
+        ylim([min_in-min_in/10,max_ax+max_ax/10])
         title(ptitles{j},'fontsize',16)
     end
     % Save the plot
