@@ -95,7 +95,8 @@ init1 = get_init_conditions(opt_params1, tspan);
 % plot_model(t1, out1);
 % drawnow
 
-R01 = calc_R0(opt_params1, out1(1,:))
+R01 = calc_R0(opt_params1, out1(1,:));
+plot_Reff(t1,out1,opt_params1)
 
 
 %% Plot Objective Functions
