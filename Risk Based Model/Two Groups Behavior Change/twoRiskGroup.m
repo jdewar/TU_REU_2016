@@ -52,11 +52,11 @@ params.theta0 = 1 - (params.theta1 + params.theta2);
 
 %% Plot ODE Solutions
 % figure()
-init = [1000,1,0,1,10000,0,0];
-params.H0 = 1000;
-params.K_v = 10000;
-params.init_cumulative_infected = 1;
-[t_model,out_model] = balance_and_solve([0 200], init, params);
+% init = [1000,1,0,1,10000,0,0];
+% params.H0 = 1000;
+% params.K_v = 10000;
+% params.init_cumulative_infected = 1;
+% [t_model,out_model] = balance_and_solve([0 200], init, params);
 % plot_model(t_model,out_model)
 % drawnow
 %% Optimization & Plot - Original Obj Fn
@@ -98,7 +98,7 @@ init1 = get_init_conditions(opt_params1, tspan);
 R01 = calc_R0(opt_params1, out1(1,:));
 plot_Reff(t1,out1,opt_params1)
 
-
+%derivatives_time(t1, init1, opt_params1)
 %% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);
@@ -127,8 +127,8 @@ plot_Reff(t1,out1,opt_params1)
 
 %% Sensitivity Analysis
 
-%sensitivity_time(opt_params1, out1, t1)
-derivatives_time(t1, init1, params)
+sensitivity_time(opt_params1, out1, t1)
+%derivatives_time(t1, init1, params)
 
 %Q1 = @(params) Q_Reff(params, out1,t1);
 % Q2 = @(params) Q_Iend(params,out1,t1);
