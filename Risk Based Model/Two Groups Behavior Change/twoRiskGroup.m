@@ -95,8 +95,9 @@ init1 = get_init_conditions(opt_params1, tspan);
 % plot_model(t1, out1);
 % drawnow
 
-R01 = calc_R0(opt_params1, out1(1,:));
-plot_Reff(t1,out1,opt_params1)
+R01 = calc_R0(opt_params1, out1(1,:))
+%figure()
+%plot_Reff(t1,out1,opt_params1)
 
 %derivatives_time(t1, init1, opt_params1)
 %% Plot Objective Functions
@@ -126,7 +127,7 @@ plot_Reff(t1,out1,opt_params1)
 
 
 %% Sensitivity Analysis
-
+figure()
 sensitivity_time(opt_params1, out1, t1)
 %derivatives_time(t1, init1, params)
 
