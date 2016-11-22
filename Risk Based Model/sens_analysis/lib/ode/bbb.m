@@ -28,7 +28,7 @@ P.pi2  = pbase.pi2;
 
 %create R0,Reff @ time in middle?, and max_inf
 %use event to get time when some % infected
-Q.num_recovered = Y(end,3);
-Q.max_infected = max(Y(:,2));
+Q.R0 = Q_R0(P, Y, T);
+Q.cumulative_infected = Y(end,4);
 
 end

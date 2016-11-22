@@ -1,8 +1,7 @@
 function generate_plots(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
-
 set(0,'defaultlinelinewidth',1.5)
 
-ylbls = {'Total Exposed','Proportion Exposed to Medical','Proportion Exposed to Funerals','Proportion Exposed to Dead'};
+ylbls = {'R0','Number of Total Infected'};
 
 
 pnames = fieldnames(pbase);
@@ -10,7 +9,6 @@ plen   = length(pnames);
 q = blackboxHandle(pbase); % Calculate the baseline
 qnames = fieldnames(q);
 qlen   = length(qnames);
-
 data = cell(1,plen);
 
 for i=1:plen
@@ -25,7 +23,7 @@ for i=1:plen
             i, true, blackboxHandle);
         save(Pfname,'gendata');
         data{i} = gendata;
-    end
+    end 
 end
 
 for i=1:qlen
@@ -33,6 +31,7 @@ for i=1:qlen
     tq = qnames{i};
     ax = realmin; in = realmax;
     for j=plen:-1:1
+%   keyboard        
         yR{j} = [data{j}.(tq)];
         ax = max(ax, max(yR{j}));
         in = min(in, min(yR{j}));
