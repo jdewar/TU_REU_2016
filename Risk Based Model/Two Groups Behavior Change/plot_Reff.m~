@@ -1,8 +1,0 @@
-function[] = plot_Reff(t,Y,p)
-Reff = zeros(size(t));
-for i = length(t)
-   i = logical(i)
-   Reff(i) = calc_Reff(p,transpose(Y(i,:)));
-end
-Reff
-plot(t,Reff)
