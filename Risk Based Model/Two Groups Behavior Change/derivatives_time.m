@@ -1,9 +1,11 @@
 function [] = derivatives_time(t1, init, parameters)
 
-for i = 1:1:length(t1)
-    [t, out] = output([0 i], init, parameters, []);
-    out(1)
-    out1 = RHS_eq_twoGroup(t, out, parameters);
+for i = 1:500
+    [t, out] = output(t1, init, parameters, []);
+    y = out(end,:);
+    out1 = RHS_eq_twoGroup(t, y, parameters)
 end
+figure()
+plot(t1, out1(:,1), 'g');
 
 end

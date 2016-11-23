@@ -89,7 +89,7 @@ opt_params1
 real;
  
 init1 = get_init_conditions(opt_params1, tspan);
-[t1,out1] = balance_and_solve([0 200], init, opt_params1);
+[t1,out1] = balance_and_solve([0 500], init, opt_params1);
 
 % figure()
 % plot_model(t1, out1);
@@ -128,8 +128,8 @@ R01 = calc_R0(opt_params1, out1(1,:))
 
 %% Sensitivity Analysis
 figure()
-sensitivity_time(opt_params1, out1, t1)
-%derivatives_time(t1, init1, params)
+%sensitivity_time(opt_params1, out1, t1)
+derivatives_time(t1, init1, opt_params1)
 
 %Q1 = @(params) Q_Reff(params, out1,t1);
 % Q2 = @(params) Q_Iend(params,out1,t1);
