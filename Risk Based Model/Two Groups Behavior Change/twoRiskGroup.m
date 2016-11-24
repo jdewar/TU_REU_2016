@@ -85,17 +85,17 @@ optimized;
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 
-opt_params1;
 real;
  
 init1 = get_init_conditions(opt_params1, tspan);
-[t1,out1] = balance_and_solve([0 500], init, opt_params1);
+[t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+peak = get_peak_infected(out)
 
 % figure()
 % plot_model(t1, out1);
 % drawnow
 
-R01 = calc_R0(opt_params1, out1(1,:));
+%R01 = calc_R0(opt_params1, out1(1,:));
 %figure()
 %plot_Reff(t1,out1,opt_params1)
 
@@ -128,7 +128,7 @@ R01 = calc_R0(opt_params1, out1(1,:));
 
 %% Sensitivity Analysis
 %sensitivity_time(opt_params1, out1, t1)
-derivatives_time(t1, init1, opt_params1)
+%derivatives_time(t1, init1, opt_params1)
 
 %Q1 = @(params) Q_Reff(params, out1,t1);
 % Q2 = @(params) Q_Iend(params,out1,t1);
