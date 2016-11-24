@@ -89,7 +89,7 @@ real;
  
 init1 = get_init_conditions(opt_params1, tspan);
 [t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
-peak = get_peak_infected(out)
+peak = get_peak_infected(out1)
 
 % figure()
 % plot_model(t1, out1);
