@@ -5,7 +5,7 @@ function Reff = calc_Reff(P, conditions)
 Nh = conditions(1) + conditions(2) + conditions(3);
 Nv = conditions(5)+conditions(6)+ conditions(7);
 
-R_h = (1/(P.gamma_h + P.mu_h)) * (P.beta_h) * (calc_b_T(P, conditions)/Nv) * (P.theta1 + P.theta1) * (conditions(1)/Nh) ;
+R_h = (1/(P.gamma_h + P.mu_h)) * (P.beta_h) * (calc_b_T(P, conditions)/Nv) * (conditions(1)/Nh) ;
 % (conditions(1)/N) = (S_h * theta1)/(Nh * theta1)
 
 R_v = (1/(P.nu_v + P.mu_v))*(P.nu_v/P.mu_v) * (P.beta_v) * (calc_b_T(P, conditions)/Nh) * (conditions(5)/Nv);

@@ -42,13 +42,13 @@ array_names = param_struct(1,:);
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
-% figure()
-% init = [10000,1,0,1,100000,0,0];
-% params.H0 = 1000;
-% params.init_cumulative_infected = 1;
-% [t_model,out_model] = balance_and_solve([0 200], init, params);
-% plot_model(t_model,out_model)
-% drawnow
+figure()
+init = [10000,1,0,1,100000,0,0];
+params.H0 = 1000;
+params.init_cumulative_infected = 1;
+[t_model,out_model] = balance_and_solve([0 200], init, params);
+plot_model(t_model,out_model)
+drawnow
 %% Optimization & Plot - Original Obj Fn
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);

@@ -12,8 +12,8 @@ legend('S_h','I_h','R_h', 'Location', 'best')
 hold off
 
 xlabel('Time in Weeks')
-ylabel('Human Population')
-title('Human SIR Dynamics')
+ylabel('Host Population')
+title('Host SIR Dynamics')
 
 
 subplot(1,2,2)
@@ -24,7 +24,7 @@ plot(t, Y(:,7), 'r', 'linewidth', 2)
 legend('S_v','E_v','I_v', 'Location', 'best')
 
 xlabel('Time in Weeks')
-ylabel('Mosquito Population')
-title('Mosquito SEI Dynamics')
+ylabel('Vector Population')
+title('Vector SEI Dynamics')
 
 end
