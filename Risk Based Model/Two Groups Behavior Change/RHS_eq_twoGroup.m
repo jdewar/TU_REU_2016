@@ -41,7 +41,7 @@ Y(7) = (parameters.gamma_h * I_h2) - (parameters.mu_h * R_h2);
 Y(8) = (lambda_h2 * S_h2);
 
 %probability a host is infected
-P_HI = (I_h1 + I_h2)/(parameters.H0 * (parameters.theta1 + parameters.theta2));
+P_HI = (parameters.pi1*I_h1 + parameters.pi2*I_h2)/(parameters.H0 * (parameters.theta1 + parameters.theta2));
 lambda_v = parameters.beta_v * P_HI * (calc_b_T(parameters, init_conditions)/N_v);
 
 %vector
