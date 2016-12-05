@@ -103,7 +103,7 @@ figure()
 plot_both(t1, out1, real);
 drawnow
 
-% R01 = calc_R0(opt_params1, out1(1,:));
+ R01 = calc_R0(opt_params1, out1(1,:))
 % figure()
 % plot_Reff(t1,out1,opt_params1)
 

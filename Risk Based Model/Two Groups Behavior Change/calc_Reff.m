@@ -1,6 +1,6 @@
 function Reff = calc_Reff(P, conditions)
 %CHIK_CALC_R0 Given params and t0, return what would be R_0 at t_0
-
+%change code to use pis
 %[P.H0, sum(init(1:3))]
 Nh = conditions(1) + conditions(2) + conditions(3);
 Nv = conditions(5)+conditions(6)+ conditions(7);
