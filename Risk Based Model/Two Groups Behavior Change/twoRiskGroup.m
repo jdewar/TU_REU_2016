@@ -56,7 +56,7 @@ params.K_v = 10000;
 params.init_cumulative_infected = 1;
 init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infected,params.K_v,0,0];
 params
-[t_model,out_model] = balance_and_solve([0:300], init, params);
+[t_model,out_model] = balance_and_solve([0:600], init, params);
 %t = [0:300];
 %[t_model, out_model] = output(t, init, params, []);
 
