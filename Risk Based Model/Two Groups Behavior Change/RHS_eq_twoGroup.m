@@ -1,4 +1,4 @@
-function [ out ] = RHS_eq_twoGroup( time, init_conditions, parameters)
+function [ out ] = RHS_eq_twoGroup( time, init_conditions, P)
 %RHS_eq takes in the time, initial conditions and parameters of the model
 %and calculates the output of the ODE equations
 
@@ -25,29 +25,31 @@ N_h1 = S_h1 + I_h1 + R_h1;
 N_h2 = S_h2 + I_h2 + R_h2;
 N_v = S_v + E_v + I_v;
 
-lambda_h1 = parameters.beta_h * (I_v/N_v) * (calc_b_T(parameters, init_conditions)*parameters.theta1)/N_h1;
-lambda_h2 = parameters.beta_h * (I_v/N_v) * (calc_b_T(parameters, init_conditions)*parameters.theta2)/N_h2;
+lambda_h1 = P.beta_h * (I_v/N_v) * (calc_b_T(P, init_conditions)*P.theta1)/N_h1;
+lambda_h2 = P.beta_h * (I_v/N_v) * (calc_b_T(P, init_conditions)*P.theta2)/N_h2;
 
 %host1
-Y(1) = (parameters.mu_h*(parameters.theta1*parameters.H0)) - (lambda_h1 * S_h1) - (parameters.mu_h*S_h1);
-Y(2) = (lambda_h1 * S_h1) - (parameters.gamma_h + parameters.mu_h)*I_h1;
-Y(3) = (parameters.gamma_h * I_h1) - (parameters.mu_h * R_h1);
+Y(1) = (P.mu_h*(P.theta1*P.H0)) - (lambda_h1 * S_h1) - (P.mu_h*S_h1);
+Y(2) = (lambda_h1 * S_h1) - (P.gamma_h + P.mu_h)*I_h1;
+Y(3) = (P.gamma_h * I_h1) - (P.mu_h * R_h1);
 Y(4) = (lambda_h1 * S_h1);
 
 %host2
-Y(5) = (parameters.mu_h*(parameters.theta2*parameters.H0)) - (lambda_h2 * S_h2) - (parameters.mu_h*S_h2);
-Y(6) = (lambda_h2 * S_h2) - (parameters.gamma_h + parameters.mu_h)*I_h2;
-Y(7) = (parameters.gamma_h * I_h2) - (parameters.mu_h * R_h2);
+Y(5) = (P.mu_h*(P.theta2*P.H0)) - (lambda_h2 * S_h2) - (P.mu_h*S_h2);
+Y(6) = (lambda_h2 * S_h2) - (P.gamma_h + P.mu_h)*I_h2;
+Y(7) = (P.gamma_h * I_h2) - (P.mu_h * R_h2);
 Y(8) = (lambda_h2 * S_h2);
 
 %probability a host is infected
-P_HI = (parameters.pi1*I_h1 + parameters.pi2*I_h2)/(parameters.H0 * (parameters.theta1 + parameters.theta2));
-lambda_v = parameters.beta_v * P_HI * (calc_b_T(parameters, init_conditions)/N_v);
+totalBites1 = S_h1*P.sigma_h1 + I_h1*P.pi1*P.sigma_h1 + R_h1*P.sigma_h1;
+totalBites2 = S_h2*P.sigma_h2 + I_h2*P.pi2*P.sigma_h2 + R_h2*P.sigma_h2;
+P_HI = (P.sigma_h1*I_h1 + P.sigma_h2*I_h2)/(totalBites1 + totalBites2);
+lambda_v = P.beta_v * P_HI * (calc_b_T(P, init_conditions)/N_v);
 
 %vector
-Y(9) = (parameters.psi_v - (parameters.psi_v - parameters.mu_v)*(N_v/parameters.K_v))*N_v - (lambda_v*S_v) - (parameters.mu_v * S_v);
-Y(10) = (lambda_v* S_v) - (parameters.nu_v + parameters.mu_v) * E_v;
-Y(11) = (parameters.nu_v*E_v) - (parameters.mu_v * I_v);
+Y(9) = (P.psi_v - (P.psi_v - P.mu_v)*(N_v/P.K_v))*N_v - (lambda_v*S_v) - (P.mu_v * S_v);
+Y(10) = (lambda_v* S_v) - (P.nu_v + P.mu_v) * E_v;
+Y(11) = (P.nu_v*E_v) - (P.mu_v * I_v);
 
 out(1) = Y(1) + Y(5); %total susceptible host
 out(2) = Y(2) + Y(6); %total infected host
