@@ -10,7 +10,7 @@ b_vw = P.sigma_v * init(4) + P.sigma_v * init(5) + P.sigma_v * init(6);
 
 %total bites
 b_T = (b_hw * b_vw)/(b_hw + b_vw);
-rho_h = b_hw/b_T;
-rho_v = b_vw/b_T;
+rho_h = b_T/b_hw;
+rho_v = b_T/b_vw;
 end
 
