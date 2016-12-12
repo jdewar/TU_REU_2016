@@ -35,8 +35,8 @@ param_struct = ...
      'theta0', 1;
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
-     'pi1', 0.5; %proportion that continues to be bitten in infected group 1
-     'pi2', 0.5; %proportion that continues to be bitten in infected group 2
+     'pi1', 1 %proportion that continues to be bitten in infected group 1
+     'pi2', 1; %proportion that continues to be bitten in infected group 2
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
@@ -54,7 +54,18 @@ params.theta0 = 1 - (params.theta1 + params.theta2);
 params.H0 = 1000;
 params.K_v = 10000;
 params.init_cumulative_infected = 1;
-init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infected,params.K_v,0,0];
+init = ...
+    [params.H0 * params.theta1 - params.init_cumulative_infected,
+    params.H0 * params.theta2 - params.init_cumulative_infected,
+    params.init_cumulative_infected,
+    params.init_cumulative_infected,
+    0,
+    0,
+    params.init_cumulative_infected,
+    params.init_cumulative_infected,
+    params.K_v,
+    0,
+    0];
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params
@@ -62,10 +73,12 @@ params
 R01 = calc_R0(params, out_model(1,:))
 Reff = calc_Reff(params, out_model(1,:))
 [peak] = get_peak_infected(out_model)
-total = out_model(end,4)
+total = out_model(end,7) + out_model(end,8)
 plot_Reff(t_model,out_model,params);
- plot_model(t_model,out_model)
- plot(t_model,out_model(:,2))
+plot_model(t_model,out_model)
+plot(t_model,out_model(:,3))
+plot(t_model,out_model(:,4))
+
 %% Optimization & Plot - Original Obj Fn
 % lb = struct2array(params,array_names);
 % ub = struct2array(params,array_names);
