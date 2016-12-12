@@ -71,10 +71,10 @@ params.theta0 = 1 - (params.theta1 + params.theta2);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
- [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
+%  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
+%  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
  [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .01, .2, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .01, .5, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
@@ -92,7 +92,7 @@ optimized;
 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-
+opt_params1
 real;
  
 init1 = get_init_conditions(opt_params1, tspan);

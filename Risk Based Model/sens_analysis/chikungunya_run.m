@@ -24,8 +24,8 @@ blackboxHandle = @bbb;
 % pbase.psi_v  = 0.3;
 % pbase.mu_v  = 1/14;
 % pbase.nu_v  = 1/11;
-pbase.sigma_h1  = 3;
-pbase.sigma_h2  = 10;
+% pbase.sigma_h1  = 3;
+% pbase.sigma_h2  = 10;
 %pbase.sigma_v  = 0.5;
 %pbase.H0  = 1000000;
 pbase.theta1  = 0.7;
@@ -45,8 +45,8 @@ npts = 40;
 % prange.psi_v  = linspace(.3,  .3, 1);
 % prange.mu_v  = linspace(1/14,  1/14, 1);
 % prange.nu_v  = linspace(1/11,  1/11, 1);
-prange.sigma_h1  = linspace(0.1,  5, npts);
-prange.sigma_h2  = linspace(5,  50, npts);
+% prange.sigma_h1  = linspace(0.1,  5, npts);
+% prange.sigma_h2  = linspace(5,  50, npts);
 %prange.sigma_v  = linspace(0.5,  5, 1);
 %prange.H0  = linspace(pbase.H0,  pbase.H0, 1);
 prange.theta1  = linspace(0.01,  .8, npts);
@@ -59,7 +59,7 @@ prange.pi2  = linspace(0.001,  1, npts);
 % These next two functions are works in progress.
 % generate_plots looks for data files and if not found, it calculates the data.
 
-generate_plots(pbase, prange,{'sigma_h1','sigma_h2','theta1','theta2','init_cumulative_infected','K_v','pi1','pi2'},'x', dirname, blackboxHandle);
+generate_plots(pbase, prange,{'theta1','theta2','init_cumulative_infected','K_v','pi1','pi2'},'x', dirname, blackboxHandle);
 %'beta_h','beta_v','gamma_h','mu_h','nu_h','psi_v','mu_v','nu_v','sigma_h1','sigma_h2','sigma_v','H0','theta1','theta2','init_cumulative_infected','K_v','pi1','pi2'
 %(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
 disp('Made plots')
