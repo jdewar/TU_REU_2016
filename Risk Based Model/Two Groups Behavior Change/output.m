@@ -7,5 +7,5 @@ if numel(options) ~= 0
 else
     [t, out] = ode45(dydt_fn, t_in, Y);
 end
-out
+
 end

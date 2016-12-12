@@ -5,6 +5,6 @@ if ((derivatives(3) < abs(0.01)))
 else
     value = derivatives(3); % dI/dt = 0
 end
-value
+value;
 isterminal = 0; % stops graph when event is triggered
 direction = 1; 
