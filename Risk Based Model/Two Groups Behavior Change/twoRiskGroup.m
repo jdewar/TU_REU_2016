@@ -69,14 +69,16 @@ init = ...
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params
-[t_model,out_model] = balance_and_solve([0:100], init, params);
+[t_model,out_model] = balance_and_solve([0:400], init, params);
 R01 = calc_R0(params, out_model(1,:))
 Reff = calc_Reff(params, out_model(1,:))
 [peak] = get_peak_infected(out_model)
 total = out_model(end,7) + out_model(end,8)
 plot_Reff(t_model,out_model,params);
 plot_model(t_model,out_model)
+figure()
 plot(t_model,out_model(:,3))
+figure()
 plot(t_model,out_model(:,4))
 
 %% Optimization & Plot - Original Obj Fn
