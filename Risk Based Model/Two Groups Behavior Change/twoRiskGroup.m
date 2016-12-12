@@ -58,7 +58,7 @@ init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infec
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params
-[t_model,out_model] = balance_and_solve([0:600], init, params);
+[t_model,out_model] = balance_and_solve([0:100], init, params);
 R01 = calc_R0(params, out_model(1,:))
 Reff = calc_Reff(params, out_model(1,:))
 [peak] = get_peak_infected(out_model)
@@ -164,7 +164,6 @@ plot_Reff(t_model,out_model,params);
 
 % figure()
 % plot_Reff(t1,out1,opt_params1)
-
 %% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);
