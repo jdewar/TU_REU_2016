@@ -29,19 +29,17 @@ lambda_h2 = P.beta_h * (I_v/N_v) * (b_t*P.theta2)/N_h2;
 
 %host1
 Y(1) = (P.mu_h*(P.theta1*P.H0)) - (lambda_h1 * S_h1) - (P.mu_h*S_h1);
-Y(2) = (lambda_h1 * S_h1) - (P.gamma_h + P.mu_h)*I_h1;
-Y(3) = (P.gamma_h * I_h1) - (P.mu_h * R_h1);
-Y(4) = (lambda_h1 * S_h1);
+Y(3) = (lambda_h1 * S_h1) - (P.gamma_h + P.mu_h)*I_h1;
+Y(5) = (P.gamma_h * I_h1) - (P.mu_h * R_h1);
+Y(7) = (lambda_h1 * S_h1);
 
 %host2
-Y(5) = (P.mu_h*(P.theta2*P.H0)) - (lambda_h2 * S_h2) - (P.mu_h*S_h2);
-Y(6) = (lambda_h2 * S_h2) - (P.gamma_h + P.mu_h)*I_h2;
-Y(7) = (P.gamma_h * I_h2) - (P.mu_h * R_h2);
+Y(2) = (P.mu_h*(P.theta2*P.H0)) - (lambda_h2 * S_h2) - (P.mu_h*S_h2);
+Y(4) = (lambda_h2 * S_h2) - (P.gamma_h + P.mu_h)*I_h2;
+Y(6) = (P.gamma_h * I_h2) - (P.mu_h * R_h2);
 Y(8) = (lambda_h2 * S_h2);
 
 %probability a host is infected
-%totalBites1 = rho_h*(S_h1*P.sigma_h1 + I_h1*P.pi1*P.sigma_h1 + R_h1*P.sigma_h1);
-%totalBites2 = rho_h*(S_h2*P.sigma_h2 + I_h2*P.pi2*P.sigma_h2 + R_h2*P.sigma_h2);
 P_HI = (rho_h*(P.sigma_h1*P.pi1*I_h1 + P.sigma_h2*P.pi2*I_h2))/(b_t);
 lambda_v = P.beta_v * P_HI * (b_t/N_v);
 
