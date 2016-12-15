@@ -52,7 +52,7 @@ npts = 40;
 prange.theta1  = linspace(0.01,  .8, npts);
 prange.theta2  = linspace(0.01,  .2, npts);
 %prange.init_cumulative_infected  = linspace(pbase.init_cumulative_infected * 0.1, pbase.init_cumulative_infected * 10, npts);
-prange.K_v = linspace( 1000000, 1000000* 10,npts);
+prange.K_v = linspace( 1000000, 1000000*10,npts);
 prange.pi1  = linspace(0.001,  1, npts);
 prange.pi2  = linspace(0.001,  1, npts);
 
