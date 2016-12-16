@@ -35,8 +35,8 @@ param_struct = ...
      'theta0', 1;
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
-     'pi1', 1 %proportion that continues to be bitten in infected group 1
-     'pi2', 1; %proportion that continues to be bitten in infected group 2
+     'pi1', 0.4; %proportion that continues to be bitten in infected group 1
+     'pi2', 0.4; %proportion that continues to be bitten in infected group 2
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
@@ -71,15 +71,13 @@ init = ...
 params
 [t_model,out_model] = balance_and_solve([0:400], init, params);
 R01 = calc_R0(params, out_model(1,:))
-Reff = calc_Reff(params, out_model(1,:))
+Reff = calc_Reff(params, out_model(1,:));
+bT = calc_b_T(params, init)
 [peak] = get_peak_infected(out_model)
 total = out_model(end,7) + out_model(end,8)
 plot_Reff(t_model,out_model,params);
-plot_model(t_model,out_model)
-figure()
-plot(t_model,out_model(:,3))
-figure()
-plot(t_model,out_model(:,4))
+plot_model(t_model,out_model);
+sensitivity_time(params, out_model, t_model)
 
 %% Optimization & Plot - Original Obj Fn
 % lb = struct2array(params,array_names);
