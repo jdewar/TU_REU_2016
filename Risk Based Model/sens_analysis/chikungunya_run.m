@@ -28,12 +28,12 @@ blackboxHandle = @bbb;
 % pbase.sigma_h2  = 10;
 %pbase.sigma_v  = 0.5;
 %pbase.H0  = 1000000;
-pbase.theta1  = 0.3;
-pbase.theta2  = 0.7;
+pbase.theta1  = 0.2660;
+pbase.theta2  = 0.7870;
 %pbase.init_cumulative_infected  = 10;
 pbase.K_v  = 1000000 *2;
-pbase.pi1  = 1;
-pbase.pi2  = 1;
+pbase.pi1  = .1146;
+pbase.pi2  = .4712;
 
 npts = 40;
 
@@ -49,12 +49,12 @@ npts = 40;
 % prange.sigma_h2  = linspace(5,  50, npts);
 %prange.sigma_v  = linspace(0.5,  5, 1);
 %prange.H0  = linspace(pbase.H0,  pbase.H0, 1);
-prange.theta1  = linspace(0.01,  .8, npts);
-prange.theta2  = linspace(0.01,  .2, npts);
+prange.theta1  = linspace(0.001,  .4, npts);
+prange.theta2  = linspace(0.4,  .6, npts);
 %prange.init_cumulative_infected  = linspace(pbase.init_cumulative_infected * 0.1, pbase.init_cumulative_infected * 10, npts);
 prange.K_v = linspace( 1000000, 1000000*10,npts);
-prange.pi1  = linspace(0.001,  1, npts);
-prange.pi2  = linspace(0.001,  1, npts);
+prange.pi1  = linspace(0.01,  1, npts);
+prange.pi2  = linspace(0.01,  1, npts);
 
 % These next two functions are works in progress.
 % generate_plots looks for data files and if not found, it calculates the data.
