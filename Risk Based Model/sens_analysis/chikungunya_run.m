@@ -28,12 +28,12 @@ blackboxHandle = @bbb;
 % pbase.sigma_h2  = 10;
 %pbase.sigma_v  = 0.5;
 %pbase.H0  = 1000000;
-pbase.theta1  = 0.7;
-pbase.theta2  = 0.1;
+pbase.theta1  = 0.266;
+pbase.theta2  = 0.787;
 %pbase.init_cumulative_infected  = 10;
 pbase.K_v  = 1000000 *2;
-pbase.pi1  = 1;
-pbase.pi2  = 1;
+pbase.pi1  = .1146;
+pbase.pi2  = .4712;
 
 npts = 40;
 
@@ -50,7 +50,7 @@ npts = 40;
 %prange.sigma_v  = linspace(0.5,  5, 1);
 %prange.H0  = linspace(pbase.H0,  pbase.H0, 1);
 prange.theta1  = linspace(0.01,  .8, npts);
-prange.theta2  = linspace(0.01,  .2, npts);
+prange.theta2  = linspace(0.01,  .8, npts);
 %prange.init_cumulative_infected  = linspace(pbase.init_cumulative_infected * 0.1, pbase.init_cumulative_infected * 10, npts);
 prange.K_v = linspace( 1000000, 1000000*10,npts);
 prange.pi1  = linspace(0.001,  1, npts);
