@@ -32,7 +32,7 @@ param_struct = ...
      'H0', pop;
      'theta1', .3; %proportion of population in group 1 - low risk
      'theta2', .7;% proportion of population in group 2 - high risk
-     'theta0', 0;
+     'theta0', 1;
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
@@ -46,6 +46,13 @@ v = 1000:100:1000000;
 g = @(x,y) (x/y)/(1+(x/y));
 k = 1:10000;
 
+for i = h
+    for j = v
+        f(k) = g(i,j);
+        l(k) = i/j;
+    end
+end
+plot(l,f)
 %% Plot Cumulative vs. Newly Infected
 %  figure()
 %  subplot(1,2,1)
@@ -103,36 +110,14 @@ init = ...
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params
-h = .01:.01:1;
-c = 1;
+m = 1;
+h = .001:.001:1;
+rho
 for i = h
-    params.H0 = i*params.K_v;
-    init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected,
-    params.H0 * params.theta2 - params.init_cumulative_infected,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    0,
-    0,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    params.K_v,
-    0,
-    0];
     [t_model,out_model] = balance_and_solve([0:400], init, params);
-    %R01 = calc_R0(params, out_model(1,:))
-    %Reff = calc_Reff(params, out_model(1,:));
-    [b_T,rho_h, rho_v, b_hw, b_vw ]  = calc_b_T(params, init);
-    rhov(c)  = rho_v;
-    rhoh(c)  = rho_h;
-    prop(c) = b_hw/b_vw;
-    c = c+1;
-end
-figure()
-subplot(1,2,1)
- plot(prop,rhov,'r')
- subplot(1,2,2)
- plot(prop,rhoh,'r')
+    R01 = calc_R0(params, out_model(1,:))
+    Reff = calc_Reff(params, out_model(1,:));
+    b_T,rho_h, rho_v  = calc_b_T(params, init)
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);

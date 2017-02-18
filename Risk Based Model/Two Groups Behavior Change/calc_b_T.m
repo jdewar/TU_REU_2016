@@ -1,4 +1,4 @@
-function [ b_T,rho_h, rho_v ] = calc_b_T(P, init)
+function [ b_T,rho_h, rho_v, b_hw, b_vw ] = calc_b_T(P, init)
 
 %biting rates desired for hosts and vectors
 b_hw1 = P.sigma_h1 * init(1) + P.sigma_h1 * P.pi1 * init(3) + P.sigma_h1 * init(5);
