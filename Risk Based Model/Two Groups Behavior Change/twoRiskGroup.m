@@ -30,9 +30,9 @@ param_struct = ...
      'sigma_h2', 30; %high risk contacts
      'sigma_v', 0.5;
      'H0', pop;
-     'theta1', .3; %proportion of population in group 1 - low risk
-     'theta2', .7;% proportion of population in group 2 - high risk
-     'theta0', 1;
+     'theta1', .4; %proportion of population in group 1 - low risk
+     'theta2', .6;% proportion of population in group 2 - high risk
+     'theta0', 0; % no risk group
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
@@ -41,18 +41,7 @@ param_struct = ...
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
 params.theta0 = 1 - (params.theta1 + params.theta2);
-h = 100:10:10000;
-v = 1000:100:1000000;
-g = @(x,y) (x/y)/(1+(x/y));
-k = 1:10000;
 
-for i = h
-    for j = v
-        f(k) = g(i,j);
-        l(k) = i/j;
-    end
-end
-plot(l,f)
 %% Plot Cumulative vs. Newly Infected
 %  figure()
 %  subplot(1,2,1)
@@ -78,8 +67,8 @@ plot(l,f)
 %     params.K_v,
 %     0,
 %     0];
-% %params.theta2 = 0.2;
-% %params.pi2 = 0;
+%params.theta2 = 0.2;
+%params.pi2 = 0;
 % params
 % [t_model,out_model] = balance_and_solve([0:400], init, params);
 % R01 = calc_R0(params, out_model(1,:))
@@ -92,33 +81,51 @@ plot(l,f)
 % plot(t_model,out_model(:,3))
 % figure()
 % plot(t_model,out_model(:,4))
-params.H0 = 1000;
-params.K_v = 10000;
-params.init_cumulative_infected = 1;
-init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected,
-    params.H0 * params.theta2 - params.init_cumulative_infected,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    0,
-    0,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    params.K_v,
-    0,
-    0];
+% params.H0 = 1000;
+% params.K_v = 10000;
+% params.init_cumulative_infected = 1;
+% init = ...
+%     [params.H0 * params.theta1 - params.init_cumulative_infected,
+%     params.H0 * params.theta2 - params.init_cumulative_infected,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     0,
+%     0,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     params.K_v,
+%     0,
+%     0];
 %params.theta2 = 0.2;
 %params.pi2 = 0;
-params
-m = 1;
-h = .001:.001:1;
-rho
-for i = h
-    [t_model,out_model] = balance_and_solve([0:400], init, params);
-    R01 = calc_R0(params, out_model(1,:))
-    Reff = calc_Reff(params, out_model(1,:));
-    b_T,rho_h, rho_v  = calc_b_T(params, init)
-end
+% params;
+% h = .01:.01:1;
+% c = 1;
+% for i = h
+%     params.H0 = i*params.H0;
+%     init = ...
+%     [params.H0 * params.theta1 - params.init_cumulative_infected,
+%     params.H0 * params.theta2 - params.init_cumulative_infected,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     0,
+%     0,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     params.K_v,
+%     0,
+%     0];
+%     [t_model,out_model] = balance_and_solve([0:400], init, params);
+%     %R01 = calc_R0(params, out_model(1,:));
+%     %Reff = calc_Reff(params, out_model(1,:));
+%     [b_T,rhoh(c), rhov(c)] = calc_b_T(params, init);
+%     c = c+1;
+% end
+% figure()
+% subplot(1,2,1)
+% plot(h, rhov);
+% subplot(1,2,2)
+% plot(h, rhoh);
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);
@@ -126,51 +133,54 @@ end
 % %sensitivity_time(params, out_model, t_model)
 
 %% Optimization & Plot - Original Obj Fn
-% lb = struct2array(params,array_names);
-% ub = struct2array(params,array_names);
-% 
-% %  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
-% %  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
-%  [lb, ub] = range(lb, ub, 'theta1', .001, .4, array_names);
-%  [lb, ub] = range(lb, ub, 'theta2', .4, .6, array_names);
-%  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
-%  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
-%  [lb, ub] = range(lb, ub, 'pi1', .01, 1, array_names);
-%  [lb, ub] = range(lb, ub, 'pi2', .01, 1, array_names);
-%  [lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
-% 
-% %  I* from integrating steady state
-% c = 1;
-% for i = 1:length(lb)
-%     if lb(i) ~= ub(i)
-%         optimized{c} = array_names{i};
-%         c = c+1;
-%     end
-% end
-% optimized;
-% 
-% obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
-% [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-% opt_params1.theta0 = opt_params1.theta1+ opt_params1.theta2;
-% opt_params1
-% real;
-%  
-% init1 = get_init_conditions(opt_params1, tspan);
-% [t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
-% peak = get_peak_infected(out1);
-% 
-% figure()
-% plot_both(t1, out1, real);
-% drawnow
-% 
-%  R01 = calc_R0(opt_params1, out1(1,:))
-% 
-% params.H0 = 1000;
-% params.K_v = 10000;
-% params.init_cumulative_infected = 1;
-% %init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infected,params.K_v,0,0];
-% params
-% [t_model,out_model] = balance_and_solve([0:600], init, params);
+lb = struct2array(params,array_names);
+ub = struct2array(params,array_names);
+
+%  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
+%  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
+ % [lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', .01, .4, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .4, .6, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
+ [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
+ [lb, ub] = range(lb, ub, 'pi1', .01, 1, array_names);
+ [lb, ub] = range(lb, ub, 'pi2', .001, 1, array_names);
+ %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
+
+%  I* from integrating steady state
+c = 1;
+for i = 1:length(lb)
+    if lb(i) ~= ub(i)
+        optimized{c} = array_names{i};
+        c = c+1;
+    end
+end
+optimized;
+
+obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
+[opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+opt_params1.theta0 = 1 - (opt_params1.theta2 + opt_params1.theta1);
+h0 = pop * (1-opt_params1.theta0)
+opt_params1
+real;
+ 
+init1 = get_init_conditions(opt_params1, tspan);
+[t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+peak = get_peak_infected(out1);
+
+figure()
+plot_both(t1, out1, real);
+drawnow
+%figure()
+%plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta1', .1:.4)
+% R01 = calc_R0(opt_params1, out1(1,:))
+
+%params.H0 = 1000;
+%params.K_v = 10000;
+%params.init_cumulative_infected = 1;
+%init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infected,params.K_v,0,0];
+%params
+%[t_model,out_model] = balance_and_solve([0:600], init, params);
 %t = [0:300];
 %[t_model, out_model] = output(t, init, params, []);
 
@@ -180,10 +190,10 @@ end
 % bT = calc_b_T(params, init)
 % out_model(end,4)
 % plot_Reff(t_model,out_model,params);
-%  plot_model(t_model,out_model)
-%  drawnow
-%  figure()
-%  plot(t_model,out_model(:,2))
+% plot_model(t_model,out_model)
+% drawnow
+% figure()
+% plot(t_model,out_model(:,2))
 
 %% Optimization & Plot - Original Obj Fn
 % lb = struct2array(params,array_names);
