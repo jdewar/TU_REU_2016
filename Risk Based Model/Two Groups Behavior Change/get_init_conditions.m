@@ -1,15 +1,16 @@
-function [init] = get_init_conditions(param, t)
+function [init] = get_init_conditions(params, t)
 %CHIK_INIT_CONDITIONS Given tspan, return desired initial conditions
 
-S_h = param.H0 * (param.theta1 + param.theta2) - param.init_cumulative_infected;
-
-init = [...
-    S_h; ...
-    param.init_cumulative_infected; ...
-    0; ...
-    param.init_cumulative_infected; ...
-    param.K_v; ...
-    0; ...
+init = ...
+    [params.H0 * params.theta1 - params.init_cumulative_infected,
+    params.H0 * params.theta2 - params.init_cumulative_infected,
+    params.init_cumulative_infected * params.theta1,
+    params.init_cumulative_infected * params.theta2,
+    0,
+    0,
+    params.init_cumulative_infected * params.theta1,
+    params.init_cumulative_infected * params.theta2,
+    params.K_v,
+    0,
     0];
-
 end

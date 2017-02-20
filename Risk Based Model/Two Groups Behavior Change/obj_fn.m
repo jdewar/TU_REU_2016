@@ -5,7 +5,6 @@ params = array2struct(param_array, array_names);
 
 new_init = get_init_conditions(params, t_in);
 c = 1.00001 - calc_R0(params, new_init);
-
 [~,Y] = balance_and_solve(t_in, new_init, params); 
 val_real = cmp_real_model(Y, data);
 

@@ -1,7 +1,6 @@
 function [ out ] = RHS_eq_twoGroup(time, init_conditions, P)
 %RHS_eq takes in the time, initial conditions and parameters of the model
 %and calculates the output of the ODE equations
-%P.theta0 = 1 - (P.theta1 + P.theta2);
 out = zeros([11 1]);
 %% Host
 %Group1 - Low Risk, Group2 - High Risk
