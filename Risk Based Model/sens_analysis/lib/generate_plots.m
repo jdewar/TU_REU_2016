@@ -64,7 +64,7 @@ for i=1:qlen
     end
     % Save the plot
     Plotfname = sprintf('%s/Q%d-%s',dirname,i,qnames{i});
-    export_fig(Plotfname, '-pdf', '-transparent')
+%    export_fig(Plotfname, '-pdf', '-transparent')
 end
 
 end

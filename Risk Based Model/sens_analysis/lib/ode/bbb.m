@@ -17,6 +17,7 @@ P.sigma_h1  = 5;
 P.sigma_h2  = 25;
 P.sigma_v  = 0.5;
 P.H0  = 1000000;
+P.theta0  = pbase.theta0;
 P.theta1  = pbase.theta1;
 P.theta2  = pbase.theta2;
 P.init_cumulative_infected  = 10;
@@ -24,7 +25,7 @@ P.K_v  = pbase.K_v;
 P.pi1  = pbase.pi1;
 P.pi2  = pbase.pi2;
 
-[T, Y] = solve_ode([1:50], [490000* P.theta1,490000* P.theta2,10* P.theta1, 10* P.theta2,0,0,10* P.theta1, 10* P.theta2,1000000,0,0], P);
+[T, Y] = solve_ode([1:50], [490000* P.theta1,490000* P.theta2, 10* P.theta1, 10* P.theta2,0,0,10* P.theta1, 10* P.theta2,1000000,0,0], P);
 
 %create R0,Reff @ time in middle?, and max_inf
 %use event to get time when some % infected
