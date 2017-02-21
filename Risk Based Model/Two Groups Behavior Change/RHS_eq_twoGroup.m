@@ -22,10 +22,11 @@ I_v = init_conditions(11);
 %% Equations
 N_h1 = S_h1 + I_h1 + R_h1;
 N_h2 = S_h2 + I_h2 + R_h2;
+N_h = N_h1 + N_h2;
 N_v = S_v + E_v + I_v;
 [b_t, rho_h, rho_v] = calc_b_T(P, init_conditions);
-lambda_h1 = P.beta_h * (I_v/N_v) * (b_t*P.theta1)/N_h1;
-lambda_h2 = P.beta_h * (I_v/N_v) * (b_t*P.theta2)/N_h2;
+lambda_h1 = P.beta_h * (I_v/N_v) * (b_t*P.theta1)/N_h;
+lambda_h2 = P.beta_h * (I_v/N_v) * (b_t*P.theta2)/N_h;
 
 %host1
 Y(1) = (P.mu_h*(P.theta1*P.H0)) - (lambda_h1 * S_h1) - (P.mu_h*S_h1);

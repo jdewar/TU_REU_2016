@@ -30,7 +30,7 @@ param_struct = ...
      'sigma_h2', 30; %high risk contacts
      'sigma_v', 0.5;
      'H0', pop;
-     'theta1', .4; %proportion of population in group 1 - low risk
+     'theta1', .3; %proportion of population in group 1 - low risk
      'theta2', .6;% proportion of population in group 2 - high risk
      'theta0', 0; % no risk group
      'init_cumulative_infected', init_infected_h;
@@ -136,14 +136,12 @@ params.theta0 = 1 - (params.theta1 + params.theta2);
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
-%  [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
-%  [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
+ % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
+ % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
  % [lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
- [lb, ub] = range(lb, ub, 'theta1', .01, .4, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .4, .6, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .01, .8, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
- [lb, ub] = range(lb, ub, 'pi1', .01, 1, array_names);
+ [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
  [lb, ub] = range(lb, ub, 'pi2', .001, 1, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
 
@@ -162,17 +160,17 @@ obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(
 opt_params1.theta0 = 1 - (opt_params1.theta2 + opt_params1.theta1);
 h0 = pop * (1-opt_params1.theta0)
 opt_params1
-real;
  
 init1 = get_init_conditions(opt_params1, tspan);
-[t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+%[t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+[t1,out1] = output(tspan, init1, opt_params1, []);
 peak = get_peak_infected(out1);
 
 figure()
 plot_both(t1, out1, real);
 drawnow
-%figure()
-%plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta1', .1:.4)
+% figure()
+% plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta1', .1:.4)
 % R01 = calc_R0(opt_params1, out1(1,:))
 
 %params.H0 = 1000;

@@ -6,7 +6,7 @@ ylabel('Population', 'fontsize', 16)
 hold on
 t1 = t'./7;
 plot(t1(1:length(data)),data, '*');
-plot(t1,Y(:,7) + Y(:,8) , 'b')
+plot(t1,(Y(:,7) + Y(:,8)), 'b')
 legend('Real infected count','Model infected count', 'Location', 'best')
 
 
