@@ -24,7 +24,7 @@ param_struct = ...
      'mu_h', 1/(70*365);
      'nu_h', 1/3;
      'psi_v', 0.3;
-     'mu_v', 1/14;
+     'mu_v', 1/17;
      'nu_v', 1/11;
      'sigma_h1', 5; %low risk contacts
      'sigma_h2', 30; %high risk contacts
