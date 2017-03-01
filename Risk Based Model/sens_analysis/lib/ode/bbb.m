@@ -16,14 +16,15 @@ P.nu_v  = 1/11;
 P.sigma_h1  = 5;
 P.sigma_h2  = 25;
 P.sigma_v  = 0.5;
-P.H0  = 1000000;
-P.theta0  = pbase.theta0;
-P.theta1  = pbase.theta1;
+P.H0  = 466000;
+P.theta0  = 0.8;
 P.theta2  = pbase.theta2;
+P.theta1  = 1 - P.theta2;
 P.init_cumulative_infected  = 10;
-P.K_v  = pbase.K_v;
-P.pi1  = pbase.pi1;
-P.pi2  = pbase.pi2;
+P.K_v  = 932000;
+P.pi1  = 0.1;
+P.pi2  = 0.6919;
+P.H0 = P.H0 * (1 - P.theta0);
 
 [T, Y] = solve_ode([1:50], [490000* P.theta1,490000* P.theta2, 10* P.theta1, 10* P.theta2,0,0,10* P.theta1, 10* P.theta2,1000000,0,0], P);
 
@@ -31,5 +32,6 @@ P.pi2  = pbase.pi2;
 %use event to get time when some % infected
 Q.R0 = Q_R0(P, Y, T);
 Q.cumulative_infected = Y(end,4);
+Q.Rinf = Q_Rinf(P, Y, T);
 
 end

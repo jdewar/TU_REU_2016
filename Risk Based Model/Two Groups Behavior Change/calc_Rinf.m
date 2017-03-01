@@ -1,4 +1,4 @@
-function Reff = calc_Reff(P, init, time)
+function Rinf = calc_Rinf(P, init, time)
 %CHIK_CALC_R0 Given params and t0, return what would be R_0 at t_0
 t = length(time);
 
@@ -16,6 +16,6 @@ R_h = R_h1+R_h2;
 
 R_v = (1/(P.nu_v + P.mu_v)) * (P.nu_v/P.mu_v) * (P.beta_v) * (b_t/Nh) * (init(t,9)/Nv);
 
-Reff = sqrt(R_v * R_h);
+Rinf = sqrt(R_v * R_h);
 
 end

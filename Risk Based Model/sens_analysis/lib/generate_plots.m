@@ -1,7 +1,7 @@
 function generate_plots(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
 set(0,'defaultlinelinewidth',1.5)
 
-ylbls = {'R0','Number of Total Infected'};
+ylbls = {'R0','Number of Total Infected','Rinf'};
 
 
 pnames = fieldnames(pbase);

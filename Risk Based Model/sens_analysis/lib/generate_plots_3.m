@@ -1,9 +1,9 @@
-function generate_plots_3(pbase, prange, ptitles, xlbls, dirname, blackboxHandle)
+function generate_plots_3(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
 
 set(0,'defaultlinelinewidth',1.5)
 
 %ylbls = {'Total Exposed','Proportion Exposed to Medical','Proportion Exposed to Funerals','Proportion Exposed to Dead'};
-ylbls = {'Total Exposed','Total Dead'};
+ylbls = {'R0','Number of Total Infected','Rinf'};
 
 pnames = fieldnames(pbase);
 plen   = length(pnames);
@@ -46,7 +46,7 @@ for i=1:qlen
             pbase.(tp), q.(tq), '*','MarkerSize',14);
         axis(a,'tight')
         set(gca,'fontsize',16)
-        xlabel(xlbls{j},'interpreter','latex','fontsize',20)
+        xlabel(xlbl,'interpreter','latex','fontsize',20)
         if j > 1
             set(a,'YTickLabel',{})
         else
@@ -57,6 +57,7 @@ for i=1:qlen
     end
     % Save the plot
 %    Plotfname = sprintf('%s/Q%d-%s',dirname,i,qnames{i});
+%    export_fig(Plotfname, '-pdf', '-transparent')
 end
 
 end
