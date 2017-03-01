@@ -97,12 +97,10 @@ init = ...
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params;
-h = .01:.01:1;
+h = .001:.001:0.1;
 j = 1;
 rhov = [];
 rhoh = [];
-ratiosh = [];
-ratiosv = [];
 for i = h
     params.H0 = i*params.H0;
     init = ...
@@ -118,22 +116,13 @@ for i = h
     0,
     0];
     [t_model,out_model] = balance_and_solve([0:400], init, params);
-    b_t = 0;
-    rho_v = 0;
-    rho_h = 0;
-    [b_t,rho_h,rho_v] = calc_b_T(params, init);
-    b_v = b_t/rho_v;
-    b_h = b_t/rho_h;
-    ratiosv(j) = b_h/b_v;
-    ratiosh(j) = b_v/b_h;
-    rhoh(j) = rho_h;
-    rhov(j) = rho_v;
+    [b_T,rho_h), rhov(j)] = calc_b_T(params, init);
     j = j+1;
 end
 figure()
-plot(ratiosv, rhov, 'r');
+plot(h, rhov, 'r');
 hold on;
-plot(ratiosv, rhoh, 'b');
+plot(h, rhoh, 'b');
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);
