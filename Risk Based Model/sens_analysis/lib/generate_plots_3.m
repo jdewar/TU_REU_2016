@@ -1,4 +1,4 @@
-function generate_plots_3(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
+function generate_plots_4(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
 
 set(0,'defaultlinelinewidth',1.5)
 

@@ -62,8 +62,6 @@ npts = 40;
 % generate_plots looks for data files and if not found, it calculates the data.
 
 generate_plots(pbase, prange,{'theta2'},'x', dirname, blackboxHandle);
-generate_plots_2(pbase, prange,{'theta2'},'x', dirname, blackboxHandle);
-generate_plots_3(pbase, prange,{'theta2'},'x', dirname, blackboxHandle);
 %'beta_h','beta_v','gamma_h','mu_h','nu_h','psi_v','mu_v','nu_v','sigma_h1','sigma_h2','sigma_v','H0','theta1','theta2','init_cumulative_infected','K_v','pi1','pi2'
 %(pbase, prange, ptitles, xlbl, dirname, blackboxHandle)
 disp('Made plots')

@@ -26,11 +26,12 @@ P.pi1  = 0.1;
 P.pi2  = 0.6919;
 P.H0 = P.H0 * (1 - P.theta0);
 
-[T, Y] = solve_ode([1:50], [490000* P.theta1,490000* P.theta2, 10* P.theta1, 10* P.theta2,0,0,10* P.theta1, 10* P.theta2,1000000,0,0], P);
+[T, Y] = solve_ode([1:200], [490000* P.theta1,490000* P.theta2, 10* P.theta1, 10* P.theta2,0,0,10* P.theta1, 10* P.theta2,1000000,0,0], P);
 
 %create R0,Reff @ time in middle?, and max_inf
 %use event to get time when some % infected
 Q.R0 = Q_R0(P, Y, T);
+Q.Reff = Q_Reff(P, Y, T);
 Q.cumulative_infected = Y(end,4);
 Q.Rinf = Q_Rinf(P, Y, T);
 
