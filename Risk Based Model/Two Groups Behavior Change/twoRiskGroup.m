@@ -52,7 +52,7 @@ params.H0 = params.H0 * params.theta0;
 
 %% Plot ODE Solutions
  params.H0 = 1000;
- params.K_v = 10000;
+ params.K_v = 100000;
  params.init_cumulative_infected = 1;
 init = ...
     [params.H0 * params.theta1 - params.init_cumulative_infected*params.theta1,
@@ -66,8 +66,7 @@ init = ...
     params.K_v,
     0,
     0];
-params.theta2 = 0.2;
-params.pi2 = 0;
+
 % params
 % [t_model,out_model] = balance_and_solve([0:400], init, params);
 % R01 = calc_R0(params, out_model(1,:))
@@ -98,13 +97,13 @@ params.pi2 = 0;
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params;
-h = .01:.01:.5;
-c = 1;
+h = .01:.01:1;
+j = 1;
 for i = h
     params.H0 = i*params.H0;
     init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected,
-    params.H0 * params.theta2 - params.init_cumulative_infected,
+    [params.H0 * params.theta1 - params.init_cumulative_infected* params.theta1,
+    params.H0 * params.theta2 - params.init_cumulative_infected* params.theta2,
     params.init_cumulative_infected * params.theta1,
     params.init_cumulative_infected * params.theta2,
     0,
@@ -115,33 +114,12 @@ for i = h
     0,
     0];
     [t_model,out_model] = balance_and_solve([0:400], init, params);
-    [b_T,rhoh(c), rhov(c)] = calc_b_T(params, init);
-    c = c+1;
+    [b_T,rhoh(j), rhov(j)] = calc_b_T(params, init);
+    j = j+1;
 end
 figure()
 plot(h, rhov, 'r');
 hold on;
-
-h = .01:.01:.5;
-c = 1;
-for i = h
-    params.H0 = (1-i)*params.H0;
-    init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected,
-    params.H0 * params.theta2 - params.init_cumulative_infected,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    0,
-    0,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    params.K_v,
-    0,
-    0];
-    [t_model,out_model] = balance_and_solve([0:400], init, params);
-    [b_T,rhoh(c), rhov(c)] = calc_b_T(params, init);
-    c = c+1;
-end
 plot(h, rhoh, 'b');
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
