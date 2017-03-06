@@ -51,7 +51,7 @@ params.H0 = params.H0 * params.theta0;
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
- params.H0 = 1000;
+ params.H0 =  100000;
  params.K_v = 100000;
  params.init_cumulative_infected = 1;
 init = ...
@@ -97,7 +97,7 @@ init = ...
 %params.theta2 = 0.2;
 %params.pi2 = 0;
 params;
-h = .01:.01:1;
+h = .0001:.01:1;
 j = 1;
 rhov = [];
 rhoh = [];
@@ -133,7 +133,7 @@ end
 figure()
 plot(ratiosv, rhov, 'r');
 hold on;
-plot(ratiosv, rhoh, 'b');
+plot(ratiosh, rhoh, 'b');
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);
