@@ -29,14 +29,14 @@ blackboxHandle = @bbb;
 %pbase.sigma_v  = 0.5;
 %pbase.H0  = 1000000;
 % pbase.theta0  = 0.2;
- pbase.theta2  = 0.7584;
+ pbase.theta2  = 0.757;
 % pbase.theta1  = 0.266;
 % pbase.init_cumulative_infected  = 10;
 % pbase.K_v  = 1000000 *2;
 % pbase.pi1  = .1146;
 % pbase.pi2  = .4712;
 
-npts = 40;
+npts = 56;
 
 % prange.beta_h = linspace( .24,  .24, 1);
 % prange.beta_v  = linspace(.24,  .24, 1);
