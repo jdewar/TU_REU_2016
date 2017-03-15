@@ -7,7 +7,7 @@ full_count = real2014;
 real = full_count;
 init_infected_h = real(1);
 tend = length(real);
-tspan = [(firstWeek2014*7):7:((tend+firstWeek2014-1)*7)];
+tspan = [(firstWeek2014)*7:7:((tend+firstWeek2014-1)*7)];
 tend = (tend+firstWeek2014-1);
 
 %switch L_MODEL
@@ -176,26 +176,33 @@ ub = struct2array(params,array_names);
 % end
 % optimized;
 % 
-obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
+obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 
 opt_params1
  
-init1 = get_init_conditions(opt_params1, tspan);
-[t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+init1 = get_init_conditions(opt_params1, 0);
+[t1,out1] = balance_and_solve(tspan, init1, opt_params1);
+
+R01 = calc_R0(opt_params1, out1(1,:))
+%Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
+Rinf = calc_Rinf(opt_params1, out1(end,:))
+
 %peak = get_peak_infected(out1);
 opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
 opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
-
 opt_params1
 
 figure()
-plot_both(t1, out1, real);
+plot_model(t1, out1)
+figure()
+plot_both(t1, out1, tspan, real);
 drawnow
+
 % figure()
 % plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01:.01:1)
-Reff = calc_Reff(opt_params1, out1, t1)
-% R01 = calc_R0(opt_params1, out1(1,:))
+
+
 
 %params.H0 = 1000;
 %params.K_v = 10000;
