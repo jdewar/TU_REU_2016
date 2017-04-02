@@ -11,6 +11,6 @@ rho_h = b_T/b_hw;
 rho_v = b_T/b_vw;
 b_v = b_T/rho_v;
 b_h = b_T/rho_h;
-r = b_v/b_h;
+%r = b_v/b_h;
 end
 
