@@ -31,8 +31,8 @@ param_struct = ...
      'sigma_v', 0.5;
      'H0', pop;
      'theta1', .3; %proportion of population in group 1 - low risk
-     'theta2', .5;% proportion of population in group 2 - high risk
-     'theta0', .8; % no risk group
+     'theta2', .7;% proportion of population in group 2 - high risk
+     'theta0', .2; % no risk group
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
@@ -101,13 +101,17 @@ init = ...
 %params.pi2 = 0;
 
 % params;
-% h = .001:.001:.5;
-% c = 1;
+% h = .0001:.01:1;
+% j = 1;
+% rhov = [];
+% rhoh = [];
+% ratiosh = [];
+% ratiosv = [];
 % for i = h
 %     params.H0 = i*params.H0;
 %     init = ...
-%     [params.H0 * params.theta1 - params.init_cumulative_infected,
-%     params.H0 * params.theta2 - params.init_cumulative_infected,
+%     [params.H0 * params.theta1 - params.init_cumulative_infected* params.theta1,
+%     params.H0 * params.theta2 - params.init_cumulative_infected* params.theta2,
 %     params.init_cumulative_infected * params.theta1,
 %     params.init_cumulative_infected * params.theta2,
 %     0,
@@ -118,6 +122,7 @@ init = ...
 %     0,
 %     0];
 %     [t_model,out_model] = balance_and_solve([0:400], init, params);
+
 %     [b_T,rhoh(c), rhov(c)] = calc_b_T(params, init);
 %     c = c+1;
 % end
@@ -186,6 +191,24 @@ plot(ratiosv, rhov, 'r');
 hold on;
 plot(ratiosh, rhoh, 'b');
 
+
+%     b_t = 0;
+%     rho_v = 0;
+%     rho_h = 0;
+%     [b_t,rho_h,rho_v] = calc_b_T(params, init);
+%     b_v = b_t/rho_v;
+%     b_h = b_t/rho_h;
+%     ratiosv(j) = b_h/b_v;
+%     ratiosh(j) = b_v/b_h;
+%     rhoh(j) = rho_h;
+%     rhov(j) = rho_v;
+%     j = j+1;
+% end
+% figure()
+% plot(ratiosv, rhov, 'r');
+% hold on;
+% plot(ratiosh, rhoh, 'b');
+
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);
@@ -196,19 +219,20 @@ plot(ratiosh, rhoh, 'b');
 lb = struct2array(params,array_names);
 ub = struct2array(params,array_names);
 
- % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
- % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
- % [lb, ub] = range(lb, ub, 'theta0', .01, .8, array_names);
- % [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .01, .9, array_names);
- [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 100, array_names);
+
+% [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
+% [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
+%[lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
+% [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
+ [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
- [lb, ub] = range(lb, ub, 'pi1', .1, 1, array_names);
- [lb, ub] = range(lb, ub, 'pi2', .01, 1, array_names);
- [lb, ub] = range(lb, ub, 'epsilon', .01, 5, array_names);
+ [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
+ [lb, ub] = range(lb, ub, 'pi2', .001, 1, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
 
-% %  I* from integrating steady state
+%  I* from integrating steady state
+
 % c = 1;
 % for i = 1:length(lb)
 %     if lb(i) ~= ub(i)
@@ -217,6 +241,7 @@ ub = struct2array(params,array_names);
 %     end
 % end
 % optimized;
+
 % 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
@@ -244,16 +269,25 @@ drawnow
 % figure()
 % plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01:.01:1)
 
-%params.H0 = 1000;
-%params.K_v = 10000;
-%params.init_cumulative_infected = 1;
-%init = [params.H0,params.init_cumulative_infected,0,params.init_cumulative_infected,params.K_v,0,0];
-%params
-%[t_model,out_model] = balance_and_solve([0:600], init, params);
-%t = [0:300];
-%[t_model, out_model] = output(t, init, params, []);
+%------ERIN: I think this may be your optimizing code, I just kept both, wasn't sure
+% obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
+% [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+% opt_params1.theta1 = 1-opt_params1.theta2;
+% opt_params1
+%  
+% init1 = get_init_conditions(opt_params1, tspan);
+% [t1,out1] = balance_and_solve([0 tspan], init1, opt_params1);
+% %[t1,out1] = output(tspan, init1, opt_params1, []);
+% peak = get_peak_infected(out1);
+% 
+% figure()
+% plot_both(t1, out1, real);
+% drawnow
+% figure()
+% plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .001, 1);
+%--------------------------------------------
 
-% R01 = calc_R0(params, out_model(1,:))
+% R01 = calc_R0(opt_params1, out1(1,:))
 % Reff = calc_Reff(params, out_model(1,:))
 % [peak] = get_peak_infected(out_model)
 % bT = calc_b_T(params, init)
@@ -263,6 +297,13 @@ drawnow
 % drawnow
 % figure()
 % plot(t_model,out_model(:,2))
+%% Compare ChikV and Zika
+% opt_params1.pi1 = opt_params1.pi1*1.6;
+% opt_params1.pi2 = opt_params1.pi2*1.6;
+% init1 = get_init_conditions(opt_params1, tspan);
+% [t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
+% figure()
+% plot_two_models(t1,out1,t2,out2,real)
 
 %% Optimization & Plot - Original Obj Fn
 % lb = struct2array(params,array_names);
