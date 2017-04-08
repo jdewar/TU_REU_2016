@@ -20,7 +20,6 @@ P.H0  = 466000;
 P.theta0  = 0.8;
 P.theta2  = pbase.theta2;
 P.theta1  = 1 - P.theta2;
-P.theta2  = 0.
 P.init_cumulative_infected  = 76;
 P.K_v  = 932000;
 P.pi1  = 0.1;

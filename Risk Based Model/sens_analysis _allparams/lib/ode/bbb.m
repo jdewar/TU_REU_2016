@@ -7,16 +7,16 @@ function Q = bbb(pbase)
 
 P.beta_h = 0.24;
 P.beta_v  = 0.24;
-P.gamma_h  = pbase.gamma_h;
+P.gamma_h  = 1/6;
 P.mu_h  = 1/(70*365);
-P.nu_h  = pbase.nu_h;
+P.nu_h  = 1/3;
 P.psi_v  = 0.3;
-P.mu_v  = pbase.mu_v;
-P.nu_v  = pbase.nu_v;
+P.mu_v  = 1/17;
+P.nu_v  = 1/11;
 P.sigma_h1  = 5;
 P.sigma_h2  = 30;
 P.sigma_v  = 0.5;
-P.H0  = 466000;
+P.H0  = 1000;
 P.theta0  = 0.8;
 P.theta2  = 0.757;
 P.theta1  = 0.3;
@@ -40,7 +40,7 @@ init = ...
     0];
 
 init1 = get_init_conditions(P, 0);
-[T,Y] = balance_and_solve(0:300, init1, P);
+[T,Y] = balance_and_solve(0:400, init1, P);
 
 %create R0,Reff @ time in middle?, and max_inf
 %use event to get time when some % infected
