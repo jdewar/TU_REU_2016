@@ -37,7 +37,6 @@ param_struct = ...
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
      'pi2', 0.4; %proportion that continues to be bitten in infected group 2
-     'epsilon', 1; 
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
