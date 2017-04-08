@@ -97,7 +97,7 @@ ub = struct2array(params,array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
 %[lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
-% [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
@@ -140,8 +140,11 @@ figure()
 plot_both(t1, out1, tspan, real);
 drawnow
 
-% figure()
-% plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01:.01:1)
+figure()
+plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01, 1)
+
+figure()
+plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1)
 
 % R01 = calc_R0(opt_params1, out1(1,:))
 % Reff = calc_Reff(params, out_model(1,:))
