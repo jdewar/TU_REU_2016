@@ -122,9 +122,9 @@ obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
-opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
-opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
-opt_params1
+% opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
+% opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
+% opt_params1
  
 %R01 = calc_R0(opt_params1, out1(1,:))
 %Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
