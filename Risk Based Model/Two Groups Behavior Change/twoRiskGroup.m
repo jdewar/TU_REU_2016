@@ -97,7 +97,7 @@ ub = struct2array(params,array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
 %[lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
-% [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
@@ -119,20 +119,19 @@ ub = struct2array(params,array_names);
 % 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-
-opt_params1
- 
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
+opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
+opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
+opt_params1
+ 
 %R01 = calc_R0(opt_params1, out1(1,:))
 %Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
 %Rinf = calc_Rinf(opt_params1, out1(end,:))
 %peak = get_peak_infected(out1);
 
-% opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
-% opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
-% opt_params1
+
 
 % figure()
 % plot_model(t1, out1)
