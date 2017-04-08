@@ -37,7 +37,6 @@ param_struct = ...
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
      'pi2', 0.4; %proportion that continues to be bitten in infected group 2
-     'epsilon', 1; 
     }';
 params = struct(param_struct{:});
 array_names = param_struct(1,:);
@@ -98,7 +97,7 @@ ub = struct2array(params,array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
 %[lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
-% [lb, ub] = range(lb, ub, 'theta1', .01, .8, array_names);
+ [lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
@@ -120,29 +119,28 @@ ub = struct2array(params,array_names);
 % 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
-
-opt_params1
- 
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
+opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
+opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
+opt_params1
+ 
 %R01 = calc_R0(opt_params1, out1(1,:))
 %Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
 %Rinf = calc_Rinf(opt_params1, out1(end,:))
 %peak = get_peak_infected(out1);
 
-% opt_params1.theta2 = (1 - opt_params1.theta0) * opt_params1.theta2;
-% opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
-% opt_params1
 
-figure()
-plot_model(t1, out1)
+
+% figure()
+% plot_model(t1, out1)
 figure()
 plot_both(t1, out1, tspan, real);
 drawnow
 
-% figure()
-% plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01:.01:1)
+ figure()
+ [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .001,1)
 
 % R01 = calc_R0(opt_params1, out1(1,:))
 % Reff = calc_Reff(params, out_model(1,:))
@@ -188,31 +186,3 @@ drawnow
 % [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
 
 
-%% Sensitivity Analysis
-%sensitivity_time(opt_params1, out1, t1)
-%derivatives_time(t1, init1, opt_params1)
-
-%Q1 = @(params) Q_Reff(params, out1,t1);
-% Q2 = @(params) Q_Iend(params,out1,t1);
-% Q3 = @(params) Q_R0(params,out1,t1);
-
-% sensitivity_theta1 = chik_sensitivity_analysis(Q1, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q1, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q1, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q1, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q1, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q1, opt_params1, 'theta0')
-% %q2
-% sensitivity_theta1 = chik_sensitivity_analysis(Q2, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q2, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q2, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q2, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q2, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q2, opt_params1, 'theta0')
-% %q3
-% sensitivity_theta1 = chik_sensitivity_analysis(Q3, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q3, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q3, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q3, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q3, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q3, opt_params1, 'theta0')
