@@ -135,8 +135,8 @@ init1 = get_init_conditions(opt_params1, 0);
 % opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
 % opt_params1
 
-figure()
-plot_model(t1, out1)
+% figure()
+% plot_model(t1, out1)
 figure()
 plot_both(t1, out1, tspan, real);
 drawnow
@@ -188,31 +188,3 @@ drawnow
 % [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
 
 
-%% Sensitivity Analysis
-%sensitivity_time(opt_params1, out1, t1)
-%derivatives_time(t1, init1, opt_params1)
-
-%Q1 = @(params) Q_Reff(params, out1,t1);
-% Q2 = @(params) Q_Iend(params,out1,t1);
-% Q3 = @(params) Q_R0(params,out1,t1);
-
-% sensitivity_theta1 = chik_sensitivity_analysis(Q1, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q1, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q1, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q1, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q1, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q1, opt_params1, 'theta0')
-% %q2
-% sensitivity_theta1 = chik_sensitivity_analysis(Q2, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q2, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q2, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q2, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q2, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q2, opt_params1, 'theta0')
-% %q3
-% sensitivity_theta1 = chik_sensitivity_analysis(Q3, opt_params1, 'theta1')
-% sensitivity_theta2 = chik_sensitivity_analysis(Q3, opt_params1, 'theta2')
-% sensitivity_pi1 = chik_sensitivity_analysis(Q3, opt_params1, 'pi1')
-% sensitivity_pi2 = chik_sensitivity_analysis(Q3, opt_params1, 'pi2')
-% sensitivity_K_v = chik_sensitivity_analysis(Q3, opt_params1, 'K_v')
-% sensitivity_theta0 = chik_sensitivity_analysis(Q3, opt_params1, 'theta0')
