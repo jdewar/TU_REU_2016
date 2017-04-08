@@ -52,8 +52,10 @@ params.H0 = params.H0 * (1 - params.theta0);
 % plot(tspan,newly_infected)
 
 %% Plot ODE Solutions
-% params.H0 = 1000;
- params.K_v = 10000;
+
+%  params.H0 =  10000;
+%  params.K_v = 100000;
+
  params.init_cumulative_infected = 1;
 init = ...
     [params.H0 * params.theta1 - params.init_cumulative_infected*params.theta1,
@@ -67,8 +69,7 @@ init = ...
     params.K_v,
     0,
     0];
-% params.theta2 = 0.2;
-% params.pi2 = 0;
+
 % params
 % [t_model,out_model] = balance_and_solve([0:400], init, params);
 % R01 = calc_R0(params, out_model(1,:))
@@ -98,6 +99,7 @@ init = ...
 %     0];
 %params.theta2 = 0.2;
 %params.pi2 = 0;
+
 % params;
 % h = .001:.001:.5;
 % c = 1;
@@ -144,6 +146,46 @@ init = ...
 %     c = c+1;
 % end
 % plot(h, rhoh, 'b');
+
+params;
+h = .0001:.01:1;
+j = 1;
+rhov = [];
+rhoh = [];
+ratiosh = [];
+ratiosv = [];
+for i = h
+    params.H0 = i*params.H0;
+    init = ...
+    [params.H0 * params.theta1 - params.init_cumulative_infected* params.theta1,
+    params.H0 * params.theta2 - params.init_cumulative_infected* params.theta2,
+    params.init_cumulative_infected * params.theta1,
+    params.init_cumulative_infected * params.theta2,
+    0,
+    0,
+    params.init_cumulative_infected * params.theta1,
+    params.init_cumulative_infected * params.theta2,
+    params.K_v,
+    0,
+    0];
+    [t_model,out_model] = balance_and_solve([0:400], init, params);
+    b_t = 0;
+    rho_v = 0;
+    rho_h = 0;
+    [b_t,rho_h,rho_v] = calc_b_T(params, init);
+    b_v = b_t/rho_v;
+    b_h = b_t/rho_h;
+    ratiosv(j) = b_h/b_v;
+    ratiosh(j) = b_v/b_h;
+    rhoh(j) = rho_h;
+    rhov(j) = rho_v;
+    j = j+1;
+end
+figure()
+plot(ratiosv, rhov, 'r');
+hold on;
+plot(ratiosh, rhoh, 'b');
+
 % [peak] = get_peak_infected(out_model)
 % total = out_model(end,7) + out_model(end,8)
 % plot_Reff(t_model,out_model,params);
@@ -201,8 +243,6 @@ drawnow
 
 % figure()
 % plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01:.01:1)
-
-
 
 %params.H0 = 1000;
 %params.K_v = 10000;
