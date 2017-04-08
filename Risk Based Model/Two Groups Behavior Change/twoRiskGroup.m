@@ -32,7 +32,7 @@ param_struct = ...
      'H0', pop;
      'theta1', .3; %proportion of population in group 1 - low risk
      'theta2', .7;% proportion of population in group 2 - high risk
-     'theta0', .2; % no risk group
+     'theta0', .8; % no risk group
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
      'pi1', 0.4; %proportion that continues to be bitten in infected group 1
@@ -55,20 +55,20 @@ params.H0 = params.H0 * (1 - params.theta0);
 
 %  params.H0 =  10000;
 %  params.K_v = 100000;
-
- params.init_cumulative_infected = 1;
-init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected*params.theta1,
-    params.H0 * params.theta2 - params.init_cumulative_infected*params.theta2,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    0,
-    0,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    params.K_v,
-    0,
-    0];
+% 
+%  params.init_cumulative_infected = 1;
+% init = ...
+%     [params.H0 * params.theta1 - params.init_cumulative_infected*params.theta1,
+%     params.H0 * params.theta2 - params.init_cumulative_infected*params.theta2,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     0,
+%     0,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     params.K_v,
+%     0,
+%     0];
 
 % params
 % [t_model,out_model] = balance_and_solve([0:400], init, params);
@@ -152,44 +152,44 @@ init = ...
 % end
 % plot(h, rhoh, 'b');
 
-params;
-h = .0001:.01:1;
-j = 1;
-rhov = [];
-rhoh = [];
-ratiosh = [];
-ratiosv = [];
-for i = h
-    params.H0 = i*params.H0;
-    init = ...
-    [params.H0 * params.theta1 - params.init_cumulative_infected* params.theta1,
-    params.H0 * params.theta2 - params.init_cumulative_infected* params.theta2,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    0,
-    0,
-    params.init_cumulative_infected * params.theta1,
-    params.init_cumulative_infected * params.theta2,
-    params.K_v,
-    0,
-    0];
-    [t_model,out_model] = balance_and_solve([0:400], init, params);
-    b_t = 0;
-    rho_v = 0;
-    rho_h = 0;
-    [b_t,rho_h,rho_v] = calc_b_T(params, init);
-    b_v = b_t/rho_v;
-    b_h = b_t/rho_h;
-    ratiosv(j) = b_h/b_v;
-    ratiosh(j) = b_v/b_h;
-    rhoh(j) = rho_h;
-    rhov(j) = rho_v;
-    j = j+1;
-end
-figure()
-plot(ratiosv, rhov, 'r');
-hold on;
-plot(ratiosh, rhoh, 'b');
+% params;
+% h = .0001:.01:1;
+% j = 1;
+% rhov = [];
+% rhoh = [];
+% ratiosh = [];
+% ratiosv = [];
+% for i = h
+%     params.H0 = i*params.H0;
+%     init = ...
+%     [params.H0 * params.theta1 - params.init_cumulative_infected* params.theta1,
+%     params.H0 * params.theta2 - params.init_cumulative_infected* params.theta2,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     0,
+%     0,
+%     params.init_cumulative_infected * params.theta1,
+%     params.init_cumulative_infected * params.theta2,
+%     params.K_v,
+%     0,
+%     0];
+%     [t_model,out_model] = balance_and_solve([0:400], init, params);
+%     b_t = 0;
+%     rho_v = 0;
+%     rho_h = 0;
+%     [b_t,rho_h,rho_v] = calc_b_T(params, init);
+%     b_v = b_t/rho_v;
+%     b_h = b_t/rho_h;
+%     ratiosv(j) = b_h/b_v;
+%     ratiosh(j) = b_v/b_h;
+%     rhoh(j) = rho_h;
+%     rhov(j) = rho_v;
+%     j = j+1;
+% end
+% figure()
+% plot(ratiosv, rhov, 'r');
+% hold on;
+% plot(ratiosh, rhoh, 'b');
 
 
 %     b_t = 0;
