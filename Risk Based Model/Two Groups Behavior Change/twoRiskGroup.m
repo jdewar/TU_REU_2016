@@ -26,7 +26,7 @@ param_struct = ...
      'psi_v', 0.3;
      'mu_v', 1/17;
      'nu_v', 1/11;
-     'sigma_h1', 5; %low risk contacts
+     'sigma_h1', 10; %low risk contacts
      'sigma_h2', 30; %high risk contacts
      'sigma_v', 0.5;
      'H0', pop;
@@ -35,7 +35,7 @@ param_struct = ...
      'theta0', .8; % no risk group
      'init_cumulative_infected', init_infected_h;
      'K_v' , pop * 2;
-     'pi1', 0.4; %proportion that continues to be bitten in infected group 1
+     'pi1', 0.1; %proportion that continues to be bitten in infected group 1
      'pi2', 0.4; %proportion that continues to be bitten in infected group 2
     }';
 params = struct(param_struct{:});
@@ -96,9 +96,9 @@ ub = struct2array(params,array_names);
 
 % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
-%[lb, ub] = range(lb, ub, 'theta0', .01, .4, array_names);
- [lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
- [lb, ub] = range(lb, ub, 'theta2', .01, 1, array_names);
+%[lb, ub] = range(lb, ub, 'theta0', .6, .9, array_names);
+ [lb, ub] = range(lb, ub, 'theta2', .01, .8, array_names);
+ %[lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
  [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
@@ -119,6 +119,8 @@ ub = struct2array(params,array_names);
 % 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
+opt_params1.theta1 = 1 - opt_params1.theta2;
+
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
@@ -138,11 +140,11 @@ figure()
 plot_both(t1, out1, tspan, real);
 drawnow
 
-figure()
-plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01, 1)
-
-figure()
-plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1)
+opt_params1
+ figure()
+ plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
+%  figure()
+%  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1);
 
 % R01 = calc_R0(opt_params1, out1(1,:))
 % Reff = calc_Reff(params, out_model(1,:))
@@ -155,8 +157,8 @@ plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2'
 % figure()
 % plot(t_model,out_model(:,2))
 %% Compare ChikV and Zika
-% opt_params1.pi1 = opt_params1.pi1*1.6;
-% opt_params1.pi2 = opt_params1.pi2*1.6;
+% opt_params1.pi1 = 0.7;
+% opt_params1.pi2 = 0.9;
 % init1 = get_init_conditions(opt_params1, tspan);
 % [t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
 % figure()
