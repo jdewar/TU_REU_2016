@@ -26,7 +26,7 @@ param_struct = ...
      'psi_v', 0.3;
      'mu_v', 1/17;
      'nu_v', 1/11;
-     'sigma_h1', 5; %low risk contacts
+     'sigma_h1', 10; %low risk contacts
      'sigma_h2', 30; %high risk contacts
      'sigma_v', 0.5;
      'H0', pop;
@@ -101,8 +101,8 @@ ub = struct2array(params,array_names);
  %[lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
- [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
- [lb, ub] = range(lb, ub, 'pi2', .001, 1, array_names);
+ [lb, ub] = range(lb, ub, 'pi1', .001, .5, array_names);
+ [lb, ub] = range(lb, ub, 'pi2', .001, .8, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
 
 %  I* from integrating steady state
@@ -128,7 +128,7 @@ init1 = get_init_conditions(opt_params1, 0);
 % opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
 % opt_params1
  
-%R01 = calc_R0(opt_params1, out1(1,:))
+R01 = calc_R0(opt_params1, out1(1,:))
 %Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
 %Rinf = calc_Rinf(opt_params1, out1(end,:))
 %peak = get_peak_infected(out1);
@@ -140,11 +140,12 @@ figure()
 plot_both(t1, out1, tspan, real);
 drawnow
 
- figure()
- plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi1', .01, 1);
 opt_params1
- figure()
- plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1);
+%  figure()
+%  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
+%  
+%  figure()
+%  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1);
 
 % R01 = calc_R0(opt_params1, out1(1,:))
 % Reff = calc_Reff(params, out_model(1,:))
@@ -157,13 +158,15 @@ opt_params1
 % figure()
 % plot(t_model,out_model(:,2))
 %% Compare ChikV and Zika
-% opt_params1.pi1 = opt_params1.pi1*1.6;
-% opt_params1.pi2 = opt_params1.pi2*1.6;
-% init1 = get_init_conditions(opt_params1, tspan);
-% [t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
-% figure()
-% plot_two_models(t1,out1,t2,out2,real)
-
+opt_params1.pi1 = 0.8;
+opt_params1.pi2 = 1;
+init1 = get_init_conditions(opt_params1, tspan);
+[t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
+R01 = calc_R0(opt_params1, out2(1,:))
+figure()
+plot_two_models(t1,out1,t2,out2,real)
+% comparing models - sum squared
+differ
 %% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);
