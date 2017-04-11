@@ -136,14 +136,17 @@ Reff1 = calc_Reff(opt_params1, out1(30,:))
 
 % figure()
 % plot_model(t1, out1)
-figure()
-plot_both(t1, out1, tspan, real);
-drawnow
+% figure()
+% plot_both(t1, out1, tspan, real);
+% drawnow
 
 opt_params1
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
+<<<<<<< HEAD
 %  
+=======
+>>>>>>> origin/master
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1);
 
@@ -158,6 +161,7 @@ opt_params1
 % figure()
 % plot(t_model,out_model(:,2))
 %% Compare ChikV and Zika
+
 opt_params1.pi1 = 0.8;
 opt_params1.pi2 = 1;
 init1 = get_init_conditions(opt_params1, tspan);
@@ -168,6 +172,18 @@ figure()
 plot_two_models(t1,out1,t2,out2,real)
 % comparing models - sum squared
 difference = cmp_models(out1,out2, real)
+
+%% Compare Risk Groups
+opt_params1.theta0 = 0;
+opt_params1.H0 = pop;
+opt_params1.sigma_h1 = 4.2948;
+opt_params1.sigma_h2 = 4.2948;
+init1 = get_init_conditions(opt_params1, tspan);
+R0 = calc_R0(opt_params1, init1)
+[t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
+figure()
+plot_two_models(t1,out1,t2,out2,real)
+
 %% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);
