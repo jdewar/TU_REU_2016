@@ -128,7 +128,7 @@ init1 = get_init_conditions(opt_params1, 0);
 % opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
 % opt_params1
  
-%R01 = calc_R0(opt_params1, out1(1,:))
+R01 = calc_R0(opt_params1, out1(1,:))
 %Reff1 = calc_Reff(opt_params1, out1(30,:))
 %Rinf = calc_Rinf(opt_params1, out1(end,:))
 %peak = get_peak_infected(out1);
@@ -169,17 +169,17 @@ init1 = get_init_conditions(opt_params1, 0);
 % difference = cmp_models(out1,out2, real)
 
 %% Compare Risk Groups 1/2 high and 1/2 no
-opt_params1.theta0 = .75;
-opt_params1.theta2 = 1; %high
-opt_params1.theta1 = 0; % low
-init2 = get_init_conditions(opt_params1, tspan);
-[t2,out2] = balance_and_solve([0 tspan], init2, opt_params1);
-R01 = calc_R0(opt_params1, out2(1,:))
-figure()
-plot_two_models(t1,out1,t2,out2,real)
+% opt_params1.theta0 = .75;
+% opt_params1.theta2 = 1; %high
+% opt_params1.theta1 = 0; % low
+% init2 = get_init_conditions(opt_params1, tspan);
+% [t2,out2] = balance_and_solve([0 tspan], init2, opt_params1);
+% R01 = calc_R0(opt_params1, out2(1,:))
+% figure()
+% plot_two_models(t1,out1,t2,out2,real)
 
 %% Compare Risk Groups start w/baseline 1/2 high -> low and 1/2 low ->no
-%(1 - opt_params1.theta0) * opt_params1.theta2
+%%(1 - opt_params1.theta0) * opt_params1.theta2
 opt_params1.theta0 = opt_params1.theta0 + 1/2*((1 - opt_params1.theta0) * opt_params1.theta1);
 opt_params1.theta2 = opt_params1.theta2*(1/2); %high
 opt_params1.theta1 = opt_params1.theta1 + (opt_params1.theta2*(1/2)); % low
