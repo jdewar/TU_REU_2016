@@ -143,10 +143,6 @@ Reff1 = calc_Reff(opt_params1, out1(30,:))
 opt_params1
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
-<<<<<<< HEAD
-%  
-=======
->>>>>>> origin/master
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'pi2', .01, 1);
 
