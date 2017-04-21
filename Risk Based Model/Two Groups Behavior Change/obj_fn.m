@@ -3,6 +3,7 @@ function [val_real] = obj_fn(param_array, data, array_names, t_in, init)
 
 params = array2struct(param_array, array_names); 
 params.theta1 = 1-params.theta2;
+%params.H0 = params.theta0*params.H0;
 new_init = get_init_conditions(params, t_in);
 c = 1.00001 - calc_R0(params, new_init);
 [~,Y] = balance_and_solve(t_in, new_init, params); 

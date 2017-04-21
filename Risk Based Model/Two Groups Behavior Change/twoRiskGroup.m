@@ -96,7 +96,7 @@ ub = struct2array(params,array_names);
 
 % [lb, ub] = range(lb, ub, 'sigma_h1', .1, 5, array_names);
 % [lb, ub] = range(lb, ub, 'sigma_h2', 5, 50, array_names);
-%[lb, ub] = range(lb, ub, 'theta0', .6, .9, array_names);
+%[lb, ub] = range(lb, ub, 'theta0', .01, .9, array_names);
  [lb, ub] = range(lb, ub, 'theta2', .01, .8, array_names);
  %[lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
@@ -120,7 +120,7 @@ ub = struct2array(params,array_names);
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, 0));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 opt_params1.theta1 = 1 - opt_params1.theta2;
-
+opt_params1
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
@@ -136,11 +136,10 @@ init1 = get_init_conditions(opt_params1, 0);
 
 % figure()
 % plot_model(t1, out1)
-% figure()
-% plot_both(t1, out1, tspan, real);
-% drawnow
+figure()
+plot_both(t1, out1, tspan, real);
+drawnow
 
-opt_params1
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
 %  figure()
@@ -164,16 +163,42 @@ opt_params1
 % figure()
 % plot_two_models(t1,out1,t2,out2,real)
 
-%% Compare Risk Groups
-opt_params1.theta0 = 0;
-opt_params1.H0 = pop;
-opt_params1.sigma_h1 = 4.2948;
-opt_params1.sigma_h2 = 4.2948;
-init1 = get_init_conditions(opt_params1, tspan);
-R0 = calc_R0(opt_params1, init1)
-[t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
+%% Compare Risk Groups -- Two Risk Groups
+%opt_params1.H0 = pop;
+opt_params1.sigma_h1 = 21.474;
+opt_params1.sigma_h2 = 21.474;
+init2 = get_init_conditions(opt_params1, 0);
+opt_params1
+[t2,out2] = balance_and_solve(tspan, init2, opt_params1);
+R0 = calc_R0(opt_params1, out2(1,:))
 figure()
-plot_two_models(t1,out1,t2,out2,real)
+plot_two_models(t1,out1,t2,out2,real);
+
+%% Compare Risk Groups -- High Risk, No Risk
+opt_params1.sigma_h1 = 10;
+opt_params1.sigma_h2 = 30;
+opt_params1.theta1 = 0;
+opt_params1.theta2 = .14316;
+opt_params1.theta0 = 1 - opt_params1.theta2;
+init3 = get_init_conditions(opt_params1, 0);
+opt_params1
+[t3,out3] = balance_and_solve(tspan, init3, opt_params1);
+t3
+R0 = calc_R0(opt_params1, out3(1,:))
+figure()
+plot_two_models(t1,out1,t3,out3,real)
+
+%% Compare Risk Groups -- Low Risk, No Risk
+opt_params1.theta2 = 0;
+opt_params1.theta1 = .42948;
+opt_params1.theta0 = 1 - opt_params1.theta1;
+init4 = get_init_conditions(opt_params1, 0);
+opt_params1
+[t4,out4] = balance_and_solve(tspan, init4, opt_params1);
+R0 = calc_R0(opt_params1, out4(1,:))
+figure()
+plot_two_models(t1,out1,t4,out4,real)
+
 
 %% Plot Objective Functions
 % figure()
