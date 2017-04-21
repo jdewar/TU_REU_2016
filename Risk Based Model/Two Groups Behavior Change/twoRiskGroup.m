@@ -101,8 +101,8 @@ ub = struct2array(params,array_names);
  %[lb, ub] = range(lb, ub, 'theta1', 1-params.theta2, 1-params.theta2, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 10, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
- [lb, ub] = range(lb, ub, 'pi1', .001, 1, array_names);
- [lb, ub] = range(lb, ub, 'pi2', .001, 1, array_names);
+ [lb, ub] = range(lb, ub, 'pi1', .001, .5, array_names);
+ [lb, ub] = range(lb, ub, 'pi2', .001, .8, array_names);
  %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
 
 %  I* from integrating steady state
@@ -128,8 +128,8 @@ init1 = get_init_conditions(opt_params1, 0);
 % opt_params1.theta1 = 1-(opt_params1.theta2 + opt_params1.theta0);
 % opt_params1
  
-%R01 = calc_R0(opt_params1, out1(1,:))
-%Reff = calc_Reff(opt_params1, out1(length(t1)/2,:))
+R01 = calc_R0(opt_params1, out1(1,:))
+%Reff1 = calc_Reff(opt_params1, out1(30,:))
 %Rinf = calc_Rinf(opt_params1, out1(end,:))
 %peak = get_peak_infected(out1);
 
@@ -139,6 +139,9 @@ init1 = get_init_conditions(opt_params1, 0);
 figure()
 plot_both(t1, out1, tspan, real);
 drawnow
+
+
+%opt_params1
 
 %  figure()
 %  plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, t1, 'theta2', .1, 1);
@@ -156,14 +159,28 @@ drawnow
 % figure()
 % plot(t_model,out_model(:,2))
 %% Compare ChikV and Zika
-% opt_params1.pi1 = 0.7;
-% opt_params1.pi2 = 0.9;
+% opt_params1.pi1 = 0.8;
+% opt_params1.pi2 = 1;
 % init1 = get_init_conditions(opt_params1, tspan);
 % [t2,out2] = balance_and_solve([0 tspan], init1, opt_params1);
+% R02 = calc_R0(opt_params1, out2(1,:))
+% Reff2 = calc_Reff(opt_params1, out1(30,:))
+% figure()
+% plot_two_models(t1,out1,t2,out2,real)
+% % comparing models - sum squared
+% difference = cmp_models(out1,out2, real)
+
+%% Compare Risk Groups 1/2 high and 1/2 no
+% opt_params1.theta0 = .75;
+% opt_params1.theta2 = 1; %high
+% opt_params1.theta1 = 0; % low
+% init2 = get_init_conditions(opt_params1, tspan);
+% [t2,out2] = balance_and_solve([0 tspan], init2, opt_params1);
+% R01 = calc_R0(opt_params1, out2(1,:))
 % figure()
 % plot_two_models(t1,out1,t2,out2,real)
 
-%% Compare Risk Groups -- Two Risk Groups
+%% Compare Risk Groups -- Combine High and Low
 %opt_params1.H0 = pop;
 opt_params1.sigma_h1 = 21.474;
 opt_params1.sigma_h2 = 21.474;
@@ -198,6 +215,17 @@ opt_params1
 R0 = calc_R0(opt_params1, out4(1,:))
 figure()
 plot_two_models(t1,out1,t4,out4,real)
+
+%% Compare Risk Groups start w/baseline 1/2 high -> low and 1/2 low ->no
+%%(1 - opt_params1.theta0) * opt_params1.theta2
+opt_params1.theta0 = opt_params1.theta0 + 1/2*((1 - opt_params1.theta0) * opt_params1.theta1);
+opt_params1.theta2 = opt_params1.theta2*(1/2); %high
+opt_params1.theta1 = opt_params1.theta1 + (opt_params1.theta2*(1/2)); % low
+init2 = get_init_conditions(opt_params1, tspan);
+[t2,out2] = balance_and_solve([0 tspan], init2, opt_params1);
+R01 = calc_R0(opt_params1, out2(1,:))
+figure()
+plot_two_models(t1,out1,t2,out2,real)
 
 
 %% Plot Objective Functions
