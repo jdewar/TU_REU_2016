@@ -56,16 +56,6 @@ ub = struct2array(params,array_names);
  [lb, ub] = range(lb, ub, 'theta', params.theta*.01, params.theta*.5, array_names);
  [lb, ub] = range(lb, ub, 'init_cumulative_infected', params.init_cumulative_infected * 0.1, params.init_cumulative_infected * 30, array_names);
  [lb, ub] = range(lb, ub, 'K_v', params.H0, params.H0 * 10, array_names);
- %[lb, ub] = range(lb, ub, 'H0', params.H0 *0.1, params.H0, array_names);
- 
-c = 1;
-for i = 1:length(lb)
-    if lb(i) ~= ub(i)
-        optimized{c} = array_names{i};
-        c = c+1;
-    end
-end
-optimized;
 
 obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(params, tspan));
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
@@ -79,21 +69,40 @@ init1 = get_init_conditions(opt_params1, tspan);
 figure()
 plot_both(tspan, out1, full_count);
 drawnow
+%% reduce contact rate for hosts by 25%
+opt_params2= opt_params1;
+opt_params2.sigma_h = opt_params1.sigma_h * (1-.25);
+init2 = get_init_conditions(opt_params2, tspan);
+[t2,out2] = balance_and_solve(tspan, init2, opt_params2);
 figure()
-r = linspace(lb(9), ub(9), 100);
-[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
-
+plot_both(tspan, out1, full_count);
+hold on
+plot_sim(tspan, out2)
+%% reduce mosquito pop by 30%
+opt_params3= opt_params1;
+opt_params3.K_v = opt_params1.K_v * (1-.3);
+init3 = get_init_conditions(opt_params3, tspan);
+[t3,out3] = balance_and_solve(tspan, init3, opt_params3);
 figure()
-r = linspace(lb(13), ub(13), 100);
-[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
-
-figure()
-r = linspace(lb(12), ub(12), 100);
-[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta', r);
-
-figure()
-r = linspace(lb(14), ub(14), 100);
-[param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
-
-R01 = calc_R0(opt_params1, out1(:,1))
+plot_both(tspan, out1, full_count);
+hold on
+plot_sim(tspan, out3)
+%% Plot objective function values
+% figure()
+% r = linspace(lb(9), ub(9), 100);
+% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'sigma_h', r);
+% 
+% figure()
+% r = linspace(lb(13), ub(13), 100);
+% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'init_cumulative_infected', r);
+% 
+% figure()
+% r = linspace(lb(12), ub(12), 100);
+% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'theta', r);
+% 
+% figure()
+% r = linspace(lb(14), ub(14), 100);
+% [param,val] = plot_obj_fn(struct2array(opt_params1, array_names), real, array_names, tspan, 'K_v', r);
+%% Calc R_0 
+% R01 = calc_R0(opt_params1, out1(:,1))
 
