@@ -121,6 +121,7 @@ obj_fn1 = @(parray)obj_fn(parray, real, array_names, tspan, get_init_conditions(
 [opt_params1,fval,grad,hes] = optimizer(obj_fn1, lb, ub, params);
 opt_params1.theta1 = 1 - opt_params1.theta2;
 opt_params1
+tspan = [1:7:500];
 init1 = get_init_conditions(opt_params1, 0);
 [t1,out1] = balance_and_solve(tspan, init1, opt_params1);
 
@@ -136,9 +137,9 @@ R01 = calc_R0(opt_params1, out1(1,:))
 
 % figure()
 % plot_model(t1, out1)
-figure()
-plot_both(t1, out1, tspan, real);
-drawnow
+% figure()
+% plot_both(t1, out1, tspan, real);
+% drawnow
 
 
 %opt_params1
@@ -180,44 +181,85 @@ drawnow
 % figure()
 % plot_two_models(t1,out1,t2,out2,real)
 
-%% Compare Risk Groups -- Combine High and Low
-%opt_params1.H0 = pop;
-opt_params1.sigma_h1 = 21.474;
-opt_params1.sigma_h2 = 21.474;
-init2 = get_init_conditions(opt_params1, 0);
-opt_params1
-[t2,out2] = balance_and_solve(tspan, init2, opt_params1);
-R0 = calc_R0(opt_params1, out2(1,:))
-figure()
-plot_two_models(t1,out1,t2,out2,real);
+%% Compare Number of Risk Groups 
+%Theta0 same as baseline, combine theta1 & theta2 with same avg bites as
+%baseline = 4.608 (reducing to two risk groups)
+% opt_params.theta1 = 0;
+% opt_params.theta2 = 1;
+% opt_params1.sigma_h2 = 23.04;
+% init2 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t2,out2] = balance_and_solve(tspan, init2, opt_params1);
+% R02 = calc_R0(opt_params1, out2(1,:))
+% 
+% %Reducing to one risk group, same avg bites as baseline = 4.2948
+% opt_params1.H0 = pop;
+% opt_params1.theta0 = 0;
+% opt_params1.sigma_h1 = 4.608;
+% opt_params1.sigma_h2 = 4.608;
+% init3 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t3,out3] = balance_and_solve(tspan, init3, opt_params1);
+% R03 = calc_R0(opt_params1, out3(1,:))
+% 
+% figure()
+% plot_two_models(t1,out1,t2,out2,t3,out3,real);
+
+%% Reducing theta0
+%theta0 is .75, theta1 & theta2 are .125, sigmah1 is 10, avg bites same
+
+% opt_params1.theta0 = 0.75;
+% opt_params1.H0 = pop * (1 - opt_params1.theta0);
+% opt_params1.theta1 = 0.5;
+% opt_params1.theta2 = 0.5;
+% opt_params1.sigma_h1 = 10;
+% opt_params1.sigma_h2 = 26.864;
+% init2 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t2,out2] = balance_and_solve(tspan, init2, opt_params1);
+% R02 = calc_R0(opt_params1, out2(1,:))
+% 
+% %theta0 is .5, theta1 is .2, theta2 is .3, sigmah2 is 12, avg bites same
+% opt_params1.theta0 = 0.5;
+% opt_params1.H0 = pop * (1 - opt_params1.theta0);
+% opt_params1.sigma_h1 = 5.0;
+% opt_params1.sigma_h2 = 13.432;
+% opt_params1.theta1 = 0.5;
+% opt_params1.theta2 = 0.5;
+% init3 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t3,out3] = balance_and_solve(tspan, init3, opt_params1);
+% R03 = calc_R0(opt_params1, out3(1,:))
+% figure()
+% plot_two_models(t1,out1,t2,out2,t3,out3,real);
 
 %% Compare Risk Groups -- High Risk, No Risk
-opt_params1.sigma_h1 = 10;
-opt_params1.sigma_h2 = 30;
-opt_params1.theta1 = 0;
-opt_params1.theta2 = .14316;
-opt_params1.theta0 = 1 - opt_params1.theta2;
-init3 = get_init_conditions(opt_params1, 0);
-opt_params1
-[t3,out3] = balance_and_solve(tspan, init3, opt_params1);
-t3
-R0 = calc_R0(opt_params1, out3(1,:))
-figure()
-plot_two_models(t1,out1,t3,out3,real)
+% opt_params1.sigma_h1 = 10;
+% opt_params1.sigma_h2 = 30;
+% opt_params1.theta1 = 0;
+% opt_params1.theta2 = .14316;
+% opt_params1.theta0 = 1 - opt_params1.theta2;
+% init3 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t3,out3] = balance_and_solve(tspan, init3, opt_params1);
+% t3
+% R0 = calc_R0(opt_params1, out3(1,:))
+% figure()
+% plot_two_models(t1,out1,t3,out3,real)
 
 %% Compare Risk Groups -- Low Risk, No Risk
-opt_params1.theta2 = 0;
-opt_params1.theta1 = .42948;
-opt_params1.theta0 = 1 - opt_params1.theta1;
-init4 = get_init_conditions(opt_params1, 0);
-opt_params1
-[t4,out4] = balance_and_solve(tspan, init4, opt_params1);
-R0 = calc_R0(opt_params1, out4(1,:))
-figure()
-plot_two_models(t1,out1,t4,out4,real)
+% opt_params1.theta2 = 0;
+% opt_params1.theta1 = .42948;
+% opt_params1.theta0 = 1 - opt_params1.theta1;
+% init4 = get_init_conditions(opt_params1, 0);
+% opt_params1
+% [t4,out4] = balance_and_solve(tspan, init4, opt_params1);
+% R0 = calc_R0(opt_params1, out4(1,:))
+% figure()
+% plot_two_models(t1,out1,t4,out4,real)
 
 %% Compare Risk Groups start w/baseline 1/2 high -> low and 1/2 low ->no
-%%(1 - opt_params1.theta0) * opt_params1.theta2
+
 opt_params1.theta0 = opt_params1.theta0 + 1/2*((1 - opt_params1.theta0) * opt_params1.theta1);
 opt_params1.theta2 = opt_params1.theta2*(1/2); %high
 opt_params1.theta1 = opt_params1.theta1 + (opt_params1.theta2*(1/2)); % low
