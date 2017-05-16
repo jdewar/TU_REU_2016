@@ -144,17 +144,7 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % plot_model(t1, out1);
  figure()
  plot_both(t1, out1, tspan, real);
- %calc b_h's
- [bT1, rhoh1, rhov1] = calc_b_T(opt_params1, init1);
- %b_h1
- opt_params1.sigma_h1
- b_h1 = rhoh1*opt_params1.sigma_h1
- %B_H2
- opt_params1.sigma_h2
- b_h2 = rhoh1*opt_params1.sigma_h2
- %average
- averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
- b_h = (b_h1+b_h2)/2
+ [bT1, rhoh1, rhov1] = calc_b_T(, init)
 % figure()
 % plot(t1,(out1(:,7) + out1(:,8)), 'b')
 % drawnow

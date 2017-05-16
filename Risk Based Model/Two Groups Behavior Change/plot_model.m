@@ -9,7 +9,7 @@ Sv = Y(:,9);
 Ev = Y(:,10);
 Iv = Y(:,11);
 
-ax2=subplot(1,2,1)
+ax2=subplot(1,2,1);
 hold on
 plot(t, Sh, ':k', 'linewidth', 2) %plots susceptible graph
 plot(t, Ih, 'b', 'linewidth', 2) %plots exposed graph
@@ -24,7 +24,7 @@ ylabel('Host Population')
 %title('Balanced Host Dynamics')
 
 
-ax4=subplot(1,2,2)
+ax4=subplot(1,2,2);
 hold on
 plot(t, Sv, ':k', 'linewidth', 2) 
 plot(t, Ev, 'b', 'linewidth', 2)
