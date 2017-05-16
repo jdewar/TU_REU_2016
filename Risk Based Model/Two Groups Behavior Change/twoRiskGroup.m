@@ -142,19 +142,21 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 
 % figure()
 % plot_model(t1, out1);
- figure()
- plot_both(t1, out1, tspan, real);
- %calc b_h's
- [bT1, rhoh1, rhov1] = calc_b_T(opt_params1, init1);
- %b_h1
- opt_params1.sigma_h1
- b_h1 = rhoh1*opt_params1.sigma_h1
- %B_H2
- opt_params1.sigma_h2
- b_h2 = rhoh1*opt_params1.sigma_h2
- %average
- averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
- b_h = (b_h1+b_h2)/2
+ %figure()
+ %plot_both(t1, out1, tspan, real);
+ 
+%  %calc b_h's
+%  [bT1, rhoh1, rhov1] = calc_b_T(opt_params1, init1);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh1*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh1*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+ 
 % figure()
 % plot(t1,(out1(:,7) + out1(:,8)), 'b')
 % drawnow
@@ -200,6 +202,17 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % % comparing models - sum squared
 % difference = cmp_models(out1,out2, real)
 
+% %calc b_h's
+%  [bT2, rhoh2, rhov2] = calc_b_T(opt_params1, init1);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh2*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh2*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 %% Compare Risk Groups 1/2 high and 1/2 no
 % opt_params1.theta0 = .75;
 % opt_params1.theta2 = 1; %high
@@ -209,6 +222,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % R01 = calc_R0(opt_params1, out2(1,:))
 % figure()
 % plot_two_models(t1,out1,t2,out2,real)
+
+% %calc b_h's
+%  [bT3, rhoh3, rhov3] = calc_b_T(opt_params1, init2);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh3*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh3*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 
 %% Compare Number of Risk Groups 
 %Theta0 same as baseline, combine theta1 & theta2 with same avg bites as
@@ -220,7 +245,19 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % opt_params1
 % [t2,out2] = balance_and_solve(tspan, init2, opt_params1);
 % R02 = calc_R0(opt_params1, out2(1,:))
-% 
+
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init2);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+
 % %Reducing to one risk group, same avg bites as baseline = 4.2948
 % opt_params1.H0 = pop;
 % opt_params1.theta0 = 0;
@@ -233,6 +270,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % 
 % figure()
 % plot_two_models(t1,out1,t2,out2,t3,out3,real);
+
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init3);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 
 %% Reducing theta0
 %theta0 is .75, theta1 & theta2 are .125, sigmah1 is 10, avg bites same
@@ -247,7 +296,19 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % opt_params1
 % [t2,out2] = balance_and_solve(tspan, init2, opt_params1);
 % R02 = calc_R0(opt_params1, out2(1,:))
-% 
+
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init2);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+
 % %theta0 is .5, theta1 is .2, theta2 is .3, sigmah2 is 12, avg bites same
 % opt_params1.theta0 = 0.5;
 % opt_params1.H0 = pop * (1 - opt_params1.theta0);
@@ -261,6 +322,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % R03 = calc_R0(opt_params1, out3(1,:))
 % figure()
 % plot_two_models(t1,out1,t2,out2,t3,out3,real);
+
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init3);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 
 %% Compare Risk Groups -- High Risk, No Risk
 % opt_params1.sigma_h1 = 10;
@@ -276,6 +349,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % figure()
 % plot_two_models(t1,out1,t3,out3,real)
 
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init3);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+
 %% Compare Risk Groups -- Low Risk, No Risk
 % opt_params1.theta2 = 0;
 % opt_params1.theta1 = .42948;
@@ -287,6 +372,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % figure()
 % plot_two_models(t1,out1,t4,out4,real)
 
+% %calc b_h's
+%  [bT, rhoh, rhov] = calc_b_T(opt_params1, init4);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+
 %% Compare Risk Groups start w/baseline 1/2 high -> low and 1/2 low ->no
 opt_params1.theta0 = opt_params1.theta0 + 1/2*((1 - opt_params1.theta0) * opt_params1.theta1);
 opt_params1.theta2 = opt_params1.theta2*(1/2); %high
@@ -296,6 +393,19 @@ init2 = get_init_conditions(opt_params1, tspan);
 R02 = calc_R0(opt_params1, out2(1,:))
 figure()
 plot_two_models(t1,out1,t2,out2,real)
+
+%calc b_h's
+ [bT, rhoh, rhov] = calc_b_T(opt_params1, init2);
+ %b_h1
+ sigh1 = opt_params1.sigma_h1
+ b_h1 = rhoh*opt_params1.sigma_h1
+ %B_H2
+ sigh2 = opt_params1.sigma_h2
+ b_h2 = rhoh*opt_params1.sigma_h2
+ %average
+ averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+ b_h = (b_h1+b_h2)/2
+
 %% Plot Objective Functions
 % figure()
 % r = linspace(lb(9), ub(9), 100);

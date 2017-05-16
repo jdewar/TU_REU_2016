@@ -142,9 +142,21 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 
 % figure()
 % plot_model(t1, out1);
- figure()
- plot_both(t1, out1, tspan, real);
- [bT1, rhoh1, rhov1] = calc_b_T(, init)
+ %figure()
+ %plot_both(t1, out1, tspan, real);
+ 
+%  %calc b_h's
+%  [bT1, rhoh1, rhov1] = calc_b_T(opt_params1, init1);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh1*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh1*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
+ 
 % figure()
 % plot(t1,(out1(:,7) + out1(:,8)), 'b')
 % drawnow
@@ -190,6 +202,17 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % % comparing models - sum squared
 % difference = cmp_models(out1,out2, real)
 
+% %calc b_h's
+%  [bT2, rhoh2, rhov2] = calc_b_T(opt_params1, init1);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh2*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh2*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 %% Compare Risk Groups 1/2 high and 1/2 no
 % opt_params1.theta0 = .75;
 % opt_params1.theta2 = 1; %high
@@ -199,6 +222,18 @@ R01 = calc_Reff(opt_params1, out1(1,:))
 % R01 = calc_R0(opt_params1, out2(1,:))
 % figure()
 % plot_two_models(t1,out1,t2,out2,real)
+
+% %calc b_h's
+%  [bT3, rhoh3, rhov3] = calc_b_T(opt_params1, init2);
+%  %b_h1
+%  opt_params1.sigma_h1
+%  b_h1 = rhoh3*opt_params1.sigma_h1
+%  %B_H2
+%  opt_params1.sigma_h2
+%  b_h2 = rhoh3*opt_params1.sigma_h2
+%  %average
+%  averageSigma = (opt_params1.sigma_h1+ opt_params1.sigma_h2)/2
+%  b_h = (b_h1+b_h2)/2
 
 %% Compare Number of Risk Groups 
 %Theta0 same as baseline, combine theta1 & theta2 with same avg bites as
